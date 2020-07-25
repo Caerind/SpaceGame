@@ -30,7 +30,4 @@ private:
 	void DebugEvent(const sf::Event& event);
 	void DebugUpdate(en::Time dt);
 #endif // ENLIVE_DEBUG
-
-private:
-	en::World mWorld;
 };

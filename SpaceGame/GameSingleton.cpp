@@ -3,6 +3,9 @@
 GameSingleton::GameSingleton()
 	: idealDistance(400.0f)
 	, thresholdDistance(100.0f)
+	, world()
+	, player1()
+	, player2()
 {
 }
 

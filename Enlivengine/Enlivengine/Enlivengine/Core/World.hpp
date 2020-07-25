@@ -30,8 +30,6 @@ public:
 	U32 GetIDGenerator() const;
 	U32 CreateID();
 
-	void Render(sf::RenderTarget& target);
-
 private:
 	EntityManager mEntityManager;
 	U32 mIDGenerator;

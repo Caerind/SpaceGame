@@ -3,6 +3,9 @@
 #include <Enlivengine/System/Singleton.hpp>
 #include <Enlivengine/System/Meta.hpp>
 
+#include <Enlivengine/Core/World.hpp>
+#include <Enlivengine/Core/Entity.hpp>
+
 #ifdef ENLIVE_ENABLE_IMGUI
 #include <Enlivengine/Application/ImGuiToolManager.hpp>
 #include <Enlivengine/Core/ObjectEditor.hpp>
@@ -16,6 +19,11 @@ class GameSingleton
 public:
 	en::F32 idealDistance;
 	en::F32 thresholdDistance;
+
+public:
+	en::World world;
+	en::Entity player1;
+	en::Entity player2;
 };
 
 ENLIVE_META_CLASS_BEGIN(GameSingleton)

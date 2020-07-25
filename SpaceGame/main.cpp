@@ -10,12 +10,18 @@
 #include "Components.hpp"
 #include "GameState.hpp"
 #include "GameSingleton.hpp"
+#include "AudioTrackMixer3000.hpp"
 
 int main(int argc, char** argv)
 {
 #ifdef ENLIVE_ENABLE_IMGUI
 	GameSingletonTool::GetInstance().Register();
+	AudioTrackMixer3000Tool::GetInstance().Register();
 #endif // ENLIVE_ENABLE_IMGUI
+
+	//en::ClassManager::Register<TrackData>();
+	//en::ClassManager::Register<AudioTrackMixer3000>();
+	//en::ClassManager::Register<GameSingleton>();
 
 	// TODO : Register engine classes in classManager & componentManager
 	en::ClassManager::Register<en::NameComponent>();
@@ -24,12 +30,18 @@ int main(int argc, char** argv)
 	en::ClassManager::Register<en::TextComponent>();
 	en::ClassManager::Register<en::RenderableComponent>();
 	en::ClassManager::Register<en::UIDComponent>();
+	en::ClassManager::Register<VelocityComponent>();
+	en::ClassManager::Register<ShipComponent>();
+
+	// TODO : Register engine classes in classManager & componentManager
 	en::ComponentManager::Register<en::NameComponent>();
 	en::ComponentManager::Register<en::TransformComponent>();
 	en::ComponentManager::Register<en::SpriteComponent>();
 	en::ComponentManager::Register<en::TextComponent>();
 	en::ComponentManager::Register<en::RenderableComponent>();
 	en::ComponentManager::Register<en::UIDComponent>();
+	en::ComponentManager::Register<VelocityComponent>();
+	en::ComponentManager::Register<ShipComponent>();
 
 	{
 		// TODO : Do something about type info for pointers
@@ -48,11 +60,13 @@ int main(int argc, char** argv)
 		if (fileGame.LoadFromFile(fileGamePath))
 		{
 			fileGame.Deserialize(GameSingleton::GetInstance(), "Game");
+			fileGame.Deserialize(AudioTrackMixer3000::GetInstance(), "Audio");
 		}
 		else
 		{
 			fileGame.CreateEmptyFile();
 			fileGame.Serialize(GameSingleton::GetInstance(), "Game");
+			fileGame.Serialize(AudioTrackMixer3000::GetInstance(), "Audio");
 			fileGame.SaveToFile(fileGamePath);
 		}
 
@@ -61,6 +75,16 @@ int main(int argc, char** argv)
 		app.GetWindow().getMainView().setCenter({ 512.0f, 384.0f });
 		app.GetWindow().getMainView().setSize({ 1024.0f, 768.0f });
 		en::PathManager::GetInstance().SetScreenshotPath("Screenshots/");
+
+		auto& actionSystem = app.GetActionSystem();
+		actionSystem.AddInputJoystickConnect("player1JoystickConnected", 0, en::ActionType::Hold);
+		actionSystem.AddInputJoystickConnect("player2JoystickConnected", 1, en::ActionType::Hold);
+		actionSystem.AddInputJoystickConnect("player1JoystickConnect", 0, en::ActionType::Pressed);
+		actionSystem.AddInputJoystickConnect("player2JoystickConnect", 1, en::ActionType::Pressed);
+		actionSystem.AddInputJoystickConnect("player1JoystickDisconnect", 0, en::ActionType::Released);
+		actionSystem.AddInputJoystickConnect("player2JoystickDisconnect", 1, en::ActionType::Released);
+		actionSystem.AddInputJoystickButton("player1JoystickButtonA", 0, 0, en::ActionType::Pressed);
+		actionSystem.AddInputJoystickButton("player2JoystickButtonA", 1, 0, en::ActionType::Pressed);
 
 		app.Start<GameState>();
 	}
