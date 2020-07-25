@@ -1,4 +1,6 @@
 set(SRC_SPACEGAME
+	AudioTrackMixer3000.cpp
+	AudioTrackMixer3000.hpp
 	Components.hpp
 	GameSingleton.cpp
 	GameSingleton.hpp

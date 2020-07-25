@@ -42,6 +42,9 @@ void ImGuiInputEditor::Display()
 		"Event", 
 		"Key",
 		"Mouse",
+		"JoystickConnect",
+		"JoystickButton",
+		"JoystickAxis",
 		"And",
 		"Or",
 		"Not"
@@ -303,6 +306,18 @@ void ImGuiInputEditor::Display()
 				{
 					enAssert(false);
 				}
+			} break;
+			case ActionInputType::JoystickConnect:
+			{
+
+			} break;
+			case ActionInputType::JoystickButton:
+			{
+
+			} break;
+			case ActionInputType::JoystickAxis:
+			{
+
 			} break;
 			case ActionInputType::And:
 			case ActionInputType::Or:

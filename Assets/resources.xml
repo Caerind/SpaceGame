@@ -1,3 +1,4 @@
 <?xml version="1.0"?>
-<Resources resourceCount="0" typeCount="8">
+<Resources resourceCount="1" typeCount="8">
+	<Resource identifier="tahoma" filename="Fonts/Tahoma.ttf" type="0" />
 </Resources>

@@ -11,6 +11,7 @@
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Joystick.hpp>
 
 namespace en
 {
@@ -22,6 +23,9 @@ enum class ActionInputType : U32
     Event,
     Key,
     Mouse,
+	JoystickConnect,
+	JoystickButton,
+	JoystickAxis,
     And,
     Or,
     Not,
@@ -153,6 +157,47 @@ private:
 	ActionType mActionType;
 };
 
+class ActionInputJoystickConnect : public ActionInput
+{
+public:
+	ActionInputJoystickConnect(const std::string& name, U32 joystickID, ActionType actionType = ActionType::Pressed);
+
+	ActionInputType GetInputType() const override;
+	bool IsCurrentlyActive(ActionSystem* system) const override;
+
+	U32 GetJoystickID() const;
+	ActionType GetType() const;
+
+	void SetJoystickID(U32 joystickID);
+	void SetActionType(ActionType actionType);
+
+private:
+	U32 mJoystickID;
+	ActionType mActionType;
+};
+
+class ActionInputJoystickButton : public ActionInput
+{
+public:
+	ActionInputJoystickButton(const std::string& name, U32 joystickID, U32 buttonID, ActionType actionType = ActionType::Pressed);
+
+	ActionInputType GetInputType() const override;
+	bool IsCurrentlyActive(ActionSystem* system) const override;
+
+	U32 GetJoystickID() const;
+	U32 GetButtonID() const;
+	ActionType GetType() const;
+
+	void SetJoystickID(U32 joystickID);
+	void SetButtonID(U32 buttonID);
+	void SetActionType(ActionType actionType);
+
+private:
+	U32 mJoystickID;
+	U32 mButtonID;
+	ActionType mActionType;
+};
+
 class ActionInputLogical : public ActionInput
 {
 public:
@@ -205,6 +250,8 @@ public:
 	void AddInputEvent(const std::string& name, ActionInputEvent::FuncType eventValidator);
 	void AddInputKey(const std::string& name, sf::Keyboard::Key key, ActionType actionType = ActionType::Pressed);
 	void AddInputMouse(const std::string& name, sf::Mouse::Button button, ActionType actionType = ActionType::Pressed);
+	void AddInputJoystickConnect(const std::string& name, U32 joystickID, ActionType actionType = ActionType::Pressed);
+	void AddInputJoystickButton(const std::string& name, U32 joystickID, U32 buttonID, ActionType actionType = ActionType::Pressed);
 	void AddInputAnd(const std::string& name, U32 inputAID, U32 inputBID);
 	void AddInputOr(const std::string& name, U32 inputAID, U32 inputBID);
 	void AddInputNot(const std::string& name, U32 inputAID);

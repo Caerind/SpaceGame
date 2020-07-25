@@ -10,6 +10,7 @@ GameState::GameState(en::StateManager& manager)
 	: en::State(manager)
 	, mWorld()
 {
+	Init();
 }
 
 GameState::~GameState()
@@ -61,6 +62,19 @@ void GameState::Init()
 #endif // ENLIVE_DEBUG
 
 	en::Universe::GetInstance().SetCurrentWorld(&mWorld);
+
+	auto& actionSystem = getApplication().GetActionSystem();
+	actionSystem.AddInputJoystickConnect("player1JoystickConnected", 0, en::ActionType::Hold);
+	actionSystem.AddInputJoystickConnect("player2JoystickConnected", 1, en::ActionType::Hold);
+	actionSystem.AddInputJoystickConnect("player1JoystickConnect", 0, en::ActionType::Pressed);
+	actionSystem.AddInputJoystickConnect("player2JoystickConnect", 1, en::ActionType::Pressed);
+	actionSystem.AddInputJoystickConnect("player1JoystickDisconnect", 0, en::ActionType::Released);
+	actionSystem.AddInputJoystickConnect("player2JoystickDisconnect", 1, en::ActionType::Released);
+	actionSystem.AddInputJoystickButton("player1JoystickButtonA", 0, 0, en::ActionType::Pressed);
+	actionSystem.AddInputJoystickButton("player2JoystickButtonA", 1, 0, en::ActionType::Pressed);
+
+
+
 }
 
 #ifdef ENLIVE_DEBUG

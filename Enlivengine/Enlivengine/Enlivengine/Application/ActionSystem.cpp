@@ -239,6 +239,137 @@ void ActionInputMouse::SetActionType(ActionType actionType)
 	mActionType = actionType;
 }
 
+ActionInputJoystickConnect::ActionInputJoystickConnect(const std::string& name, U32 joystickID, ActionType actionType /*= ActionType::Pressed*/)
+	: ActionInput(name)
+	, mJoystickID(joystickID)
+	, mActionType(actionType)
+{
+}
+
+ActionInputType ActionInputJoystickConnect::GetInputType() const
+{
+	return ActionInputType::JoystickConnect;
+}
+
+bool ActionInputJoystickConnect::IsCurrentlyActive(ActionSystem* system) const
+{
+	if (mActionType == ActionType::Hold)
+	{
+		return sf::Joystick::isConnected(static_cast<unsigned int>(mJoystickID));
+	}
+	else if (system != nullptr)
+	{
+		const U32 eventCount = system->GetEventCount();
+		for (U32 i = 0; i < eventCount; ++i)
+		{
+			const sf::Event& event = system->GetEvent(i);
+			if (mActionType == ActionType::Pressed)
+			{
+				if (event.type == sf::Event::EventType::JoystickConnected && event.joystickConnect.joystickId == static_cast<unsigned int>(mJoystickID))
+				{
+					return true;
+				}
+			}
+			else if (mActionType == ActionType::Released)
+			{
+				if (event.type == sf::Event::EventType::JoystickDisconnected && event.joystickConnect.joystickId == static_cast<unsigned int>(mJoystickID))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+U32 ActionInputJoystickConnect::GetJoystickID() const
+{
+	return mJoystickID;
+}
+
+ActionType ActionInputJoystickConnect::GetType() const
+{
+	return mActionType;
+}
+
+void ActionInputJoystickConnect::SetJoystickID(U32 joystickID)
+{
+	mJoystickID = joystickID;
+}
+
+void ActionInputJoystickConnect::SetActionType(ActionType actionType)
+{
+	mActionType = actionType;
+}
+
+ActionInputJoystickButton::ActionInputJoystickButton(const std::string& name, U32 joystickID, U32 buttonID, ActionType actionType /*= ActionType::Pressed*/)
+	: ActionInput(name)
+	, mJoystickID(joystickID)
+	, mButtonID(buttonID)
+	, mActionType(actionType)
+{
+}
+
+ActionInputType ActionInputJoystickButton::GetInputType() const
+{
+	return ActionInputType::JoystickButton;
+}
+
+bool ActionInputJoystickButton::IsCurrentlyActive(ActionSystem* system) const
+{
+	if (mActionType == ActionType::Hold)
+	{
+		return sf::Joystick::isButtonPressed(static_cast<unsigned int>(mJoystickID), static_cast<unsigned int>(mButtonID));
+	}
+	else if (system != nullptr)
+	{
+		const U32 eventCount = system->GetEventCount();
+		for (U32 i = 0; i < eventCount; ++i)
+		{
+			const sf::Event& event = system->GetEvent(i);
+			if (mActionType == ActionType::Pressed)
+			{
+				if (event.type == sf::Event::EventType::JoystickButtonPressed 
+					&& event.joystickButton.joystickId == static_cast<unsigned int>(mJoystickID)
+					&& event.joystickButton.button == static_cast<unsigned int>(mButtonID))
+				{
+					return true;
+				}
+			}
+			else if (mActionType == ActionType::Released)
+			{
+				if (event.type == sf::Event::EventType::JoystickButtonReleased
+					&& event.joystickButton.joystickId == static_cast<unsigned int>(mJoystickID)
+					&& event.joystickButton.button == static_cast<unsigned int>(mButtonID))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+U32 ActionInputJoystickButton::GetJoystickID() const
+{
+	return mJoystickID;
+}
+
+ActionType ActionInputJoystickButton::GetType() const
+{
+	return mActionType;
+}
+
+void ActionInputJoystickButton::SetJoystickID(U32 joystickID)
+{
+	mJoystickID = joystickID;
+}
+
+void ActionInputJoystickButton::SetActionType(ActionType actionType)
+{
+	mActionType = actionType;
+}
+
 ActionInputLogical::ActionInputLogical(const std::string& name, ActionInputLogicalOperator logic, U32 inputAID, U32 inputBID /*= U32_Max*/)
 	: ActionInput(name)
 	, mLogicOperator(logic)
@@ -430,6 +561,16 @@ void ActionSystem::AddInputKey(const std::string& name, sf::Keyboard::Key key, A
 void ActionSystem::AddInputMouse(const std::string& name, sf::Mouse::Button button, ActionType actionType /*= ActionType::Pressed*/)
 {
 	AddInput_Internal(new ActionInputMouse(name, button, actionType));
+}
+
+void ActionSystem::AddInputJoystickConnect(const std::string& name, U32 joystickID, ActionType actionType /*= ActionType::Pressed*/)
+{
+	AddInput_Internal(new ActionInputJoystickConnect(name, joystickID, actionType));
+}
+
+void ActionSystem::AddInputJoystickButton(const std::string& name, U32 joystickID, U32 buttonID, ActionType actionType /*= ActionType::Pressed*/)
+{
+	AddInput_Internal(new ActionInputJoystickButton(name, joystickID, buttonID, actionType));
 }
 
 void ActionSystem::AddInputAnd(const std::string& name, U32 inputAID, U32 inputBID)

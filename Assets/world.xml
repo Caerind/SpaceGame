@@ -1,7 +1,26 @@
 <?xml version="1.0"?>
 <DataFile>
 	<World type="en::World">
-		<EntityManager type="en::EntityManager" />
+		<EntityManager type="en::EntityManager">
+			<Remi type="en::Entity">
+				<en::NameComponent type="en::NameComponent">
+					<name type="std::string">Remi</name>
+				</en::NameComponent>
+				<en::TextComponent type="en::TextComponent">
+					<text type="en::Text">
+						<FontID type="en::U32">1496362539</FontID>
+						<String type="std::string">Remi</String>
+						<CharacterSize type="en::U32">40</CharacterSize>
+						<LineSpacing type="en::F32">1</LineSpacing>
+						<LetterSpacing type="en::F32">1</LetterSpacing>
+						<FillColor type="en::Color">f80000ff</FillColor>
+						<OutlineColor type="en::Color">202fcd9</OutlineColor>
+						<OutlineThickness type="en::F32">3</OutlineThickness>
+					</text>
+				</en::TextComponent>
+				<en::RenderableComponent type="en::RenderableComponent" />
+			</Remi>
+		</EntityManager>
 		<IDGenerator type="en::U32">3452816845</IDGenerator>
 	</World>
 </DataFile>

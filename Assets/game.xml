@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <DataFile>
 	<Game type="GameSingleton">
-		<someSpeed type="en::F32">300</someSpeed>
+		<someSpeed type="en::F32">200</someSpeed>
 	</Game>
 </DataFile>
