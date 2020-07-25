@@ -1,0 +1,1 @@
+start build/SpaceGameProject.sln

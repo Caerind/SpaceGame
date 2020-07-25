@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<DataFile>
+	<World type="en::World">
+		<EntityManager type="en::EntityManager" />
+		<IDGenerator type="en::U32">3452816845</IDGenerator>
+	</World>
+</DataFile>
