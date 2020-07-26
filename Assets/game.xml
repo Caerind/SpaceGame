@@ -1,6 +1,47 @@
 <?xml version="1.0"?>
 <DataFile>
 	<Game type="GameSingleton">
-		<someSpeed type="en::F32">200</someSpeed>
+		<distanceMaxInitial type="en::F32">3000</distanceMaxInitial>
+		<distanceMaxPerSecond type="en::F32">10</distanceMaxPerSecond>
+		<idealDistancePlayer type="en::F32">600</idealDistancePlayer>
+		<thresholdDistancePlayer type="en::F32">200</thresholdDistancePlayer>
+		<startPosition type="en::Vector2<en::F32>">
+			<x type="en::F32">512</x>
+			<y type="en::F32">384</y>
+		</startPosition>
+		<startOffsetPlayer1 type="en::Vector2<en::F32>">
+			<x type="en::F32">-256</x>
+			<y type="en::F32">-192</y>
+		</startOffsetPlayer1>
+		<startOffsetPlayer2 type="en::Vector2<en::F32>">
+			<x type="en::F32">256</x>
+			<y type="en::F32">192</y>
+		</startOffsetPlayer2>
+		<startRotationPlayer1 type="en::F32">45</startRotationPlayer1>
+		<startRotationPlayer2 type="en::F32">-45</startRotationPlayer2>
+		<energyFactorAI type="en::F32">0.9</energyFactorAI>
+		<playerForce type="en::F32">60</playerForce>
 	</Game>
+	<Audio type="AudioTrackMixer3000">
+		<tempoBpm type="en::U32">71</tempoBpm>
+		<baseTrack type="TrackData">
+			<musicIdentifier type="std::string"></musicIdentifier>
+			<volumeDefault type="en::F32">1</volumeDefault>
+		</baseTrack>
+		<tracks type="TrackData" size="3">
+			<tracks_0 type="TrackData">
+				<musicIdentifier type="std::string"></musicIdentifier>
+				<volumeDefault type="en::F32">1</volumeDefault>
+			</tracks_0>
+			<tracks_1 type="TrackData">
+				<musicIdentifier type="std::string"></musicIdentifier>
+				<volumeDefault type="en::F32">1</volumeDefault>
+			</tracks_1>
+			<tracks_2 type="TrackData">
+				<musicIdentifier type="std::string"></musicIdentifier>
+				<volumeDefault type="en::F32">1</volumeDefault>
+			</tracks_2>
+		</tracks>
+		<distanceFromSolarMax type="en::F32">1000</distanceFromSolarMax>
+	</Audio>
 </DataFile>

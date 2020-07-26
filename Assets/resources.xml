@@ -1,4 +1,7 @@
 <?xml version="1.0"?>
-<Resources resourceCount="1" typeCount="8">
+<Resources resourceCount="4" typeCount="8">
 	<Resource identifier="tahoma" filename="Fonts/Tahoma.ttf" type="0" />
+	<Resource identifier="shipDefault" filename="Textures/ship_default.png" type="1" />
+	<Resource identifier="spaceMagicBar" filename="Textures/spaceMagicBar.png" type="1" />
+	<Resource identifier="background" filename="Textures/background.png" type="1" />
 </Resources>

@@ -71,9 +71,11 @@ int main(int argc, char** argv)
 		}
 
 		en::Application& app = en::Application::GetInstance();
-		app.GetWindow().create(sf::VideoMode(1024, 768), "SpaceGame", sf::Style::Titlebar | sf::Style::Close);
-		app.GetWindow().getMainView().setCenter({ 512.0f, 384.0f });
-		app.GetWindow().getMainView().setSize({ 1024.0f, 768.0f });
+		sf::VideoMode vm = sf::VideoMode::getDesktopMode();
+		app.GetWindow().create(vm, "SpaceGame", sf::Style::Titlebar | sf::Style::Close);
+		app.GetWindow().getMainView().setSize({ vm.width * 1.0f, vm.height * 1.0f });
+		app.GetWindow().getMainView().setCenter({ vm.width * 0.5f, vm.height * 0.5f });
+		app.GetWindow().toFullscreen();
 		en::PathManager::GetInstance().SetScreenshotPath("Screenshots/");
 
 		auto& actionSystem = app.GetActionSystem();

@@ -6,6 +6,9 @@
 
 #include <Enlivengine/Core/ComponentManager.hpp>
 
+#include <Enlivengine/Math/Vector2.hpp>
+#include <Enlivengine/Math/Vector3.hpp>
+
 namespace en
 {
 
@@ -26,6 +29,8 @@ public:
 	U32 GetID() const;
 
 	const char* GetName() const;
+	Vector2f GetPosition2D() const;
+	Vector3f GetPosition() const;
 
 	template <typename T> 
 	T& Add();

@@ -10,11 +10,57 @@ struct VelocityComponent
 
 	en::Vector2f velocity;
 };
-
 ENLIVE_META_CLASS_BEGIN(VelocityComponent)
 	ENLIVE_META_CLASS_MEMBER("velocity", &VelocityComponent::velocity)
 ENLIVE_META_CLASS_END()
 
+struct PlanetComponent
+{
+	PlanetComponent() : nothingYet(false) {}
+
+	bool nothingYet;
+};
+ENLIVE_META_CLASS_BEGIN(PlanetComponent)
+ENLIVE_META_CLASS_END()
+
+struct BlackHoleComponent
+{
+	BlackHoleComponent() : nothingYet(false) {}
+
+	bool nothingYet;
+};
+ENLIVE_META_CLASS_BEGIN(BlackHoleComponent)
+ENLIVE_META_CLASS_END()
+
+struct SpacePhysicComponent
+{
+	SpacePhysicComponent() : forceFactor(1.0f), dMin(10.0f), dMax(1000.0f) {}
+
+	en::Vector2f ComputeForce(const en::Vector2f& thisPosition, const en::Vector2f& otherPosition)
+	{
+		en::Vector2f delta = thisPosition - otherPosition;
+		const en::F32 dSquared = delta.getSquaredLength();
+		if (dSquared > dMin* dMin && dSquared < dMax * dMax && dSquared > 0.01f)
+		{
+			const en::F32 factor = forceFactor / (dSquared);
+			delta.normalize();
+			return delta * factor;
+		}
+		else
+		{
+			return en::Vector2f();
+		}
+	}
+
+	en::F32 forceFactor;
+	en::F32 dMin;
+	en::F32 dMax;
+};
+ENLIVE_META_CLASS_BEGIN(SpacePhysicComponent)
+	ENLIVE_META_CLASS_MEMBER("forceFactor", &SpacePhysicComponent::forceFactor),
+	ENLIVE_META_CLASS_MEMBER("dMin", &SpacePhysicComponent::dMin),
+	ENLIVE_META_CLASS_MEMBER("dMax", &SpacePhysicComponent::dMax)
+ENLIVE_META_CLASS_END()
 
 struct ShipComponent
 {
@@ -47,7 +93,6 @@ struct ShipComponent
 	en::Sprite engine;
 	en::Sprite shield;
 };
-
 ENLIVE_META_CLASS_BEGIN(ShipComponent)
 	ENLIVE_META_CLASS_MEMBER("body", &ShipComponent::body),
 	ENLIVE_META_CLASS_MEMBER("bodyFrame", &ShipComponent::bodyFrame),
