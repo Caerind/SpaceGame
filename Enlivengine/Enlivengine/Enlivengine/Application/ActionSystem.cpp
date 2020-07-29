@@ -113,10 +113,11 @@ bool ActionInputEvent::IsCurrentlyActive(ActionSystem* system) const
 	return false;
 }
 
-ActionInputKey::ActionInputKey(const std::string& name, sf::Keyboard::Key key, ActionType actionType /*= ActionType::Pressed*/)
+ActionInputKey::ActionInputKey(const std::string& name, sf::Keyboard::Key key, ActionType actionType /*= ActionType::Pressed*/, U32 keyCombination /*= static_cast<U32>(KeyCombination::None)*/)
 	: ActionInput(name)
 	, mKey(key)
 	, mActionType(actionType)
+	, mKeyCombination(keyCombination)
 {
 }
 
@@ -129,7 +130,26 @@ bool ActionInputKey::IsCurrentlyActive(ActionSystem* system) const
 {
 	if (mActionType == ActionType::Hold)
 	{
-		return sf::Keyboard::isKeyPressed(mKey);
+		if (sf::Keyboard::isKeyPressed(mKey))
+		{
+			if ((mKeyCombination & static_cast<U32>(KeyCombination::Ctrl)) != 0 && !(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)))
+			{
+				return false;
+			}
+			if ((mKeyCombination & static_cast<U32>(KeyCombination::Alt)) != 0 && !(sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt)))
+			{
+				return false;
+			}
+			if ((mKeyCombination & static_cast<U32>(KeyCombination::Shift)) != 0 && !(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)))
+			{
+				return false;
+			}
+			if ((mKeyCombination & static_cast<U32>(KeyCombination::System)) != 0 && !(sf::Keyboard::isKeyPressed(sf::Keyboard::LSystem) || sf::Keyboard::isKeyPressed(sf::Keyboard::RSystem)))
+			{
+				return false;
+			}
+			return true;
+		}
 	}
 	else if (system != nullptr)
 	{
@@ -141,6 +161,22 @@ bool ActionInputKey::IsCurrentlyActive(ActionSystem* system) const
 			{
 				if (event.type == sf::Event::EventType::KeyPressed && event.key.code == mKey)
 				{
+					if ((mKeyCombination & static_cast<U32>(KeyCombination::Ctrl)) != 0 && !event.key.control)
+					{
+						return false;
+					}
+					if ((mKeyCombination & static_cast<U32>(KeyCombination::Alt)) != 0 && !event.key.alt)
+					{
+						return false;
+					}
+					if ((mKeyCombination & static_cast<U32>(KeyCombination::Shift)) != 0 && !event.key.shift)
+					{
+						return false;
+					}
+					if ((mKeyCombination & static_cast<U32>(KeyCombination::System)) != 0 && !event.key.system)
+					{
+						return false;
+					}
 					return true;
 				}
 			}
@@ -148,6 +184,22 @@ bool ActionInputKey::IsCurrentlyActive(ActionSystem* system) const
 			{
 				if (event.type == sf::Event::EventType::KeyReleased && event.key.code == mKey)
 				{
+					if ((mKeyCombination & static_cast<U32>(KeyCombination::Ctrl)) != 0 && !event.key.control)
+					{
+						return false;
+					}
+					if ((mKeyCombination & static_cast<U32>(KeyCombination::Alt)) != 0 && !event.key.alt)
+					{
+						return false;
+					}
+					if ((mKeyCombination & static_cast<U32>(KeyCombination::Shift)) != 0 && !event.key.shift)
+					{
+						return false;
+					}
+					if ((mKeyCombination & static_cast<U32>(KeyCombination::System)) != 0 && !event.key.system)
+					{
+						return false;
+					}
 					return true;
 				}
 			}
@@ -166,6 +218,11 @@ ActionType ActionInputKey::GetType() const
 	return mActionType;
 }
 
+U32 ActionInputKey::GetKeyCombination() const
+{
+	return mKeyCombination;
+}
+
 void ActionInputKey::SetKey(sf::Keyboard::Key key)
 {
 	mKey = key;
@@ -174,6 +231,11 @@ void ActionInputKey::SetKey(sf::Keyboard::Key key)
 void ActionInputKey::SetActionType(ActionType actionType)
 {
 	mActionType = actionType;
+}
+
+void ActionInputKey::SetKeyCombination(U32 keyCombination)
+{
+	mKeyCombination = keyCombination;
 }
 
 ActionInputMouse::ActionInputMouse(const std::string& name, sf::Mouse::Button button, ActionType actionType /*= ActionType::Pressed*/)
@@ -355,6 +417,11 @@ U32 ActionInputJoystickButton::GetJoystickID() const
 	return mJoystickID;
 }
 
+U32 ActionInputJoystickButton::GetButtonID() const
+{
+	return mButtonID;
+}
+
 ActionType ActionInputJoystickButton::GetType() const
 {
 	return mActionType;
@@ -363,6 +430,11 @@ ActionType ActionInputJoystickButton::GetType() const
 void ActionInputJoystickButton::SetJoystickID(U32 joystickID)
 {
 	mJoystickID = joystickID;
+}
+
+void ActionInputJoystickButton::SetButtonID(U32 buttonID)
+{
+	mButtonID = buttonID;
 }
 
 void ActionInputJoystickButton::SetActionType(ActionType actionType)
@@ -553,7 +625,7 @@ void ActionSystem::AddInputEvent(const std::string& name, ActionInputEvent::Func
 	AddInput_Internal(new ActionInputEvent(name, eventValidator));
 }
 
-void ActionSystem::AddInputKey(const std::string& name, sf::Keyboard::Key key, ActionType actionType /*= ActionType::Pressed*/)
+void ActionSystem::AddInputKey(const std::string& name, sf::Keyboard::Key key, ActionType actionType /*= ActionType::Pressed*/, U32 keyCombination /*= static_cast<U32>(ActionInputKey::KeyCombination::None)*/)
 {
 	AddInput_Internal(new ActionInputKey(name, key, actionType));
 }

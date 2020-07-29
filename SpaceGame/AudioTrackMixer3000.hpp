@@ -59,6 +59,16 @@ struct TrackData
 
 	bool playing;
 	en::MusicPtr music;
+
+#ifdef ENLIVE_ENABLE_IMGUI
+	float volumes[90];
+	int volumesOffset;
+	void UpdateVolumeTool()
+	{
+		volumes[volumesOffset] = music.GetFinalVolume();
+		volumesOffset = (volumesOffset + 1) % IM_ARRAYSIZE(volumes);
+	}
+#endif // ENLIVE_ENABLE_IMGUI
 };
 
 ENLIVE_META_CLASS_BEGIN(TrackData)
@@ -175,6 +185,20 @@ public:
 
 		ImGui::Separator();
 
+
+		static double refreshTime = 0.0f;
+		if (refreshTime == 0.0)
+			refreshTime = ImGui::GetTime();
+		while (refreshTime < ImGui::GetTime()) // Create dummy data at fixed 60 Hz rate for the demo
+		{
+			refreshTime += 1.0f / 60.0f;
+			audioMixer.mBaseTrack.UpdateVolumeTool();
+			for (auto& track : audioMixer.mTracks)
+			{
+				track.UpdateVolumeTool();
+			}
+		}
+
 		static constexpr const char* names[] = {
 			"Nav",
 			"Safe",
@@ -182,10 +206,12 @@ public:
 		};
 		const en::F32 factor = audioMixer.GetDistanceFromSolarFactor();
 		ImGui::Text("BaseTrack: %f (%f, %f)", audioMixer.mBaseTrack.music.GetVolume(), audioMixer.mBaseTrack.volumeDefault, factor);
+		ImGui::PlotLines("", audioMixer.mBaseTrack.volumes, IM_ARRAYSIZE(audioMixer.mBaseTrack.volumes), audioMixer.mBaseTrack.volumesOffset, nullptr, 0.0f, 1.0f);
 		for (en::U32 i = 0; i < static_cast<en::U32>(AudioTrackMixer3000::SecondTrackType::Count); ++i)
 		{
 			std::string n = std::string(en::Meta::GetEnumName(static_cast<AudioTrackMixer3000::SecondTrackType>(i)));
 			ImGui::Text("%s: %f (%f, %f)", n.c_str(), audioMixer.mTracks[i].music.GetVolume(), audioMixer.mTracks[i].volumeDefault, factor);
+			ImGui::PlotLines("", audioMixer.mTracks[i].volumes, IM_ARRAYSIZE(audioMixer.mTracks[i].volumes), audioMixer.mTracks[i].volumesOffset, nullptr, 0.0f, 1.0f);
 			if (audioMixer.mTracks[i].IsPlaying())
 			{
 				ImGui::SameLine();

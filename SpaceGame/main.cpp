@@ -107,6 +107,12 @@ int main(int argc, char** argv)
 		actionSystem.AddInputOr("player1Fire", actionSystem.GetInputByName("player1JoystickFire")->GetID(), actionSystem.GetInputByName("player1KeyFire")->GetID());
 		actionSystem.AddInputOr("player2Fire", actionSystem.GetInputByName("player2JoystickFire")->GetID(), actionSystem.GetInputByName("player2KeyFire")->GetID());
 
+#ifdef ENLIVE_DEBUG
+		actionSystem.AddInputKey("save", sf::Keyboard::S, en::ActionType::Pressed, static_cast<en::U32>(en::ActionInputKey::KeyCombination::Ctrl));
+		actionSystem.AddInputMouse("rightMouseButton", sf::Mouse::Button::Right, en::ActionType::Pressed);
+		actionSystem.AddInputMouse("middleMouseButton", sf::Mouse::Button::Middle, en::ActionType::Pressed);
+#endif // ENLIVE_DEBUG
+
 		app.Start<GameState>();
 	}
 	

@@ -19,17 +19,9 @@ GameState::GameState(en::StateManager& manager)
 	Init();
 }
 
-GameState::~GameState()
-{
-}
-
 bool GameState::handleEvent(const sf::Event& event)
 {
 	ENLIVE_PROFILE_FUNCTION();
-
-#ifdef ENLIVE_DEBUG
-	DebugEvent(event);
-#endif // ENLIVE_DEBUG
 
 	if (event.type == sf::Event::JoystickMoved && event.joystickMove.axis == sf::Joystick::Axis::Z && event.joystickMove.position < -95.0f)
 	{
@@ -131,15 +123,21 @@ void GameState::render(sf::RenderTarget& target)
 	target.draw(background);
 
 #ifdef ENLIVE_DEBUG
-	static bool dotInit = false;
-	static sf::CircleShape dotTransform;
-	if (!dotInit)
+	static bool transformDebugInit = false;
+	static sf::RectangleShape tX;
+	static sf::RectangleShape tY;
+	if (!transformDebugInit)
 	{
-		static constexpr float radius = 2.0f;
-		dotTransform.setFillColor(sf::Color::Red);
-		dotTransform.setRadius(radius);
-		dotTransform.setOrigin(sf::Vector2f(radius, radius));
-		dotInit = true;
+		static constexpr en::F32 scale = 10.0f;
+		tX.setSize({ 10.0f, 1.0f });
+		tX.setFillColor(sf::Color::Green);
+		tX.setOrigin({ 0.0f, 0.5f });
+		tX.setScale({ 10.0f, 10.0f });
+		tY.setSize({ 1.0f, 10.0f });
+		tY.setFillColor(sf::Color::Red);
+		tY.setOrigin({ 0.5f, 0.0f });
+		tY.setScale({ 10.0f, 10.0f });
+		transformDebugInit = true;
 	}
 #endif // ENLIVE_DEBUG
 
@@ -224,7 +222,8 @@ void GameState::render(sf::RenderTarget& target)
 #ifdef ENLIVE_DEBUG
 				if (en::ImGuiEntityBrowser::GetInstance().IsSelected(entity))
 				{
-					target.draw(dotTransform, states);
+					target.draw(tX, states);
+					target.draw(tY, states);
 				}
 #endif // ENLIVE_DEBUG
 			}
@@ -831,61 +830,6 @@ void GameState::SpawnPlanet(const en::Vector2f& pos)
 }
 
 #ifdef ENLIVE_DEBUG
-void GameState::DebugEvent(const sf::Event& event)
-{
-	ENLIVE_PROFILE_FUNCTION();
-
-	if (event.type == sf::Event::KeyPressed)
-	{
-		if (event.key.control == true && event.key.code == sf::Keyboard::S)
-		{
-			en::DataFile fileWorld;
-			fileWorld.CreateEmptyFile();
-			fileWorld.Serialize(GameSingleton::GetInstance().world, "World");
-			fileWorld.SaveToFile(en::PathManager::GetInstance().GetAssetsPath() + "world.xml");
-
-			en::DataFile fileGame;
-			fileGame.CreateEmptyFile();
-			fileGame.Serialize(GameSingleton::GetInstance(), "Game");
-			fileGame.Serialize(AudioTrackMixer3000::GetInstance(), "Audio");
-			fileGame.SaveToFile(en::PathManager::GetInstance().GetAssetsPath() + "game.xml");
-
-			enLogInfo(en::LogChannel::Global, "Saved");
-		}
-	}
-
-	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
-	{
-		auto mp = getApplication().GetWindow().getCursorPositionView(GameSingleton::GetInstance().world.GetFreeCamView().getHandle());
-
-		static en::U32 index = 0;
-		index++;
-		SpawnSwarm(index, mp);
-	}
-	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle)
-	{
-		auto mp = getApplication().GetWindow().getCursorPositionView(GameSingleton::GetInstance().world.GetFreeCamView().getHandle());
-		SpawnPlanet(mp);
-	}
-
-	/*
-	if (event.type == sf::Event::JoystickButtonPressed)
-	{
-		enLogInfo(0, "");
-	}
-	if (event.type == sf::Event::JoystickMoved)
-	{
-		if (event.joystickMove.axis != sf::Joystick::Axis::X
-			&& event.joystickMove.axis != sf::Joystick::Axis::Y
-			&& event.joystickMove.axis != sf::Joystick::Axis::U
-			&& event.joystickMove.axis != sf::Joystick::Axis::V)
-		{
-			enLogInfo(0, "");
-		}
-	}
-	*/
-}
-
 void GameState::DebugUpdate(en::Time dt)
 {
 	ENLIVE_PROFILE_FUNCTION();
@@ -952,6 +896,36 @@ void GameState::DebugUpdate(en::Time dt)
 		velocity *= speed * speedMulti * speedDiv * dt.AsSeconds();
 		GameSingleton::GetInstance().world.GetFreeCamView().move(velocity);
 	}
-}
 
+#ifdef ENLIVE_DEBUG
+	if (getApplication().GetActionSystem().IsInputActive("save"))
+	{
+		en::DataFile fileWorld;
+		fileWorld.CreateEmptyFile();
+		fileWorld.Serialize(GameSingleton::GetInstance().world, "World");
+		fileWorld.SaveToFile(en::PathManager::GetInstance().GetAssetsPath() + "world.xml");
+
+		en::DataFile fileGame;
+		fileGame.CreateEmptyFile();
+		fileGame.Serialize(GameSingleton::GetInstance(), "Game");
+		fileGame.Serialize(AudioTrackMixer3000::GetInstance(), "Audio");
+		fileGame.SaveToFile(en::PathManager::GetInstance().GetAssetsPath() + "game.xml");
+
+		enLogInfo(en::LogChannel::Global, "Saved");
+	}
+	if (getApplication().GetActionSystem().IsInputActive("rightMouseButton"))
+	{
+		auto mp = getApplication().GetWindow().getCursorPositionView(GameSingleton::GetInstance().world.GetFreeCamView().getHandle());
+
+		static en::U32 index = 0;
+		index++;
+		SpawnSwarm(index, mp);
+	}
+	if (getApplication().GetActionSystem().IsInputActive("middleMouseButton"))
+	{
+		auto mp = getApplication().GetWindow().getCursorPositionView(GameSingleton::GetInstance().world.GetFreeCamView().getHandle());
+		SpawnPlanet(mp);
+	}
+#endif // ENLIVE_DEBUG
+}
 #endif // ENLIVE_DEBUG

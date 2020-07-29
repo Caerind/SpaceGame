@@ -17,7 +17,6 @@ class GameState : public en::State
 {
 public:
 	GameState(en::StateManager& manager);
-	~GameState();
 
 	bool handleEvent(const sf::Event& event);
 
@@ -39,7 +38,6 @@ private:
 	void SpawnPlanet(const en::Vector2f& pos);
 
 #ifdef ENLIVE_DEBUG
-	void DebugEvent(const sf::Event& event);
 	void DebugUpdate(en::Time dt);
 #endif // ENLIVE_DEBUG
 
