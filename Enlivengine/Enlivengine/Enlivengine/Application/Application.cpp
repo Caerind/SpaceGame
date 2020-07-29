@@ -477,7 +477,8 @@ void Application::Render()
 	mStates.render(mWindow.getHandle());
 
 #ifdef ENLIVE_DEBUG
-	DebugDraw::render(mWindow.getHandle());
+	// TODO : How to respect player's view ?
+	//DebugDraw::GetInstance().render(mWindow.getHandle());
 #endif // ENLIVE_DEBUG
 
 #ifdef ENLIVE_ENABLE_IMGUI

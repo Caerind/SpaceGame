@@ -25,6 +25,7 @@ struct CustomXmlSerialization<en::Time>
 		auto& parser = dataFile.GetParser();
 		if (parser.CreateNode(name))
 		{
+			dataFile.WriteCurrentType<en::Time>();
 			parser.SetValue(en::ToString(object.AsSeconds()));
 			parser.CloseNode();
 			return true;
@@ -471,6 +472,7 @@ struct CustomXmlSerialization<en::Text>
 			dataFile.Serialize_Common(object.GetFillColor(), "FillColor");
 			dataFile.Serialize_Common(object.GetOutlineColor(), "OutlineColor");
 			dataFile.Serialize_Common(object.GetOutlineThickness(), "OutlineThickness");
+			dataFile.Serialize_Common(object.GetOrigin(), "Origin");
 			parser.CloseNode();
 			return true;
 		}
@@ -527,6 +529,10 @@ struct CustomXmlSerialization<en::Text>
 			en::F32 outlineThickness;
 			dataFile.Deserialize_Common(outlineThickness, "OutlineThickness");
 			object.SetOutlineThickness(outlineThickness);
+
+			en::Vector2f origin;
+			dataFile.Deserialize_Common(origin, "Origin");
+			object.SetOrigin(origin);
 
 			parser.CloseNode();
 			return true;

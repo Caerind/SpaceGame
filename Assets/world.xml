@@ -2,178 +2,34 @@
 <DataFile>
 	<World type="en::World">
 		<EntityManager type="en::EntityManager">
-			<Player2 type="en::Entity">
-				<en::NameComponent type="en::NameComponent">
-					<name type="std::string">Player2</name>
-				</en::NameComponent>
-				<en::TransformComponent type="en::TransformComponent">
-					<transform type="en::Transform">
-						<Position type="en::Vector3<en::F32>">
-							<x type="en::F32">-1980.04</x>
-							<y type="en::F32">576</y>
-							<z type="en::F32">0</z>
-						</Position>
-						<Rotation type="en::F32">-90</Rotation>
-						<Scale type="en::Vector3<en::F32>">
-							<x type="en::F32">0.5</x>
-							<y type="en::F32">0.5</y>
-							<z type="en::F32">1</z>
-						</Scale>
-					</transform>
-				</en::TransformComponent>
-				<en::TextComponent type="en::TextComponent">
-					<text type="en::Text">
-						<FontID type="en::U32">1496362539</FontID>
-						<String type="std::string">Player2</String>
-						<CharacterSize type="en::U32">40</CharacterSize>
-						<LineSpacing type="en::F32">1</LineSpacing>
-						<LetterSpacing type="en::F32">1</LetterSpacing>
-						<FillColor type="en::Color">ffff</FillColor>
-						<OutlineColor type="en::Color">ff</OutlineColor>
-						<OutlineThickness type="en::F32">0</OutlineThickness>
-					</text>
-				</en::TextComponent>
-				<ShipComponent type="ShipComponent">
-					<body type="en::Sprite">
-						<TextureID type="en::U32">2706156514</TextureID>
-						<TextureRect type="en::Rect<en::I32>">
-							<Min type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Min>
-							<Size type="en::Vector2<en::I32>">
-								<x type="en::I32">256</x>
-								<y type="en::I32">256</y>
-							</Size>
-						</TextureRect>
-						<Origin type="en::Vector2<en::F32>">
-							<x type="en::F32">128</x>
-							<y type="en::F32">128</y>
-						</Origin>
-					</body>
-					<bodyFrame type="en::Sprite">
-						<TextureID type="en::U32">4294967295</TextureID>
-						<TextureRect type="en::Rect<en::I32>">
-							<Min type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Min>
-							<Size type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Size>
-						</TextureRect>
-						<Origin type="en::Vector2<en::F32>">
-							<x type="en::F32">0</x>
-							<y type="en::F32">0</y>
-						</Origin>
-					</bodyFrame>
-					<wings type="en::Sprite">
-						<TextureID type="en::U32">4294967295</TextureID>
-						<TextureRect type="en::Rect<en::I32>">
-							<Min type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Min>
-							<Size type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Size>
-						</TextureRect>
-						<Origin type="en::Vector2<en::F32>">
-							<x type="en::F32">0</x>
-							<y type="en::F32">0</y>
-						</Origin>
-					</wings>
-					<wingsFrame type="en::Sprite">
-						<TextureID type="en::U32">4294967295</TextureID>
-						<TextureRect type="en::Rect<en::I32>">
-							<Min type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Min>
-							<Size type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Size>
-						</TextureRect>
-						<Origin type="en::Vector2<en::F32>">
-							<x type="en::F32">0</x>
-							<y type="en::F32">0</y>
-						</Origin>
-					</wingsFrame>
-					<weapons type="en::Sprite">
-						<TextureID type="en::U32">4294967295</TextureID>
-						<TextureRect type="en::Rect<en::I32>">
-							<Min type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Min>
-							<Size type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Size>
-						</TextureRect>
-						<Origin type="en::Vector2<en::F32>">
-							<x type="en::F32">0</x>
-							<y type="en::F32">0</y>
-						</Origin>
-					</weapons>
-					<engine type="en::Sprite">
-						<TextureID type="en::U32">4294967295</TextureID>
-						<TextureRect type="en::Rect<en::I32>">
-							<Min type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Min>
-							<Size type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Size>
-						</TextureRect>
-						<Origin type="en::Vector2<en::F32>">
-							<x type="en::F32">0</x>
-							<y type="en::F32">0</y>
-						</Origin>
-					</engine>
-					<shield type="en::Sprite">
-						<TextureID type="en::U32">4294967295</TextureID>
-						<TextureRect type="en::Rect<en::I32>">
-							<Min type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Min>
-							<Size type="en::Vector2<en::I32>">
-								<x type="en::I32">0</x>
-								<y type="en::I32">0</y>
-							</Size>
-						</TextureRect>
-						<Origin type="en::Vector2<en::F32>">
-							<x type="en::F32">0</x>
-							<y type="en::F32">0</y>
-						</Origin>
-					</shield>
-				</ShipComponent>
-				<en::RenderableComponent type="en::RenderableComponent" />
-				<VelocityComponent type="VelocityComponent">
-					<velocity type="en::Vector2<en::F32>">
-						<x type="en::F32">0</x>
-						<y type="en::F32">0</y>
-					</velocity>
-				</VelocityComponent>
-			</Player2>
 			<Player1 type="en::Entity">
 				<en::NameComponent type="en::NameComponent">
 					<name type="std::string">Player1</name>
 				</en::NameComponent>
+				<BarkComponent type="BarkComponent">
+					<text type="en::Text">
+						<FontID type="en::U32">1496362539</FontID>
+						<String type="std::string">Arggg</String>
+						<CharacterSize type="en::U32">50</CharacterSize>
+						<LineSpacing type="en::F32">1</LineSpacing>
+						<LetterSpacing type="en::F32">1</LetterSpacing>
+						<FillColor type="en::Color">ffffffff</FillColor>
+						<OutlineColor type="en::Color">ff</OutlineColor>
+						<OutlineThickness type="en::F32">0</OutlineThickness>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">0</x>
+							<y type="en::F32">0</y>
+						</Origin>
+					</text>
+				</BarkComponent>
 				<en::TransformComponent type="en::TransformComponent">
 					<transform type="en::Transform">
 						<Position type="en::Vector3<en::F32>">
-							<x type="en::F32">-1974.28</x>
+							<x type="en::F32">256</x>
 							<y type="en::F32">192</y>
 							<z type="en::F32">0</z>
 						</Position>
-						<Rotation type="en::F32">-90</Rotation>
+						<Rotation type="en::F32">45</Rotation>
 						<Scale type="en::Vector3<en::F32>">
 							<x type="en::F32">0.5</x>
 							<y type="en::F32">0.5</y>
@@ -191,8 +47,13 @@
 						<FillColor type="en::Color">fd0000ff</FillColor>
 						<OutlineColor type="en::Color">ff</OutlineColor>
 						<OutlineThickness type="en::F32">0</OutlineThickness>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">0</x>
+							<y type="en::F32">0</y>
+						</Origin>
 					</text>
 				</en::TextComponent>
+				<en::RenderableComponent type="en::RenderableComponent" />
 				<ShipComponent type="ShipComponent">
 					<body type="en::Sprite">
 						<TextureID type="en::U32">2706156514</TextureID>
@@ -314,14 +175,195 @@
 						</Origin>
 					</shield>
 				</ShipComponent>
-				<en::RenderableComponent type="en::RenderableComponent" />
 				<VelocityComponent type="VelocityComponent">
 					<velocity type="en::Vector2<en::F32>">
 						<x type="en::F32">0</x>
 						<y type="en::F32">0</y>
 					</velocity>
 				</VelocityComponent>
+				<PlayerComponent type="PlayerComponent" />
 			</Player1>
+			<Player2 type="en::Entity">
+				<en::NameComponent type="en::NameComponent">
+					<name type="std::string">Player2</name>
+				</en::NameComponent>
+				<BarkComponent type="BarkComponent">
+					<text type="en::Text">
+						<FontID type="en::U32">1496362539</FontID>
+						<String type="std::string">Outch</String>
+						<CharacterSize type="en::U32">50</CharacterSize>
+						<LineSpacing type="en::F32">1</LineSpacing>
+						<LetterSpacing type="en::F32">1</LetterSpacing>
+						<FillColor type="en::Color">ffffffff</FillColor>
+						<OutlineColor type="en::Color">ff</OutlineColor>
+						<OutlineThickness type="en::F32">0</OutlineThickness>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">0</x>
+							<y type="en::F32">0</y>
+						</Origin>
+					</text>
+				</BarkComponent>
+				<en::TransformComponent type="en::TransformComponent">
+					<transform type="en::Transform">
+						<Position type="en::Vector3<en::F32>">
+							<x type="en::F32">768</x>
+							<y type="en::F32">576</y>
+							<z type="en::F32">0</z>
+						</Position>
+						<Rotation type="en::F32">-45</Rotation>
+						<Scale type="en::Vector3<en::F32>">
+							<x type="en::F32">0.5</x>
+							<y type="en::F32">0.5</y>
+							<z type="en::F32">1</z>
+						</Scale>
+					</transform>
+				</en::TransformComponent>
+				<en::TextComponent type="en::TextComponent">
+					<text type="en::Text">
+						<FontID type="en::U32">1496362539</FontID>
+						<String type="std::string">Player2</String>
+						<CharacterSize type="en::U32">40</CharacterSize>
+						<LineSpacing type="en::F32">1</LineSpacing>
+						<LetterSpacing type="en::F32">1</LetterSpacing>
+						<FillColor type="en::Color">ffff</FillColor>
+						<OutlineColor type="en::Color">ff</OutlineColor>
+						<OutlineThickness type="en::F32">0</OutlineThickness>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">0</x>
+							<y type="en::F32">0</y>
+						</Origin>
+					</text>
+				</en::TextComponent>
+				<en::RenderableComponent type="en::RenderableComponent" />
+				<ShipComponent type="ShipComponent">
+					<body type="en::Sprite">
+						<TextureID type="en::U32">2706156514</TextureID>
+						<TextureRect type="en::Rect<en::I32>">
+							<Min type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Min>
+							<Size type="en::Vector2<en::I32>">
+								<x type="en::I32">256</x>
+								<y type="en::I32">256</y>
+							</Size>
+						</TextureRect>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">128</x>
+							<y type="en::F32">128</y>
+						</Origin>
+					</body>
+					<bodyFrame type="en::Sprite">
+						<TextureID type="en::U32">4294967295</TextureID>
+						<TextureRect type="en::Rect<en::I32>">
+							<Min type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Min>
+							<Size type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Size>
+						</TextureRect>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">0</x>
+							<y type="en::F32">0</y>
+						</Origin>
+					</bodyFrame>
+					<wings type="en::Sprite">
+						<TextureID type="en::U32">4294967295</TextureID>
+						<TextureRect type="en::Rect<en::I32>">
+							<Min type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Min>
+							<Size type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Size>
+						</TextureRect>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">0</x>
+							<y type="en::F32">0</y>
+						</Origin>
+					</wings>
+					<wingsFrame type="en::Sprite">
+						<TextureID type="en::U32">4294967295</TextureID>
+						<TextureRect type="en::Rect<en::I32>">
+							<Min type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Min>
+							<Size type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Size>
+						</TextureRect>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">0</x>
+							<y type="en::F32">0</y>
+						</Origin>
+					</wingsFrame>
+					<weapons type="en::Sprite">
+						<TextureID type="en::U32">4294967295</TextureID>
+						<TextureRect type="en::Rect<en::I32>">
+							<Min type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Min>
+							<Size type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Size>
+						</TextureRect>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">0</x>
+							<y type="en::F32">0</y>
+						</Origin>
+					</weapons>
+					<engine type="en::Sprite">
+						<TextureID type="en::U32">4294967295</TextureID>
+						<TextureRect type="en::Rect<en::I32>">
+							<Min type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Min>
+							<Size type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Size>
+						</TextureRect>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">0</x>
+							<y type="en::F32">0</y>
+						</Origin>
+					</engine>
+					<shield type="en::Sprite">
+						<TextureID type="en::U32">4294967295</TextureID>
+						<TextureRect type="en::Rect<en::I32>">
+							<Min type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Min>
+							<Size type="en::Vector2<en::I32>">
+								<x type="en::I32">0</x>
+								<y type="en::I32">0</y>
+							</Size>
+						</TextureRect>
+						<Origin type="en::Vector2<en::F32>">
+							<x type="en::F32">0</x>
+							<y type="en::F32">0</y>
+						</Origin>
+					</shield>
+				</ShipComponent>
+				<VelocityComponent type="VelocityComponent">
+					<velocity type="en::Vector2<en::F32>">
+						<x type="en::F32">0</x>
+						<y type="en::F32">0</y>
+					</velocity>
+				</VelocityComponent>
+				<PlayerComponent type="PlayerComponent" />
+			</Player2>
 		</EntityManager>
 		<IDGenerator type="en::U32">3452816845</IDGenerator>
 	</World>

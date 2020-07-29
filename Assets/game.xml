@@ -21,27 +21,1426 @@
 		<startRotationPlayer2 type="en::F32">-45</startRotationPlayer2>
 		<energyFactorAI type="en::F32">0.9</energyFactorAI>
 		<playerForce type="en::F32">60</playerForce>
+		<degPerSecond type="en::F32">10</degPerSecond>
+		<bodys type="BodyPart" size="8">
+			<bodys_0 type="BodyPart">
+				<body type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</body>
+				<bodyColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</bodyColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0.1</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</bodys_0>
+			<bodys_1 type="BodyPart">
+				<body type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</body>
+				<bodyColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</bodyColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</bodys_1>
+			<bodys_2 type="BodyPart">
+				<body type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</body>
+				<bodyColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</bodyColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</bodys_2>
+			<bodys_3 type="BodyPart">
+				<body type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</body>
+				<bodyColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</bodyColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</bodys_3>
+			<bodys_4 type="BodyPart">
+				<body type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</body>
+				<bodyColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</bodyColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</bodys_4>
+			<bodys_5 type="BodyPart">
+				<body type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</body>
+				<bodyColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</bodyColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</bodys_5>
+			<bodys_6 type="BodyPart">
+				<body type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</body>
+				<bodyColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</bodyColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</bodys_6>
+			<bodys_7 type="BodyPart">
+				<body type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</body>
+				<bodyColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</bodyColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</bodys_7>
+		</bodys>
+		<wings type="WingsPart" size="8">
+			<wings_0 type="WingsPart">
+				<wings type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wings>
+				<wingsColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wingsColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</wings_0>
+			<wings_1 type="WingsPart">
+				<wings type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wings>
+				<wingsColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wingsColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</wings_1>
+			<wings_2 type="WingsPart">
+				<wings type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wings>
+				<wingsColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wingsColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</wings_2>
+			<wings_3 type="WingsPart">
+				<wings type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wings>
+				<wingsColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wingsColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</wings_3>
+			<wings_4 type="WingsPart">
+				<wings type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wings>
+				<wingsColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wingsColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</wings_4>
+			<wings_5 type="WingsPart">
+				<wings type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wings>
+				<wingsColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wingsColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</wings_5>
+			<wings_6 type="WingsPart">
+				<wings type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wings>
+				<wingsColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wingsColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</wings_6>
+			<wings_7 type="WingsPart">
+				<wings type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wings>
+				<wingsColor type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</wingsColor>
+				<damages type="en::Rect<en::I32>" size="4">
+					<damages_0 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_0>
+					<damages_1 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_1>
+					<damages_2 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_2>
+					<damages_3 type="en::Rect<en::I32>">
+						<Min type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Min>
+						<Size type="en::Vector2<en::I32>">
+							<x type="en::I32">0</x>
+							<y type="en::I32">0</y>
+						</Size>
+					</damages_3>
+				</damages>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</wings_7>
+		</wings>
+		<canons type="CanonPart" size="8">
+			<canons_0 type="CanonPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</canons_0>
+			<canons_1 type="CanonPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</canons_1>
+			<canons_2 type="CanonPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</canons_2>
+			<canons_3 type="CanonPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</canons_3>
+			<canons_4 type="CanonPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</canons_4>
+			<canons_5 type="CanonPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</canons_5>
+			<canons_6 type="CanonPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</canons_6>
+			<canons_7 type="CanonPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</canons_7>
+		</canons>
+		<engines type="EnginePart" size="5">
+			<engines_0 type="EnginePart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</engines_0>
+			<engines_1 type="EnginePart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</engines_1>
+			<engines_2 type="EnginePart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</engines_2>
+			<engines_3 type="EnginePart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</engines_3>
+			<engines_4 type="EnginePart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</engines_4>
+		</engines>
+		<arms type="ArmPart" size="5">
+			<arms_0 type="ArmPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</arms_0>
+			<arms_1 type="ArmPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</arms_1>
+			<arms_2 type="ArmPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</arms_2>
+			<arms_3 type="ArmPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</arms_3>
+			<arms_4 type="ArmPart">
+				<texture type="en::Rect<en::I32>">
+					<Min type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Min>
+					<Size type="en::Vector2<en::I32>">
+						<x type="en::I32">0</x>
+						<y type="en::I32">0</y>
+					</Size>
+				</texture>
+				<agility type="en::F32">0</agility>
+				<damage type="en::F32">0</damage>
+				<resistance type="en::F32">0</resistance>
+				<speed type="en::F32">0</speed>
+			</arms_4>
+		</arms>
+		<aiParams type="AIParams">
+			<timeRecompMin type="en::Time">0.6</timeRecompMin>
+			<timeRecompMax type="en::Time">2</timeRecompMax>
+			<cooldown type="en::Time">0.4</cooldown>
+			<cooldownDev type="en::Time">0.2</cooldownDev>
+			<randDev type="en::F32">25</randDev>
+			<evF type="en::F32">5</evF>
+			<evD type="en::F32">300</evD>
+			<alF type="en::F32">1</alF>
+			<plF type="en::F32">6</plF>
+			<rnF type="en::F32">1</rnF>
+			<plD type="en::F32">2000</plD>
+			<plI type="en::F32">4</plI>
+		</aiParams>
 	</Game>
 	<Audio type="AudioTrackMixer3000">
-		<tempoBpm type="en::U32">71</tempoBpm>
-		<baseTrack type="TrackData">
-			<musicIdentifier type="std::string"></musicIdentifier>
+		<mBaseTrack type="TrackData">
+			<musicIdentifier type="std::string">spaceBase</musicIdentifier>
 			<volumeDefault type="en::F32">1</volumeDefault>
-		</baseTrack>
-		<tracks type="TrackData" size="3">
-			<tracks_0 type="TrackData">
-				<musicIdentifier type="std::string"></musicIdentifier>
-				<volumeDefault type="en::F32">1</volumeDefault>
-			</tracks_0>
-			<tracks_1 type="TrackData">
-				<musicIdentifier type="std::string"></musicIdentifier>
-				<volumeDefault type="en::F32">1</volumeDefault>
-			</tracks_1>
-			<tracks_2 type="TrackData">
-				<musicIdentifier type="std::string"></musicIdentifier>
-				<volumeDefault type="en::F32">1</volumeDefault>
-			</tracks_2>
-		</tracks>
-		<distanceFromSolarMax type="en::F32">1000</distanceFromSolarMax>
+		</mBaseTrack>
+		<mTracks type="TrackData" size="3">
+			<mTracks_0 type="TrackData">
+				<musicIdentifier type="std::string">spaceNavigation</musicIdentifier>
+				<volumeDefault type="en::F32">0.8</volumeDefault>
+			</mTracks_0>
+			<mTracks_1 type="TrackData">
+				<musicIdentifier type="std::string">spaceSafe</musicIdentifier>
+				<volumeDefault type="en::F32">1.1</volumeDefault>
+			</mTracks_1>
+			<mTracks_2 type="TrackData">
+				<musicIdentifier type="std::string">spaceCombat</musicIdentifier>
+				<volumeDefault type="en::F32">0.9</volumeDefault>
+			</mTracks_2>
+		</mTracks>
 	</Audio>
 </DataFile>

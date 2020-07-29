@@ -32,6 +32,13 @@ int main(int argc, char** argv)
 	en::ClassManager::Register<en::UIDComponent>();
 	en::ClassManager::Register<VelocityComponent>();
 	en::ClassManager::Register<ShipComponent>();
+	en::ClassManager::Register<ShootComponent>();
+	en::ClassManager::Register<UIComponent>();
+	en::ClassManager::Register<BarkComponent>();
+	en::ClassManager::Register<AIComponent>();
+	en::ClassManager::Register<PlayerComponent>();
+	en::ClassManager::Register<PlanetComponent>();
+	en::ClassManager::Register<SpacePhysicComponent>();
 
 	// TODO : Register engine classes in classManager & componentManager
 	en::ComponentManager::Register<en::NameComponent>();
@@ -42,6 +49,13 @@ int main(int argc, char** argv)
 	en::ComponentManager::Register<en::UIDComponent>();
 	en::ComponentManager::Register<VelocityComponent>();
 	en::ComponentManager::Register<ShipComponent>();
+	en::ComponentManager::Register<ShootComponent>();
+	en::ComponentManager::Register<UIComponent>();
+	en::ComponentManager::Register<BarkComponent>();
+	en::ComponentManager::Register<AIComponent>();
+	en::ComponentManager::Register<PlayerComponent>();
+	en::ComponentManager::Register<PlanetComponent>();
+	en::ComponentManager::Register<SpacePhysicComponent>();
 
 	{
 		// TODO : Do something about type info for pointers
@@ -75,7 +89,8 @@ int main(int argc, char** argv)
 		app.GetWindow().create(vm, "SpaceGame", sf::Style::Titlebar | sf::Style::Close);
 		app.GetWindow().getMainView().setSize({ vm.width * 1.0f, vm.height * 1.0f });
 		app.GetWindow().getMainView().setCenter({ vm.width * 0.5f, vm.height * 0.5f });
-		app.GetWindow().toFullscreen();
+		app.GetWindow().setKeyRepeatEnabled(false);
+		//app.GetWindow().toFullscreen();
 		en::PathManager::GetInstance().SetScreenshotPath("Screenshots/");
 
 		auto& actionSystem = app.GetActionSystem();
@@ -85,8 +100,12 @@ int main(int argc, char** argv)
 		actionSystem.AddInputJoystickConnect("player2JoystickConnect", 1, en::ActionType::Pressed);
 		actionSystem.AddInputJoystickConnect("player1JoystickDisconnect", 0, en::ActionType::Released);
 		actionSystem.AddInputJoystickConnect("player2JoystickDisconnect", 1, en::ActionType::Released);
-		actionSystem.AddInputJoystickButton("player1JoystickButtonA", 0, 0, en::ActionType::Pressed);
-		actionSystem.AddInputJoystickButton("player2JoystickButtonA", 1, 0, en::ActionType::Pressed);
+		actionSystem.AddInputJoystickButton("player1JoystickFire", 0, 0, en::ActionType::Pressed);
+		actionSystem.AddInputJoystickButton("player2JoystickFire", 1, 0, en::ActionType::Pressed);
+		actionSystem.AddInputKey("player1KeyFire", sf::Keyboard::Space, en::ActionType::Pressed);
+		actionSystem.AddInputKey("player2KeyFire", sf::Keyboard::Enter, en::ActionType::Pressed);
+		actionSystem.AddInputOr("player1Fire", actionSystem.GetInputByName("player1JoystickFire")->GetID(), actionSystem.GetInputByName("player1KeyFire")->GetID());
+		actionSystem.AddInputOr("player2Fire", actionSystem.GetInputByName("player2JoystickFire")->GetID(), actionSystem.GetInputByName("player2KeyFire")->GetID());
 
 		app.Start<GameState>();
 	}

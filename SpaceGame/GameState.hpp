@@ -29,7 +29,14 @@ private:
 	void Init();
 
 	void Velocity(en::Time dt);
-	void PlayerMvt(en::U32 index);
+	void PlayerMvt(en::Time dt, en::U32 index);
+	void AIMvt(en::Time dt);
+	void ShootUpdate(en::Time dt);
+	void PlayerShoot(en::Time dt, en::U32 index);
+	void Shoot(const en::Entity& entity);
+	void SpawnSwarm(en::U32 swarmIndex, const en::Vector2f& pos);
+	void SpawnEnemy(const en::Vector2f& pos, en::F32 rotation, en::U32 swarmIndex, const en::Color& color);
+	void SpawnPlanet(const en::Vector2f& pos);
 
 #ifdef ENLIVE_DEBUG
 	void DebugEvent(const sf::Event& event);
@@ -37,6 +44,9 @@ private:
 #endif // ENLIVE_DEBUG
 
 	static constexpr en::F32 zoom = 2.0f;
+
+	bool fire1;
+	bool fire2;
 
 	static constexpr en::U32 magicBarLines = 6;
 	static constexpr en::Time magicBarTime = en::Time::Milliseconds(100);

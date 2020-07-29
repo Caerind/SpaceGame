@@ -13,6 +13,49 @@
 #include <Enlivengine/Core/ObjectEditor.hpp>
 #endif // ENLIVE_ENABLE_IMGUI
 
+struct AIParams
+{
+	AIParams()
+		: timeRecompMin(en::Time::Seconds(0.3f))
+		, timeRecompMax(en::Time::Seconds(1.0f))
+		, cooldown(en::Time::Seconds(0.3f))
+		, cooldownDev(en::Time::Seconds(0.1f))
+		, randDev(15.0f)
+		, evF(1.2f)
+		, evD(400.0f)
+		, alF(1.0f)
+		, plF(1.0f)
+		, rnF(1.0f)
+	{}
+
+	en::Time timeRecompMin;
+	en::Time timeRecompMax;
+	en::Time cooldown;
+	en::Time cooldownDev;
+	en::F32 randDev;
+	en::F32 evF;
+	en::F32 evD;
+	en::F32 alF;
+	en::F32 plF;
+	en::F32 rnF;
+	en::F32 plD;
+	en::F32 plI;
+};
+ENLIVE_META_CLASS_BEGIN(AIParams)
+ENLIVE_META_CLASS_MEMBER("timeRecompMin", &AIParams::timeRecompMin),
+ENLIVE_META_CLASS_MEMBER("timeRecompMax", &AIParams::timeRecompMax),
+ENLIVE_META_CLASS_MEMBER("cooldown", &AIParams::cooldown),
+ENLIVE_META_CLASS_MEMBER("cooldownDev", &AIParams::cooldownDev),
+ENLIVE_META_CLASS_MEMBER("randDev", &AIParams::randDev),
+ENLIVE_META_CLASS_MEMBER("evF", &AIParams::evF),
+ENLIVE_META_CLASS_MEMBER("evD", &AIParams::evD),
+ENLIVE_META_CLASS_MEMBER("alF", &AIParams::alF),
+ENLIVE_META_CLASS_MEMBER("plF", &AIParams::plF),
+ENLIVE_META_CLASS_MEMBER("rnF", &AIParams::rnF),
+ENLIVE_META_CLASS_MEMBER("plD", &AIParams::plD),
+ENLIVE_META_CLASS_MEMBER("plI", &AIParams::plI)
+ENLIVE_META_CLASS_END()
+
 class GameSingleton
 {
 	ENLIVE_SINGLETON(GameSingleton);
@@ -30,6 +73,13 @@ public:
 	en::F32 startRotationPlayer2;
 	en::F32 energyFactorAI;
 	en::F32 playerForce;
+	en::F32 degPerSecond;
+	std::array<BodyPart, 8> bodys;
+	std::array<WingsPart, 8> wings;
+	std::array<CanonPart, 8> canons;
+	std::array<EnginePart, 5> engines;
+	std::array<ArmPart, 5> arms;
+	AIParams aiParams;
 
 public:
 	en::World world;
@@ -108,7 +158,14 @@ ENLIVE_META_CLASS_BEGIN(GameSingleton)
 	ENLIVE_META_CLASS_MEMBER("startRotationPlayer1", &GameSingleton::startRotationPlayer1),
 	ENLIVE_META_CLASS_MEMBER("startRotationPlayer2", &GameSingleton::startRotationPlayer2),
 	ENLIVE_META_CLASS_MEMBER("energyFactorAI", &GameSingleton::energyFactorAI),
-	ENLIVE_META_CLASS_MEMBER("playerForce", &GameSingleton::playerForce)
+	ENLIVE_META_CLASS_MEMBER("playerForce", &GameSingleton::playerForce),
+	ENLIVE_META_CLASS_MEMBER("degPerSecond", &GameSingleton::degPerSecond),
+	ENLIVE_META_CLASS_MEMBER("bodys", &GameSingleton::bodys),
+	ENLIVE_META_CLASS_MEMBER("wings", &GameSingleton::wings),
+	ENLIVE_META_CLASS_MEMBER("canons", &GameSingleton::canons),
+	ENLIVE_META_CLASS_MEMBER("engines", &GameSingleton::engines),
+	ENLIVE_META_CLASS_MEMBER("arms", &GameSingleton::arms),
+	ENLIVE_META_CLASS_MEMBER("aiParams", &GameSingleton::aiParams)
 ENLIVE_META_CLASS_END()
 
 
@@ -126,6 +183,21 @@ public:
 	virtual void Display() 
 	{
 		auto& gameSing = GameSingleton::GetInstance();
+
+		if (gameSing.world.IsPlaying())
+		{
+			if (ImGui::Button("PauseWorld"))
+			{
+				gameSing.world.Pause();
+			}
+		}
+		else
+		{
+			if (ImGui::Button("PlayWorld"))
+			{
+				gameSing.world.Play();
+			}
+		}
 
 		en::ObjectEditor::ImGuiEditor(gameSing, "GameSingleton");
 

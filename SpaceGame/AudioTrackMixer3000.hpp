@@ -9,12 +9,56 @@
 #include <Enlivengine/Core/ObjectEditor.hpp>
 #endif // ENLIVE_ENABLE_IMGUI
 
+#include "GameSingleton.hpp"
+
 struct TrackData
 {
-	TrackData() : musicIdentifier(""), volumeDefault(1.0f) {}
+	TrackData() : musicIdentifier(""), volumeDefault(1.0f), playing(false), music() {}
 
 	std::string musicIdentifier;
 	en::F32 volumeDefault;
+
+	bool IsPlaying() const { return playing; }
+	void Play()
+	{
+		playing = true;
+		if (music.IsValid())
+		{
+			music.Play();
+		}
+		else
+		{
+			music = en::AudioSystem::GetInstance().PlayMusic(musicIdentifier.c_str());
+		}
+	}
+	void FakeStop()
+	{
+		playing = false;
+		music.SetVolume(0.0f);
+	}
+	void HardStop()
+	{
+		playing = false;
+		if (music.IsValid())
+		{
+			music.Stop();
+			music = en::MusicPtr();
+		}
+	}
+	void UpdateVolume(en::F32 factor)
+	{
+		if (playing)
+		{
+			music.SetVolume(factor * volumeDefault);
+		}
+		else
+		{
+			music.SetVolume(0.0f);
+		}
+	}
+
+	bool playing;
+	en::MusicPtr music;
 };
 
 ENLIVE_META_CLASS_BEGIN(TrackData)
@@ -24,7 +68,20 @@ ENLIVE_META_CLASS_END()
 
 class AudioTrackMixer3000
 {
-	ENLIVE_SINGLETON(AudioTrackMixer3000);
+	AudioTrackMixer3000()
+		: mBaseTrack()
+		, mTracks()
+		, mSecondTrack(SecondTrackType::Nav)
+		, mPlaying(false)
+	{
+	}
+
+public:
+	static AudioTrackMixer3000& GetInstance() 
+	{
+		static AudioTrackMixer3000 instance;
+			return instance;
+	}
 	~AudioTrackMixer3000() {}
 
 public:
@@ -37,43 +94,67 @@ public:
 		Count
 	};
 
-	en::U32 tempoBpm;
-	TrackData baseTrack;
-	std::array<TrackData, static_cast<en::U32>(SecondTrackType::Count)> tracks;
-	en::F32 distanceFromSolarMax;
+	TrackData mBaseTrack;
+	std::array<TrackData, static_cast<en::U32>(SecondTrackType::Count)> mTracks;
 
 public:
 	bool IsPlaying() const { return mPlaying; }
-	void PlayAllTracks();
-	void StopAllTracks();
+	void Play()
+	{
+		mPlaying = true;
+		mBaseTrack.Play();
+		mTracks[static_cast<en::U32>(mSecondTrack)].Play();
+	}
+	void Stop()
+	{
+		mPlaying = false;
+		mBaseTrack.HardStop();
+		for (auto& t : mTracks)
+		{
+			t.HardStop();
+		}
+	}
 
-	void UpdateTempo(en::Time dt);
-	void UpdateVolumes();
-	void ChangeTrack(SecondTrackType newTrack);
+	void UpdateVolumes()
+	{
+		const en::F32 factor = GetDistanceFromSolarFactor();
+		mBaseTrack.UpdateVolume(factor);
+		for (auto& t : mTracks)
+			t.UpdateVolume(factor);
+	}
+	void ChangeTrack(SecondTrackType newTrack)
+	{
+		if (newTrack != mSecondTrack)
+		{
+			mTracks[static_cast<en::U32>(mSecondTrack)].FakeStop();
+			mSecondTrack = newTrack;
+			mTracks[static_cast<en::U32>(mSecondTrack)].Play();
+		}
+	}
 
-	en::F32 GetDistanceFromSolarFactor() const;
-	en::F32 GetDistanceFromSolar() const;
-	void SetDistanceFromSolar(en::F32 distanceFromSolar);
+	en::F32 GetDistanceFromSolarFactor() const
+	{
+		auto& gameSing = GameSingleton::GetInstance();
+		if (gameSing.distanceMax > 0.0f && gameSing.energyFactorEnv > 0.0f)
+		{
+			return en::Math::Clamp((gameSing.energyFactor / gameSing.energyFactorEnv) - 1.0f, 0.0f, 1.0f);
+		}
+		else
+		{
+			return 1.0f;
+		}
+	}
 
-	SecondTrackType GetSecondTrack() const;
+	SecondTrackType GetSecondTrack() const { return mSecondTrack; }
 
 private:
-	void StartTrack();
-
-private:
-	en::F32 mDistanceFromSolar;
 	SecondTrackType mSecondTrack;
-	en::MusicPtr mMusicBase;
-	en::MusicPtr mMusicOther;
-	en::Time mTimeAcc;
 	bool mPlaying;
 };
 
 ENLIVE_META_CLASS_BEGIN(AudioTrackMixer3000)
-	ENLIVE_META_CLASS_MEMBER("tempoBpm", &AudioTrackMixer3000::tempoBpm),
-	ENLIVE_META_CLASS_MEMBER("baseTrack", &AudioTrackMixer3000::baseTrack),
-	ENLIVE_META_CLASS_MEMBER("tracks", &AudioTrackMixer3000::tracks),
-	ENLIVE_META_CLASS_MEMBER("distanceFromSolarMax", &AudioTrackMixer3000::distanceFromSolarMax)
+	ENLIVE_META_CLASS_MEMBER("mBaseTrack", &AudioTrackMixer3000::mBaseTrack),
+	ENLIVE_META_CLASS_MEMBER("mTracks", &AudioTrackMixer3000::mTracks)
 ENLIVE_META_CLASS_END()
 
 
@@ -90,44 +171,40 @@ public:
 	virtual void Display() 
 	{
 		AudioTrackMixer3000& audioMixer = AudioTrackMixer3000::GetInstance();
-
-		en::ObjectEditor::ImGuiEditor(audioMixer, "StaticStats");
-		if (audioMixer.distanceFromSolarMax <= 0.0f)
-		{
-			audioMixer.distanceFromSolarMax = 0.01f;
-		}
+		en::ObjectEditor::ImGuiEditor(audioMixer, "Config");
 
 		ImGui::Separator();
 
-		en::F32 distanceFromSolar = audioMixer.GetDistanceFromSolar();
-		if (en::ObjectEditor::ImGuiEditor(distanceFromSolar, "distanceFromSolar"))
+		static constexpr const char* names[] = {
+			"Nav",
+			"Safe",
+			"Fight"
+		};
+		const en::F32 factor = audioMixer.GetDistanceFromSolarFactor();
+		ImGui::Text("BaseTrack: %f (%f, %f)", audioMixer.mBaseTrack.music.GetVolume(), audioMixer.mBaseTrack.volumeDefault, factor);
+		for (en::U32 i = 0; i < static_cast<en::U32>(AudioTrackMixer3000::SecondTrackType::Count); ++i)
 		{
-			if (distanceFromSolar <= 0.0f)
+			std::string n = std::string(en::Meta::GetEnumName(static_cast<AudioTrackMixer3000::SecondTrackType>(i)));
+			ImGui::Text("%s: %f (%f, %f)", n.c_str(), audioMixer.mTracks[i].music.GetVolume(), audioMixer.mTracks[i].volumeDefault, factor);
+			if (audioMixer.mTracks[i].IsPlaying())
 			{
-				distanceFromSolar = 0.01f;
-			}
-			audioMixer.SetDistanceFromSolar(distanceFromSolar);
-		}
-		ImGui::Text("Factor: %f", audioMixer.GetDistanceFromSolarFactor());
+				ImGui::SameLine();
+				ImGui::Text(" -> Playing");
+				/*if (ImGui::Button("Stop"))
+				{
 
-		AudioTrackMixer3000::SecondTrackType secondTrack = audioMixer.GetSecondTrack();
-		if (en::ObjectEditor::ImGuiEditor(secondTrack, "secondTrack"))
-		{
-			audioMixer.ChangeTrack(secondTrack);
-		}
-
-		if (!audioMixer.IsPlaying())
-		{
-			if (ImGui::Button("Play"))
-			{
-				audioMixer.PlayAllTracks();
+				}
+				*/
 			}
-		}
-		else
-		{
-			if (ImGui::Button("Stop"))
+			else
 			{
-				audioMixer.StopAllTracks();
+				ImGui::SameLine();
+				ImGui::PushID(i);
+				if (ImGui::Button("Play"))
+				{
+					audioMixer.ChangeTrack(static_cast<AudioTrackMixer3000::SecondTrackType>(i));
+				}
+				ImGui::PopID();
 			}
 		}
 	}
