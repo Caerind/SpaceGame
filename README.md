@@ -1,3 +1,3 @@
-# Proto
+# SpaceGame
 
-Some random prototypes and things using [Enlivengine](https://github.com/Cmdu76/Enlivengine)
+"Summer" TeamBuilding Game Jam and things using [Enlivengine](https://github.com/Cmdu76/Enlivengine)
