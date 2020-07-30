@@ -126,7 +126,7 @@ bool DataFile::Serialize_Registered(const T& object, const char* name)
 		WriteCurrentType<T>();
 		Meta::ForEachMember<T>([this, &object](const auto& member)
 		{
-			Serialize_Common(member.Get(object), member.GetName());
+			Serialize_Common(member.GetConstRef(object), member.GetName());
 		});
 		mParserXml.CloseNode();
 		return true;
@@ -165,7 +165,7 @@ bool DataFile::Deserialize_Registered(T& object, const char* name)
 			// TODO : Use return of Serialize_Common for return
 			Meta::ForEachMember<T>([this, &object](const auto& member)
 			{
-				Deserialize_Common(member.Get(object), member.GetName());
+				Deserialize_Common(member.GetRef(object), member.GetName());
 			});
 		}
 		else

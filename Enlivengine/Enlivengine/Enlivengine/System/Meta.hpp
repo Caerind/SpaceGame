@@ -17,21 +17,113 @@ class Member
 {
 public:
 	using MemberPtrT = T Class::*;
-	using classType = Class;
-	using type = T;
+	using ClassType = Class;
+	using Type = T;
+
+	using ConstRefGetterFuncPtrT = const T& (Class::*)() const;
+	using ConstRefSetterFuncPtrT = void (Class::*)(const T&);
+	using NonConstRefGetterFuncPtrT = T& (Class::*)();
+	using CopyGetterFuncPtrT = T (Class::*)() const;
+	using CopySetterFuncPtrT = void (Class::*)(T);
 
 	constexpr Member(const char* name, MemberPtrT ptr, U32 attributes = 0)
 		: mName(name)
-		, mPtr(ptr)
 		, mAttributes(attributes)
+		, mHasMemberPtr(true)
+		, mMemberPtr(ptr)
+		, mConstRefGetter(nullptr)
+		, mNonConstRefGetter(nullptr)
+		, mCopyGetter(nullptr)
+		, mConstRefSetter(nullptr)
+		, mCopySetter(nullptr)
+	{
+	}
+
+	constexpr Member(const char* name, ConstRefGetterFuncPtrT getter, ConstRefSetterFuncPtrT setter, U32 attributes = 0)
+		: mName(name)
+		, mAttributes(attributes)
+		, mHasMemberPtr(false)
+		, mMemberPtr(nullptr)
+		, mConstRefGetter(getter)
+		, mNonConstRefGetter(nullptr)
+		, mCopyGetter(nullptr)
+		, mConstRefSetter(setter)
+		, mCopySetter(nullptr)
+	{
+	}
+	constexpr Member(const char* name, NonConstRefGetterFuncPtrT getter, ConstRefSetterFuncPtrT setter, U32 attributes = 0)
+		: mName(name)
+		, mAttributes(attributes)
+		, mHasMemberPtr(false)
+		, mMemberPtr(nullptr)
+		, mConstRefGetter(nullptr)
+		, mNonConstRefGetter(getter)
+		, mCopyGetter(nullptr)
+		, mConstRefSetter(setter)
+		, mCopySetter(nullptr)
+	{
+	}
+	constexpr Member(const char* name, CopyGetterFuncPtrT getter, ConstRefSetterFuncPtrT setter, U32 attributes = 0)
+		: mName(name)
+		, mAttributes(attributes)
+		, mHasMemberPtr(false)
+		, mMemberPtr(nullptr)
+		, mConstRefGetter(nullptr)
+		, mNonConstRefGetter(nullptr)
+		, mCopyGetter(getter)
+		, mConstRefSetter(setter)
+		, mCopySetter(nullptr)
+	{
+	}
+
+	constexpr Member(const char* name, ConstRefGetterFuncPtrT getter, CopySetterFuncPtrT setter, U32 attributes = 0)
+		: mName(name)
+		, mAttributes(attributes)
+		, mHasMemberPtr(false)
+		, mMemberPtr(nullptr)
+		, mConstRefGetter(getter)
+		, mNonConstRefGetter(nullptr)
+		, mCopyGetter(nullptr)
+		, mConstRefSetter(nullptr)
+		, mCopySetter(setter)
+	{
+	}
+	constexpr Member(const char* name, NonConstRefGetterFuncPtrT getter, CopySetterFuncPtrT setter, U32 attributes = 0)
+		: mName(name)
+		, mAttributes(attributes)
+		, mMemberPtr(nullptr)
+		, mConstRefGetter(nullptr)
+		, mNonConstRefGetter(getter)
+		, mCopyGetter(nullptr)
+		, mConstRefSetter(nullptr)
+		, mCopySetter(setter)
+	{
+	}
+	constexpr Member(const char* name, CopyGetterFuncPtrT getter, CopySetterFuncPtrT setter, U32 attributes = 0)
+		: mName(name)
+		, mAttributes(attributes)
+		, mHasMemberPtr(false)
+		, mMemberPtr(nullptr)
+		, mConstRefGetter(nullptr)
+		, mNonConstRefGetter(nullptr)
+		, mCopyGetter(getter)
+		, mConstRefSetter(nullptr)
+		, mCopySetter(setter)
 	{
 	}
 
 	constexpr const char* GetName() const { return mName; }
 	constexpr U32 GetHash() const { return Hash::ConstexprHash(mName); }
-	constexpr const MemberPtrT GetPtr() const { return mPtr; }
 	constexpr U32 GetAttributes() const { return mAttributes; }
-	constexpr U32 GetSize() const { return ENLIVE_SIZE_OF(T); }
+
+	constexpr bool HasMemberPtr() const { return mHasMemberPtr; }
+
+	constexpr bool HasConstRefGetter() const { return mConstRefGetter != nullptr; }
+	constexpr bool HasNonConstRefGetter() const { return mNonConstRefGetter != nullptr; }
+	constexpr bool HasCopyGetter() const { return mCopyGetter != nullptr; }
+
+	constexpr bool HasConstRefSetter() const { return mConstRefSetter != nullptr; }
+	constexpr bool HasCopySetter() const { return mCopySetter != nullptr; }
 
 	constexpr U32 GetTotalHash() const
 	{
@@ -40,26 +132,96 @@ public:
 		return Hash::Combine32(TypeInfo<Class>::GetHash(), Hash::Combine32(TypeInfo<T>::GetHash(), Hash::ConstexprHash(mName)));
 	}
 
-	constexpr T& Get(Class& obj) const
+	constexpr T& GetRef(Class& obj) const
 	{
-		return obj.*mPtr;
+		if (HasMemberPtr())
+		{
+			return obj.*mMemberPtr;
+		}
+		else if (HasNonConstRefGetter())
+		{
+			return (obj.*mNonConstRefGetter)();
+		}
+		else
+		{
+			throw std::logic_error("Invalid member setup/use");
+		}
 	}
 	
-	constexpr const T& Get(const Class& obj) const
+	constexpr const T& GetConstRef(const Class& obj) const
 	{
-		return obj.*mPtr;
+		if (HasMemberPtr())
+		{
+			return obj.*mMemberPtr;
+		}
+		else if (HasConstRefGetter())
+		{
+			return (obj.*mConstRefGetter)();
+		}
+		else
+		{
+			throw std::logic_error("Invalid member setup/use");
+		}
+	}
+
+	constexpr T GetCopy(const Class& obj) const
+	{
+		if (HasMemberPtr())
+		{
+			return obj.*mMemberPtr;
+		}
+		else if (HasConstRefGetter())
+		{
+			return (obj.*mConstRefGetter)();
+		}
+		else if (HasNonConstRefGetter())
+		{
+			return (obj.*mNonConstRefGetter)();
+		}
+		else if (HasCopyGetter())
+		{
+			return (obj.*mCopyGetter)();
+		}
+		else
+		{
+			throw std::logic_error("Invalid member setup/use");
+		}
 	}
 
 	template <typename V, typename = Traits::EnableIf<std::is_constructible_v<T, V>::type>> // TODO : Remove this std::type_traits
 	constexpr void Set(Class& obj, V&& value) const
 	{
-		obj.*mPtr = value;
+		if (HasMemberPtr())
+		{
+			obj.*mMemberPtr = value;
+		}
+		else if (HasConstRefSetter())
+		{
+			(obj.*mConstRefSetter)(value);
+		}
+		else if (HasCopySetter())
+		{
+			(obj.*mCopySetter)(value);
+		}
+		else
+		{
+			throw std::logic_error("Invalid member setup/use");
+		}
 	}
 
 private:
 	const char* mName;
-	MemberPtrT mPtr;
 	U32 mAttributes;
+	bool mHasMemberPtr;
+
+	MemberPtrT mMemberPtr;
+
+	ConstRefGetterFuncPtrT mConstRefGetter;
+	NonConstRefGetterFuncPtrT mNonConstRefGetter;
+	CopyGetterFuncPtrT mCopyGetter;
+
+	ConstRefSetterFuncPtrT mConstRefSetter;
+	CopySetterFuncPtrT mCopySetter;
 };
 
 template <typename Class, typename T>
@@ -97,8 +259,7 @@ namespace priv
 		constexpr bool IsRegistered<className>() { return true; } \
 		template <> \
 		constexpr auto RegisterMembers<className>() { return std::make_tuple(
-#define ENLIVE_META_CLASS_MEMBER(name, ptr) en::Meta::RegisterMember(name, ptr)
-#define ENLIVE_META_CLASS_MEMBER_EX(name, ptr, attributes) en::Meta::RegisterMember(name, ptr, attributes)
+#define ENLIVE_META_CLASS_MEMBER(name, ...) en::Meta::RegisterMember(name, __VA_ARGS__)
 #define ENLIVE_META_CLASS_END() ); } }
 
 template <typename T>
@@ -127,7 +288,7 @@ constexpr void ForEachMember(F&& f)
 }
 
 template <typename T>
-using MemberTypeOf = typename Traits::Decay<T>::type;
+using MemberTypeOf = typename Traits::Decay<T>::type::Type;
 
 template <typename T>
 constexpr bool HasMember(const char* name)

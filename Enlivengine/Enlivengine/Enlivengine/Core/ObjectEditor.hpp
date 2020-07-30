@@ -69,7 +69,7 @@ public:
 			Meta::ForEachMember<T>([&object, &modified](const auto& member)
 			{
 				ImGui::PushID(member.GetHash());
-				modified = ImGuiEditor_Common(member.Get(object), member.GetName()) || modified;
+				modified = ImGuiEditor_Common(member.GetRef(object), member.GetName()) || modified;
 				ImGui::PopID();
 			});
 			ImGui::Unindent();
