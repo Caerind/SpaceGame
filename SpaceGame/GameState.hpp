@@ -18,8 +18,6 @@ class GameState : public en::State
 public:
 	GameState(en::StateManager& manager);
 
-	bool handleEvent(const sf::Event& event);
-
 	bool update(en::Time dt);
 
 	void render(sf::RenderTarget& target);
@@ -42,9 +40,6 @@ private:
 #endif // ENLIVE_DEBUG
 
 	static constexpr en::F32 zoom = 2.0f;
-
-	bool fire1;
-	bool fire2;
 
 	static constexpr en::U32 magicBarLines = 6;
 	static constexpr en::Time magicBarTime = en::Time::Milliseconds(100);

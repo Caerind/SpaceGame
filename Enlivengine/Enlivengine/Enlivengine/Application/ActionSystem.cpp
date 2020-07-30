@@ -442,6 +442,61 @@ void ActionInputJoystickButton::SetActionType(ActionType actionType)
 	mActionType = actionType;
 }
 
+ActionInputJoysticAxis::ActionInputJoysticAxis(const std::string& name, U32 joystickID, sf::Joystick::Axis axis)
+	: ActionInput(name)
+	, mJoystickID(joystickID)
+	, mAxis(axis)
+{
+}
+
+ActionInputType ActionInputJoysticAxis::GetInputType() const
+{
+	return ActionInputType::JoystickAxis;
+}
+
+bool ActionInputJoysticAxis::IsCurrentlyActive(ActionSystem* system) const
+{
+	if (!sf::Joystick::hasAxis(mJoystickID, mAxis))
+	{
+		return false;
+	}
+	else if (system != nullptr)
+	{
+		const U32 eventCount = system->GetEventCount();
+		for (U32 i = 0; i < eventCount; ++i)
+		{
+			const sf::Event& event = system->GetEvent(i);
+			if (event.type == sf::Event::EventType::JoystickMoved
+				&& event.joystickMove.joystickId == static_cast<unsigned int>(mJoystickID)
+				&& event.joystickMove.axis == mAxis)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+U32 ActionInputJoysticAxis::GetJoystickID() const
+{
+	return mJoystickID;
+}
+
+sf::Joystick::Axis ActionInputJoysticAxis::GetAxis() const
+{
+	return mAxis;
+}
+
+void ActionInputJoysticAxis::SetJoystickID(U32 joystickID)
+{
+	mJoystickID = joystickID;
+}
+
+void ActionInputJoysticAxis::SetAxis(sf::Joystick::Axis axis)
+{
+	mAxis = axis;
+}
+
 ActionInputLogical::ActionInputLogical(const std::string& name, ActionInputLogicalOperator logic, U32 inputAID, U32 inputBID /*= U32_Max*/)
 	: ActionInput(name)
 	, mLogicOperator(logic)
@@ -627,7 +682,7 @@ void ActionSystem::AddInputEvent(const std::string& name, ActionInputEvent::Func
 
 void ActionSystem::AddInputKey(const std::string& name, sf::Keyboard::Key key, ActionType actionType /*= ActionType::Pressed*/, U32 keyCombination /*= static_cast<U32>(ActionInputKey::KeyCombination::None)*/)
 {
-	AddInput_Internal(new ActionInputKey(name, key, actionType));
+	AddInput_Internal(new ActionInputKey(name, key, actionType, keyCombination));
 }
 
 void ActionSystem::AddInputMouse(const std::string& name, sf::Mouse::Button button, ActionType actionType /*= ActionType::Pressed*/)
@@ -643,6 +698,11 @@ void ActionSystem::AddInputJoystickConnect(const std::string& name, U32 joystick
 void ActionSystem::AddInputJoystickButton(const std::string& name, U32 joystickID, U32 buttonID, ActionType actionType /*= ActionType::Pressed*/)
 {
 	AddInput_Internal(new ActionInputJoystickButton(name, joystickID, buttonID, actionType));
+}
+
+void ActionSystem::AddInputJoystickAxis(const std::string& name, U32 joystickID, sf::Joystick::Axis axis)
+{
+	AddInput_Internal(new ActionInputJoysticAxis(name, joystickID, axis));
 }
 
 void ActionSystem::AddInputAnd(const std::string& name, U32 inputAID, U32 inputBID)

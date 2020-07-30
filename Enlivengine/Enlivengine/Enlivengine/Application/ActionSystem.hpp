@@ -7,6 +7,7 @@
 #include <Enlivengine/System/PrimitiveTypes.hpp>
 #include <Enlivengine/System/Singleton.hpp>
 #include <Enlivengine/System/NonCopyable.hpp>
+#include <Enlivengine/System/Meta.hpp>
 
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -108,7 +109,7 @@ private:
 class ActionInputEvent : public ActionInput
 {
 public:
-	using FuncType = std::function<bool(const sf::Event & event)>;
+	using FuncType = std::function<bool(const sf::Event& event)>;
 
 	ActionInputEvent(const std::string& name, FuncType eventValidator);
 
@@ -210,6 +211,25 @@ private:
 	ActionType mActionType;
 };
 
+class ActionInputJoysticAxis : public ActionInput
+{
+public:
+	ActionInputJoysticAxis(const std::string& name, U32 joystickID, sf::Joystick::Axis axis);
+
+	ActionInputType GetInputType() const override;
+	bool IsCurrentlyActive(ActionSystem* system) const override;
+
+	U32 GetJoystickID() const;
+	sf::Joystick::Axis GetAxis() const;
+
+	void SetJoystickID(U32 joystickID);
+	void SetAxis(sf::Joystick::Axis axis);
+
+private:
+	U32 mJoystickID;
+	sf::Joystick::Axis mAxis;
+};
+
 class ActionInputLogical : public ActionInput
 {
 public:
@@ -264,6 +284,7 @@ public:
 	void AddInputMouse(const std::string& name, sf::Mouse::Button button, ActionType actionType = ActionType::Pressed);
 	void AddInputJoystickConnect(const std::string& name, U32 joystickID, ActionType actionType = ActionType::Pressed);
 	void AddInputJoystickButton(const std::string& name, U32 joystickID, U32 buttonID, ActionType actionType = ActionType::Pressed);
+	void AddInputJoystickAxis(const std::string& name, U32 joystickID, sf::Joystick::Axis axis);
 	void AddInputAnd(const std::string& name, U32 inputAID, U32 inputBID);
 	void AddInputOr(const std::string& name, U32 inputAID, U32 inputBID);
 	void AddInputNot(const std::string& name, U32 inputAID);

@@ -19,25 +19,6 @@ GameState::GameState(en::StateManager& manager)
 	Init();
 }
 
-bool GameState::handleEvent(const sf::Event& event)
-{
-	ENLIVE_PROFILE_FUNCTION();
-
-	if (event.type == sf::Event::JoystickMoved && event.joystickMove.axis == sf::Joystick::Axis::Z && event.joystickMove.position < -95.0f)
-	{
-		if (event.joystickMove.joystickId == 0)
-		{
-			fire1 = true;
-		}
-		else if (event.joystickMove.joystickId == 1)
-		{
-			fire2 = true;
-		}
-	}
-
-	return false;
-}
-
 bool GameState::update(en::Time dt)
 {
 	ENLIVE_PROFILE_FUNCTION();
@@ -53,12 +34,10 @@ bool GameState::update(en::Time dt)
 
 	AudioTrackMixer3000::GetInstance().UpdateVolumes();
 
-
 	if (!GameSingleton::GetInstance().world.IsPlaying())
 	{
 		return false;
 	}
-
 
 	GameSingleton::GetInstance().UpdateStats(dt);
 
@@ -362,9 +341,6 @@ void GameState::Init()
 
 	GameSingleton::GetInstance().UpdateStats(en::Time::Zero());
 	AudioTrackMixer3000::GetInstance().UpdateVolumes();
-
-	fire1 = false;
-	fire2 = false;
 }
 
 void GameState::Velocity(en::Time dt)
@@ -696,29 +672,13 @@ void GameState::PlayerShoot(en::Time dt, en::U32 index)
 	bool fire = false;
 	static en::Time cooldown = en::Time::Zero();
 	cooldown += dt;
-	if (sf::Joystick::isConnected(index))
+	if (index == 0)
 	{
-		if (index == 0 && fire1)
-		{
-			fire = true;
-			fire1 = false;
-		}
-		else if (index == 1 && fire2)
-		{
-			fire = true;
-			fire2 = false;
-		}
+		fire = getApplication().GetActionSystem().IsInputActive("player1Fire");
 	}
 	else
 	{
-		if (index == 0)
-		{
-			fire = getApplication().GetActionSystem().IsInputActive("player1KeyFire");
-		}
-		else
-		{
-			fire = getApplication().GetActionSystem().IsInputActive("player2KeyFire");
-		}
+		fire = getApplication().GetActionSystem().IsInputActive("player2Fire");
 	}
 	if (fire && cooldown > en::Time::Seconds(0.1f))
 	{

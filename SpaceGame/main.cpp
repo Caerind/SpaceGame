@@ -94,12 +94,6 @@ int main(int argc, char** argv)
 		en::PathManager::GetInstance().SetScreenshotPath("Screenshots/");
 
 		auto& actionSystem = app.GetActionSystem();
-		actionSystem.AddInputJoystickConnect("player1JoystickConnected", 0, en::ActionType::Hold);
-		actionSystem.AddInputJoystickConnect("player2JoystickConnected", 1, en::ActionType::Hold);
-		actionSystem.AddInputJoystickConnect("player1JoystickConnect", 0, en::ActionType::Pressed);
-		actionSystem.AddInputJoystickConnect("player2JoystickConnect", 1, en::ActionType::Pressed);
-		actionSystem.AddInputJoystickConnect("player1JoystickDisconnect", 0, en::ActionType::Released);
-		actionSystem.AddInputJoystickConnect("player2JoystickDisconnect", 1, en::ActionType::Released);
 		actionSystem.AddInputJoystickButton("player1JoystickFire", 0, 0, en::ActionType::Pressed);
 		actionSystem.AddInputJoystickButton("player2JoystickFire", 1, 0, en::ActionType::Pressed);
 		actionSystem.AddInputKey("player1KeyFire", sf::Keyboard::Space, en::ActionType::Pressed);

@@ -39,12 +39,23 @@ public:
 	constexpr Time operator-() const { return Time(-mTicks); }
 	constexpr Time operator-(const Time& time) const { return Time(mTicks - time.mTicks); }
 	constexpr Time& operator-=(const Time& time) { mTicks -= time.mTicks; return *this; }
+	constexpr Time operator*(const Time& time) const = delete;
+	constexpr Time& operator*=(const Time& time) = delete;
+	constexpr Time operator/(const Time& time) const = delete;
+	constexpr Time& operator/=(const Time& time) = delete;
 	constexpr Time operator%(const Time& time) const { return Time(mTicks % time.mTicks); }
 	constexpr Time& operator%=(const Time& time) { mTicks %= time.mTicks; return *this; }
-	constexpr Time operator*(F32 scalar) const { return Time(static_cast<I64>(static_cast<F32>(mTicks) * scalar)); }
-	constexpr Time& operator*=(F32 scalar) { mTicks = static_cast<I64>(static_cast<F32>(mTicks) * scalar); return *this; }
-	constexpr Time operator/(F32 scalar) const { return Time(static_cast<I64>(static_cast<F32>(mTicks) / scalar)); }
-	constexpr Time& operator/=(F32 scalar) { mTicks = static_cast<I64>(static_cast<F32>(mTicks) / scalar); return *this; }
+
+	constexpr Time operator+(F32 scalar) const = delete;
+	constexpr Time& operator+=(F32 scalar) = delete;
+	constexpr Time operator-(F32 scalar) const = delete;
+	constexpr Time& operator-=(F32 scalar) = delete;
+	constexpr Time operator*(F32 scalar) const { return Time(static_cast<I64>(mTicks * scalar)); }
+	constexpr Time& operator*=(F32 scalar) { mTicks = static_cast<I64>(mTicks * scalar); return *this; }
+	constexpr Time operator/(F32 scalar) const { return Time(static_cast<I64>(mTicks / scalar)); }
+	constexpr Time& operator/=(F32 scalar) { mTicks = static_cast<I64>(mTicks / scalar); return *this; }
+	constexpr Time operator%(F32 scalar) const = delete;
+	constexpr Time& operator%=(F32 scalar) = delete;
 
 	constexpr bool operator==(const Time& time) const { return mTicks == time.mTicks; }
 	constexpr bool operator!=(const Time& time) const { return mTicks != time.mTicks; }
