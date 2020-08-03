@@ -1,4 +1,6 @@
 language: cpp
+notifications:
+  email: false
 
 addons:
   apt_packages:
@@ -12,13 +14,6 @@ addons:
     - g++
     - clang
 
-before_script:
-- mkdir build && cd build
-- cmake .. $CMAKE_FLAGS
-
-script:
-- cmake --build . --target install
-
 matrix:
   include:
 
@@ -26,18 +21,48 @@ matrix:
     os: linux
     dist: xenial
     compiler: gcc
+    addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-9
+            - g++-9
+    env:
+        - MATRIX_EVAL="export CC=gcc-9; export CXX=g++-9"
+        - CMAKE_FLAGS=""
 
   - name: "Linux clang"
     os: linux
     dist: xenial
     compiler: clang
+    addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - libstdc++-7-dev
+    env:
+        - MATRIX_EVAL=""
+        - CMAKE_FLAGS=""
 
   - name: "macOS Xcode 10"
     os: osx
     osx_image: xcode10
+    env:
+        - MATRIX_EVAL=""
+        - CMAKE_FLAGS=""
     
   - name: "Visual studio 17 2019"
     os: windows
+    env:
+        - MATRIX_EVAL=""
+        - CMAKE_FLAGS=""
+        
+        
 
-notifications:
-  email: false
+script:
+- eval "${MATRIX_EVAL}"
+- mkdir build && cd build
+- cmake .. $CMAKE_FLAGS
+- cmake --build . --target install

@@ -293,7 +293,7 @@ using MemberTypeOf = typename Traits::Decay<T>::type::Type;
 template <typename T>
 constexpr bool HasMember(const char* name)
 {
-	constexpr U32 hash = Hash::SlowHash(name);
+	U32 hash = Hash::SlowHash(name);
 	bool found = false;
 	ForEachMember([&found, &hash](const auto& member)
 	{
@@ -308,7 +308,7 @@ constexpr bool HasMember(const char* name)
 template <typename T, typename MemberT>
 constexpr bool HasMemberOfType(const char* name)
 {
-	constexpr U32 hash = Hash::SlowHash(name);
+	U32 hash = Hash::SlowHash(name);
 	bool found = false;
 	ForEachMember([&found, &hash](const auto& member)
 	{
@@ -324,7 +324,7 @@ template <typename T, typename MemberT, typename F>
 constexpr void ForMember(const char* name, F&& f)
 {
 	static_assert(HasMemberOfType<T, MemberT>(name));
-	constexpr U32 hash = Hash::SlowHash(name);
+	U32 hash = Hash::SlowHash(name);
 	ForEachMember<T>([&](const auto& member)
 	{
 		if (member.GetHash() == hash)
