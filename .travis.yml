@@ -30,7 +30,6 @@ matrix:
             - g++-9
     env:
         - MATRIX_EVAL="export CC=gcc-9; export CXX=g++-9"
-        - CMAKE_FLAGS=""
 
   - name: "Linux clang"
     os: linux
@@ -44,25 +43,22 @@ matrix:
             - libstdc++-7-dev
     env:
         - MATRIX_EVAL=""
-        - CMAKE_FLAGS=""
 
   - name: "macOS Xcode 10"
     os: osx
     osx_image: xcode10
     env:
         - MATRIX_EVAL=""
-        - CMAKE_FLAGS=""
     
   - name: "Visual studio 17 2019"
     os: windows
     env:
         - MATRIX_EVAL=""
-        - CMAKE_FLAGS=""
         
         
 
 script:
 - eval "${MATRIX_EVAL}"
 - mkdir build && cd build
-- cmake .. $CMAKE_FLAGS
+- cmake ..
 - cmake --build .
