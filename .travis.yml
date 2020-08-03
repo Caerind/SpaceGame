@@ -7,7 +7,7 @@ matrix:
 
   - name: "Linux gcc"
     os: linux
-    dist: xenial
+    dist: bionic
     compiler: gcc
     addons:
         apt:
@@ -30,7 +30,7 @@ matrix:
 
   - name: "Linux clang"
     os: linux
-    dist: xenial
+    dist: bionic
     compiler: clang
     addons:
         apt:
@@ -44,9 +44,7 @@ matrix:
             - libflac-dev
             - libvorbis-dev
             - libgl1-mesa-dev
-            - clang-10
     script:
-        - export CXX=clang-10
         - mkdir build && cd build
         - cmake ..
         - make
