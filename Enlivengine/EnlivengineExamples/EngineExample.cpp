@@ -88,8 +88,8 @@ public:
 			ImGui::Text("View X : %d", (int)getApplication().GetWindow().getMainView().getCenter().x);
 			ImGui::Text("View Y : %d", (int)getApplication().GetWindow().getMainView().getCenter().y);
 #ifdef ENLIVE_DEBUG
-			ImGui::Text("DebugDisplay Rectangles : %d", en::DebugDraw::getCurrentRectangleCount());
-			ImGui::Text("DebugDisplay Circles : %d", en::DebugDraw::getCurrentCircleCount());
+			ImGui::Text("DebugDisplay Rectangles : %d", en::DebugDraw::GetInstance().getCurrentRectangleCount());
+			ImGui::Text("DebugDisplay Circles : %d", en::DebugDraw::GetInstance().getCurrentCircleCount());
 #endif // ENLIVE_DEBUG
 			ImGui::End();
 		}

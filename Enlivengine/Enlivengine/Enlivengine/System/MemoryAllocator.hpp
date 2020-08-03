@@ -12,6 +12,7 @@
 #include <Enlivengine/System/PrimitiveTypes.hpp>
 #include <Enlivengine/System/Macros.hpp>
 #include <Enlivengine/System/Assert.hpp>
+#include <Enlivengine/System/TypeTraits.hpp>
 
 namespace en
 {

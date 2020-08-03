@@ -11,6 +11,7 @@
 #include <vector>
 
 #include <Enlivengine/System/ParserXml.hpp>
+#include <Enlivengine/System/ClassManager.hpp>
 
 #include <Enlivengine/Core/CustomXmlSerialization.hpp>
 
@@ -206,7 +207,10 @@ bool DataFile::Serialize_Basic(const T& object, const char* name)
 	if (mParserXml.CreateNode(name))
 	{
 		WriteCurrentType<T>();
-		if constexpr (Traits::IsSame<Traits::Decay<T>::type, bool>::value)
+		
+		using Type = typename Traits::Decay<T>::type;
+		
+		if constexpr (Traits::IsSame<Type, bool>::value)
 		{
 			mParserXml.SetValue(ToBoolString(object));
 		}
@@ -215,7 +219,7 @@ bool DataFile::Serialize_Basic(const T& object, const char* name)
 			const std::string enumValueStr(Meta::GetEnumName(object));
 			mParserXml.SetValue(enumValueStr);
 		}
-		else if constexpr (Traits::IsSame<Traits::Decay<T>::type, std::string>::value)
+		else if constexpr (Traits::IsSame<Type, std::string>::value)
 		{
 			mParserXml.SetValue(object);
 		}
@@ -436,7 +440,9 @@ bool DataFile::Deserialize_Basic(T& object, const char* name)
 		const U32 typeHash = ReadCurrentType();
 		if (typeHash == TypeInfo<T>::GetHash())
 		{
-			if constexpr (Traits::IsSame<Traits::Decay<T>::type, bool>::value)
+			using Type = typename Traits::Decay<T>::type;
+		
+			if constexpr (Traits::IsSame<Type, bool>::value)
 			{
 				std::string value;
 				mParserXml.GetValue(value);
@@ -446,9 +452,9 @@ bool DataFile::Deserialize_Basic(T& object, const char* name)
 			{
 				std::string value;
 				mParserXml.GetValue(value);
-				object = Meta::EnumCast<MyEnum>(value);
+				object = Meta::EnumCast<T>(value);
 			}
-			else if constexpr (Traits::IsSame<Traits::Decay<T>::type, std::string>::value)
+			else if constexpr (Traits::IsSame<Type, std::string>::value)
 			{
 				mParserXml.GetValue(object);
 			}
@@ -530,7 +536,7 @@ bool DataFile::Deserialize_Basic(std::vector<T>& object, const char* name)
 			mParserXml.GetAttribute("size", size);
 			object.clear();
 			object.resize(static_cast<std::size_t>(size));
-			if constexpr (!Traits::IsDefaultConstructible<T>:value)
+			if constexpr (!Traits::IsDefaultConstructible<T>::value)
 			{
 				// For now T must be default constructible
 				static_assert(Traits::IsDefaultConstructible<T>::value);

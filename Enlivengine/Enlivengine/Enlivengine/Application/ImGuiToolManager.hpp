@@ -61,7 +61,6 @@ class ImGuiTool
 		bool mRegistered;
 
 		friend class ImGuiToolManager;
-		virtual U32 GetHash() const;
 		bool ShouldResize() const;
 		void Resize();
 		bool ShouldFocus() const;

@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <type_traits>
@@ -13,12 +12,6 @@ namespace Traits
 {
 #define ENLIVE_DEFINE_TYPE_TRAITS_VALUE(name, expr) \
 	template <typename T> \
-	struct name \
-	{ \
-		static constexpr auto value = expr; \
-	};
-#define ENLIVE_DEFINE_TYPE_TRAITS_VALUE_2(name, expr) \
-	template <typename T1, typename T2> \
 	struct name \
 	{ \
 		static constexpr auto value = expr; \
@@ -94,9 +87,21 @@ namespace Traits
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(IsMoveConstructible, std::is_move_constructible<T>::value)
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(IsTriviallyMoveConstructible, std::is_trivially_move_constructible<T>::value)
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(IsNothrowMoveConstructible, std::is_nothrow_move_constructible<T>::value)
-	ENLIVE_DEFINE_TYPE_TRAITS_VALUE_2(IsAssignable, (std::is_assignable<T1, T2>::value))
-	ENLIVE_DEFINE_TYPE_TRAITS_VALUE_2(IsTriviallyAssignable, (std::is_trivially_assignable<T1, T2>::value))
-	ENLIVE_DEFINE_TYPE_TRAITS_VALUE_2(IsNothrowAssignable, (std::is_nothrow_assignable<T1, T2>::value))
+	template <typename T1, typename T2>
+	struct IsAssignable
+	{
+		static constexpr auto value = std::is_assignable<T1, T2>::value;
+	};
+	template <typename T1, typename T2>
+	struct IsTriviallyAssignable
+	{
+		static constexpr auto value = std::is_trivially_assignable<T1, T2>::value;
+	};
+	template <typename T1, typename T2>
+	struct IsNothrowAssignable
+	{
+		static constexpr auto value = std::is_nothrow_assignable<T1, T2>::value;
+	};
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(IsCopyAssignable, std::is_copy_assignable<T>::value)
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(IsTriviallyCopyAssignable, std::is_trivially_copy_assignable<T>::value)
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(IsNothrowCopyAssignable, std::is_nothrow_copy_assignable<T>::value)
@@ -107,9 +112,17 @@ namespace Traits
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(IsTriviallyDestructible, std::is_trivially_destructible<T>::value)
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(IsNothrowDestructible, std::is_nothrow_destructible<T>::value)
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(HasVirtualDestructor, std::has_virtual_destructor<T>::value)
-	ENLIVE_DEFINE_TYPE_TRAITS_VALUE_2(IsSwappableWith, (std::is_swappable_with<T1, T2>::value))
+	template <typename T1, typename T2>
+	struct IsSwappableWith
+	{
+		static constexpr auto value = std::is_swappable_with<T1, T2>::value;
+	};
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(IsSwappable, std::is_swappable<T>::value)
-	ENLIVE_DEFINE_TYPE_TRAITS_VALUE_2(IsNothrowSwappableWith, (std::is_nothrow_swappable_with<T1, T2>::value))
+	template <typename T1, typename T2>
+	struct IsNothrowSwappableWith
+	{
+		static constexpr auto value = std::is_nothrow_swappable_with<T1, T2>::value;
+	};
 	ENLIVE_DEFINE_TYPE_TRAITS_VALUE(IsNothrowSwappable, std::is_nothrow_swappable<T>::value)
 
 	// Properties queries
@@ -122,9 +135,21 @@ namespace Traits
 	};
 
 	// Type relationships
-	ENLIVE_DEFINE_TYPE_TRAITS_VALUE_2(IsSame, (std::is_same<T1, T2>::value))
-	ENLIVE_DEFINE_TYPE_TRAITS_VALUE_2(IsBaseOf, (std::is_base_of<T1, T2>::value)) // T1:Base, T2:Derived
-	ENLIVE_DEFINE_TYPE_TRAITS_VALUE_2(IsConvertible, (std::is_convertible<T1, T2>::value)) // T1:From, T2:To
+	template <typename T1, typename T2>
+	struct IsSame
+	{
+		static constexpr auto value = std::is_same<T1, T2>::value;
+	};
+	template <typename Base, typename Derived>
+	struct IsBaseOf
+	{
+		static constexpr auto value = std::is_base_of<Base, Derived>::value;
+	};
+	template <typename From, typename To>
+	struct IsConvertible
+	{
+		static constexpr auto value = std::is_convertible<From, To>::value;
+	};
 	//ENLIVE_DEFINE_TYPE_TRAITS_VALUE_2(IsNothrowConvertible, (std::is_nothrow_convertible<T1, T2>::value)) // T1:From, T2:To // New C++20
 	//ENLIVE_DEFINE_TYPE_TRAITS_2(IsLayoutCompatible, std::is_layout_compatible<T1, T2>::value) // New C++20
 	//ENLIVE_DEFINE_TYPE_TRAITS_2(IsPointerInterconvertibleBaseOf, std::is_pointer_interconvertible_base_of<T1, T2>::value) // New C++20 // T1:Base, T2:Derived
@@ -214,17 +239,17 @@ namespace Traits
 	//ENLIVE_DEFINE_TYPE_TRAITS_TYPE(TypeIdentity, std::type_identity<T>::type); // New C++20
 
 	// Operations on traits
-	template <class... B>
+	template <typename... B>
 	struct Conjunction
 	{
 		static constexpr auto value = std::conjunction<B...>::value;
 	};
-	template <class... B>
+	template <typename... B>
 	struct Disjunction
 	{
 		static constexpr auto value = std::disjunction<B...>::value;
 	};
-	template <class B>
+	template <typename B>
 	struct Negation
 	{
 		static constexpr auto value = std::negation<B>::value;

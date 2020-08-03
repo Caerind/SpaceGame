@@ -2,6 +2,8 @@
 
 #include <Enlivengine/Math/Vector2.hpp>
 
+// TODO : constexpr
+
 namespace en 
 {
 
@@ -343,4 +345,4 @@ bool Rect<T>::operator!=(const Rect<T>& rect) const
 
 } // namespace en
 
-ENLIVE_DEFINE_TYPE_INFO_TEMPLATE(en::Rect);
+ENLIVE_DEFINE_TYPE_INFO_TEMPLATE(en::Rect)

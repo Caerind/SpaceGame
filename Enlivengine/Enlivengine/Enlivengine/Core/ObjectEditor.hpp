@@ -99,12 +99,14 @@ private:
 	static bool ImGuiEditor_Basic(T& object, const char* name)
 	{
 		enAssert(name != nullptr);
+		
+		using Type = typename Traits::Decay<T>::type;
 
-		if constexpr (Traits::IsSame<Traits::Decay<T>::type, bool>::value)
+		if constexpr (Traits::IsSame<Type, bool>::value)
 		{
 			return ImGui::Checkbox(name, &object);
 		}
-		else if constexpr (Traits::IsSame<Traits::Decay<T>::type, char>::value)
+		else if constexpr (Traits::IsSame<Type, char>::value)
 		{
 			static char c;
 			c = object;
@@ -167,7 +169,7 @@ private:
 			}
 			return false;
 		}
-		else if constexpr (Traits::IsSame<Traits::Decay<T>::type, std::string>::value)
+		else if constexpr (Traits::IsSame<Type, std::string>::value)
 		{
 			static constexpr std::size_t maxSize = 512;
 			static char inputBuffer[maxSize];

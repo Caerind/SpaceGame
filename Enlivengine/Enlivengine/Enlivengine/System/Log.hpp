@@ -99,7 +99,7 @@ class LogManager
 
 public:
 	template <typename... Args>
-	void Write(LogType type, U32 channelID, std::string_view formatStr, Args&& ...args);
+	void Write(LogType type, U32 channelID, Args&& ...args);
 
 	void SetTypeFilter(U32 typeFilter);
 	U32 GetTypeFilter() const;
@@ -130,12 +130,12 @@ private:
 };
 
 template <typename... Args>
-void LogManager::Write(LogType type, U32 channelID, std::string_view formatStr, Args&& ...args)
+void LogManager::Write(LogType type, U32 channelID, Args&& ...args)
 {
 	if (PassFilters(type, channelID))
 	{
 		LogMessage message;
-		message.message = fmt::format(formatStr, std::forward<Args>(args)...);
+		message.message = fmt::format(std::forward<Args>(args)...);
 		message.type = type;
 		message.channel = channelID;
 
@@ -217,10 +217,10 @@ private:
 
 } // namespace en
 
-#define enLogInfo(channel, message, ...) ::en::LogManager::GetInstance().Write(::en::LogType::Info, static_cast<::en::U32>(channel), message, __VA_ARGS__);
-#define enLogWarning(channel, message, ...) ::en::LogManager::GetInstance().Write(::en::LogType::Warning, static_cast<::en::U32>(channel), message, __VA_ARGS__);
-#define enLogError(channel, message, ...) ::en::LogManager::GetInstance().Write(::en::LogType::Error, static_cast<::en::U32>(channel), message, __VA_ARGS__);
-#define enLogFatal(channel, message, ...) ::en::LogManager::GetInstance().Write(::en::LogType::Fatal, static_cast<::en::U32>(channel), message, __VA_ARGS__);
+#define enLogInfo(channel, ...) ::en::LogManager::GetInstance().Write(::en::LogType::Info, static_cast<::en::U32>(channel), __VA_ARGS__);
+#define enLogWarning(channel, ...) ::en::LogManager::GetInstance().Write(::en::LogType::Warning, static_cast<::en::U32>(channel), __VA_ARGS__);
+#define enLogError(channel, ...) ::en::LogManager::GetInstance().Write(::en::LogType::Error, static_cast<::en::U32>(channel), __VA_ARGS__);
+#define enLogFatal(channel, ...) ::en::LogManager::GetInstance().Write(::en::LogType::Fatal, static_cast<::en::U32>(channel), __VA_ARGS__);
 
 #else
 

@@ -713,4 +713,4 @@ typedef Vector3f vec3; // GLSL-like
 
 } // namespace en
 
-ENLIVE_DEFINE_TYPE_INFO_TEMPLATE(en::Vector3);
+ENLIVE_DEFINE_TYPE_INFO_TEMPLATE(en::Vector3)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Enlivengine/System/PrimitiveTypes.hpp>
+#include <Enlivengine/System/TypeTraits.hpp>
 #include <Enlivengine/System/Hash.hpp>
 #include <Enlivengine/System/Macros.hpp>
 #include <Enlivengine/System/String.hpp> 
@@ -18,7 +19,7 @@ struct TypeInfo
 	using type = T;
 	static constexpr bool IsKnown() { return false; }
 	static constexpr const char* GetName() { return "<Unknown>"; }
-	//static constexpr U32 GetHash() { return Hash::ConstexprHash(GetName()); } // This has been removed to explicit the fact that it is invalid
+	//static constexpr U32 GetHash() { return Hash::SlowHash(GetName()); } // This has been removed to explicit the fact that it is invalid
 	static constexpr U32 GetSize() { return ENLIVE_SIZE_OF(T); }
 	static constexpr U32 GetAlign() { return ENLIVE_ALIGN_OF(T); }
 };
@@ -32,7 +33,7 @@ struct TypeInfo
 		using type = templateType; \
 		static constexpr bool IsKnown() { return true; } \
 		static constexpr const char* GetName() { return #templateType; } \
-		static constexpr U32 GetHash() { return Hash::ConstexprHash(GetName()); } \
+		static constexpr U32 GetHash() { return Hash::SlowHash(GetName()); } \
 		static constexpr U32 GetSize() { return ENLIVE_SIZE_OF(type); } \
 		static constexpr U32 GetAlign() { return ENLIVE_ALIGN_OF(type); } \
 	}; } // namespace en
@@ -49,7 +50,7 @@ struct TypeInfo
 		using elementType = T; \
 		static constexpr bool IsKnown() { return true; } \
 		static constexpr const char* GetName() { return s_stringStorage.GetData(); } \
-		static constexpr U32 GetHash() { return Hash::ConstexprHash(GetName()); } \
+		static constexpr U32 GetHash() { return Hash::SlowHash(GetName()); } \
 		static constexpr U32 GetSize() { return ENLIVE_SIZE_OF(templateType<T>); } \
 		static constexpr U32 GetAlign() { return ENLIVE_ALIGN_OF(templateType<T>); } \
 	}; } // namespace en
@@ -83,9 +84,9 @@ public:
 	using elementType = T;
 	static constexpr bool IsKnown() { return true; }
 	static constexpr const char* GetName() { return s_stringStorage.GetData(); }
-	static constexpr U32 GetHash() { return Hash::ConstexprHash(GetName()); }
-	static constexpr U32 GetSize() { return ENLIVE_SIZE_OF((std::array<T, N>)); }
-	static constexpr U32 GetAlign() { return ENLIVE_ALIGN_OF((std::array<T, N>)); }
+	static constexpr U32 GetHash() { return Hash::SlowHash(GetName()); }
+	static constexpr U32 GetSize() { return ENLIVE_SIZE_OF(T) * N; }
+	static constexpr U32 GetAlign() { return ENLIVE_ALIGN_OF(T); }
 }; 
 
 // std::vector
@@ -100,7 +101,7 @@ public:
 	using elementType = T;
 	static constexpr bool IsKnown() { return true; }
 	static constexpr const char* GetName() { return s_stringStorage.GetData(); }
-	static constexpr U32 GetHash() { return Hash::ConstexprHash(GetName()); }
+	static constexpr U32 GetHash() { return Hash::SlowHash(GetName()); }
 	static constexpr U32 GetSize() { return ENLIVE_SIZE_OF(std::vector<T>); }
 	static constexpr U32 GetAlign() { return ENLIVE_ALIGN_OF(std::vector<T>); }
 };

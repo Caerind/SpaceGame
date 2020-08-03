@@ -146,9 +146,9 @@ struct CustomObjectEditor<en::Entity>
 			display = ImGui::CollapsingHeader(name);
 		}
 
+		bool modified = false;
 		if (display)
 		{
-			bool result = false;
 			if (!fromEntityBrowser)
 			{
 				ImGui::Indent();
@@ -172,6 +172,7 @@ struct CustomObjectEditor<en::Entity>
 						if (ImGui::Button("-"))
 						{
 							ci.remove(object.GetRegistry(), object.GetEntity());
+							modified = true;
 							ImGui::PopID();
 							continue;
 						}
@@ -180,7 +181,7 @@ struct CustomObjectEditor<en::Entity>
 							ImGui::SameLine();
 							if (ci.editor(object.GetRegistry(), object.GetEntity()))
 							{
-								result = true;
+								modified = true;
 							}
 							ImGui::PopID();
 						}
@@ -209,6 +210,7 @@ struct CustomObjectEditor<en::Entity>
 							if (ImGui::Selectable(ci.name)) 
 							{
 								ci.add(object.GetRegistry(), object.GetEntity());
+								modified = true;
 							}
 							ImGui::PopID();
 						}
@@ -227,7 +229,7 @@ struct CustomObjectEditor<en::Entity>
 				ImGui::Unindent();
 			}
 		}
-		return true;
+		return modified;
 	}
 
 private:
@@ -285,7 +287,7 @@ struct CustomXmlSerialization<en::Entity>
 				do
 				{
 					const std::string nodeName = parser.GetNodeName();
-					const en::U32 nodeNameHash = en::Hash::ConstexprHash(nodeName);
+					const en::U32 nodeNameHash = en::Hash::SlowHash(nodeName);
 					const en::U32 nodeType = dataFile.ReadCurrentType();
 					const bool registeredComponent = en::ComponentManager::IsRegistered(nodeNameHash);
 					if (nodeNameHash == nodeType && registeredComponent)

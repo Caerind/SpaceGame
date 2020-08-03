@@ -317,10 +317,10 @@ struct CustomXmlSerialization<en::Quaternion<T>>
 		if (parser.CreateNode(name))
 		{
 			dataFile.WriteCurrentType<en::Quaternion<T>>();
-			dataFile.Serialize_Common(v.x, "x");
-			dataFile.Serialize_Common(v.y, "y");
-			dataFile.Serialize_Common(v.z, "z");
-			dataFile.Serialize_Common(s, "s");
+			dataFile.Serialize_Common(object.v.x, "x");
+			dataFile.Serialize_Common(object.v.y, "y");
+			dataFile.Serialize_Common(object.v.z, "z");
+			dataFile.Serialize_Common(object.s, "s");
 			parser.CloseNode();
 			return true;
 		}
@@ -335,10 +335,10 @@ struct CustomXmlSerialization<en::Quaternion<T>>
 		if (parser.ReadNode(name))
 		{
 			enAssert(dataFile.ReadCurrentType() == en::TypeInfo<en::Quaternion<T>>::GetHash());
-			dataFile.Deserialize_Common(v.x, "x");
-			dataFile.Deserialize_Common(v.y, "y");
-			dataFile.Deserialize_Common(v.z, "z");
-			dataFile.Deserialize_Common(s, "s");
+			dataFile.Deserialize_Common(object.v.x, "x");
+			dataFile.Deserialize_Common(object.v.y, "y");
+			dataFile.Deserialize_Common(object.v.z, "z");
+			dataFile.Deserialize_Common(object.s, "s");
 			parser.CloseNode();
 			return true;
 		}

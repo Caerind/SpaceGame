@@ -42,7 +42,7 @@ private:
 
 	bool mPlaying;
 
-	ENLIVE_META_CLASS();
+	ENLIVE_META_CLASS()
 };
 
 } // namespace en

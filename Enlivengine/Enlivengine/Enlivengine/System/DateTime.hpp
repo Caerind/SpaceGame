@@ -151,7 +151,7 @@ public:
 		constexpr I32 daysPerMonth[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 		return ((month > 2) && IsLeapYear(year)) ? 29 : daysPerMonth[month];
 	}
-	static bool IsLeapYear(I32 year) { return ((year % 4) == 0) ? (((year % 100) != 0) || ((year % 400) == 0)) : false; }
+	static constexpr bool IsLeapYear(I32 year) { return ((year % 4) == 0) ? (((year % 100) != 0) || ((year % 400) == 0)) : false; }
 
 	static DateTime Now();
 	static DateTime Today();
