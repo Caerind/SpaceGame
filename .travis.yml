@@ -11,8 +11,17 @@ addons:
     - libflac-dev
     - libvorbis-dev
     - libgl1-mesa-dev
-    - g++
-    - clang
+        
+before_scirpt:
+- eval "${MATRIX_EVAL}"
+- mkdir build && cd build
+- cmake ..
+- cat CMakeFiles/CMakeOutput.log
+
+script:
+- cmake --build .
+
+
 
 matrix:
   include:
@@ -54,12 +63,3 @@ matrix:
     os: windows
     env:
         - MATRIX_EVAL=""
-        
-        
-
-script:
-- eval "${MATRIX_EVAL}"
-- mkdir build && cd build
-- cmake ..
-- cat CMakeFiles/CMakeOutput.log
-- cmake --build .
