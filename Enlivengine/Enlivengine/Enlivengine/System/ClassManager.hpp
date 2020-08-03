@@ -32,6 +32,8 @@ public:
 		{
 			return itr->second.name;
 		}
+		enAssert(false);
+		return nullptr;
 	}
 
 	static U32 GetClassHashAtIndex(U32 index)
@@ -42,6 +44,8 @@ public:
 		{
 			return itr->first;
 		}
+		enAssert(false);
+		return U32_Max;
 	}
 
 	static const char* GetClassNameFromHash(U32 classHash)

@@ -24,6 +24,8 @@ matrix:
             - gcc-9
             - g++-9
     script:
+        - export CC=gcc-9
+        - export CXX=g++-9
         - mkdir build && cd build
         - cmake ..
         - make
