@@ -1,0 +1,43 @@
+language: cpp
+
+addons:
+  apt_packages:
+    - cmake
+    - libxrandr-dev
+    - libudev-dev
+    - libopenal-dev
+    - libflac-dev
+    - libvorbis-dev
+    - libgl1-mesa-dev
+    - g++
+    - clang
+
+before_script:
+- mkdir build && cd build
+- cmake .. $CMAKE_FLAGS
+
+script:
+- cmake --build . --target install
+
+matrix:
+  include:
+
+  - name: "Linux gcc"
+    os: linux
+    dist: xenial
+    compiler: gcc
+
+  - name: "Linux clang"
+    os: linux
+    dist: xenial
+    compiler: clang
+
+  - name: "macOS Xcode 10"
+    os: osx
+    osx_image: xcode10
+    
+  - name: "Visual studio 17 2019"
+    os: windows
+
+notifications:
+  email: false
