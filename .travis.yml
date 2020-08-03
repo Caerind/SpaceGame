@@ -61,4 +61,5 @@ script:
 - eval "${MATRIX_EVAL}"
 - mkdir build && cd build
 - cmake ..
+- cat CMakeFiles/CMakeOutput.log
 - cmake --build .
