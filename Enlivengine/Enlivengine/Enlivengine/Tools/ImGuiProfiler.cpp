@@ -192,7 +192,7 @@ void ImGuiProfiler::DisplayFrame(const ProfilerFrame& frame) const
 				const F32 width = percent * frameSize;
 				if (width >= 1.0f)
 				{
-					const U32 taskNameHash = Hash::Meow32(task.name);
+					const U32 taskNameHash = Hash::SlowHash(task.name);
 					const Color color(taskNameHash);
 					const ImVec4 imColor = color.toImGuiColor();
 

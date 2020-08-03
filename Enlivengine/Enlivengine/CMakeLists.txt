@@ -16,7 +16,6 @@ set(SRC_SYSTEM
     Enlivengine/System/Debugger.cpp
     Enlivengine/System/Debugger.hpp
     Enlivengine/System/Endianness.hpp
-    Enlivengine/System/Hash.cpp
     Enlivengine/System/Hash.hpp
     Enlivengine/System/Log.cpp
     Enlivengine/System/Log.hpp

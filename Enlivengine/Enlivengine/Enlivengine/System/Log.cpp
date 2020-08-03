@@ -219,25 +219,13 @@ void ConsoleLogger::Write(const LogMessage& message)
 #endif // ENLIVE_PLATFORM_WINDOWS
 
 #ifdef ENLIVE_PLATFORM_UNIX
-	char colorChar;
-	switch (message.type)
-	{
-	case LogType::Warning:
-		colorChar = '\e[34m';
-		break;
-	case LogType::Error:
-	case LogType::Fatal:
-		colorChar = '\e[31m';
-		break;
-	case LogType::Info:
-	default:
-		colorChar = '\e[0m';
-		break;
-	}
-	fmt::print("{}[{}][{}] {}\e[0m\n",
+	// TODO : Colors in terminal for Unix
+	
+	fmt::print("[{}][{}] {}\n",
 		message.GetTypeString(),
 		message.GetChannelString(),
 		message.GetMessageString());
+		
 #endif // ENLIVE_PLATFORM_UNIX
 }
 

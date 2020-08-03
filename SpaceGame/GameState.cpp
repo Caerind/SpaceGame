@@ -420,7 +420,7 @@ void GameState::Velocity(en::Time dt)
 
 void GameState::PlayerMvt(en::Time dt, en::U32 index)
 {
-	auto& player = GameSingleton::GetInstance().GetPlayer(index);
+	auto player = GameSingleton::GetInstance().GetPlayer(index);
 	if (player.IsValid())
 	{
 		auto& pla = player.Get<ShipComponent>();
@@ -430,7 +430,7 @@ void GameState::PlayerMvt(en::Time dt, en::U32 index)
 		if (sf::Joystick::isConnected(index))
 		{
 #ifdef ENLIVE_DEBUG
-			auto& player2 = GameSingleton::GetInstance().GetPlayer(1);
+			auto player2 = GameSingleton::GetInstance().GetPlayer(1);
 			auto& tra2 = player2.Get<en::TransformComponent>().transform;
 			enLogInfo(0, "p1:{}   -   p2:{}", tra.GetRotation2D(), tra2.GetRotation2D());
 #endif // ENLIVE_DEBUG

@@ -64,11 +64,6 @@ void ImGuiTool::AskForFocus()
 	mShouldFocus = true;
 }
 
-U32 ImGuiTool::GetHash() const
-{
-	return Hash::Meow32(GetName());
-}
-
 bool ImGuiTool::ShouldResize() const
 {
 	return mShouldResize;
@@ -101,16 +96,16 @@ void ImGuiToolManager::RegisterTool(ImGuiTool* tool)
 {
 	enAssert(tool != nullptr);
 
-	const U32 toolHash = tool->GetHash();
 	const U32 tab = static_cast<U32>(tool->GetTab());
 	enAssert(tab >= static_cast<U32>(ImGuiToolTab::Main) && tab < static_cast<U32>(ImGuiToolTab::Count));
 
 	std::vector<ImGuiTool*>& tools = mTools[tab];
 
+	const U32 toolHash = Hash::SlowHash(tool->GetName());
 	const size_t size = tools.size();
 	for (size_t i = 0; i < size; ++i)
 	{
-		enAssert(tools[i]->GetHash() != toolHash);
+		enAssert(Hash::SlowHash(tools[i]->GetName()) != toolHash);
 	}
 
 	tools.push_back(tool);
@@ -120,16 +115,16 @@ void ImGuiToolManager::UnregisterTool(ImGuiTool* tool)
 {
 	enAssert(tool != nullptr);
 
-	const U32 toolHash = tool->GetHash();
     const U32 tab = static_cast<U32>(tool->GetTab());
 	enAssert(tab >= static_cast<U32>(ImGuiToolTab::Main) && tab < static_cast<U32>(ImGuiToolTab::Count));
 
 	std::vector<ImGuiTool*>& tools = mTools[tab];
 
+	const U32 toolHash = Hash::SlowHash(tool->GetName());
 	const size_t size = tools.size();
 	for (size_t i = 0; i < size; ++i)
 	{
-		if (tools[i]->GetHash() == toolHash)
+		if (Hash::SlowHash(tools[i]->GetName()) == toolHash)
 		{
 			tools.erase(tools.begin() + i);
 			return;

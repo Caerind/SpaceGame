@@ -15,7 +15,7 @@ Animation::Frame::Frame(const Rectu& rect, Time duration)
 
 Animation::Clip::Clip(const std::string& name, U32 from, U32 to, Direction direction)
 	: mName(name)
-	, mHashedName(Hash::Meow32(name.c_str()))
+	, mHashedName(Hash::SlowHash(name.c_str()))
 	, mFrom(from)
 	, mTo(to)
 	, mDirection(direction)
@@ -24,7 +24,7 @@ Animation::Clip::Clip(const std::string& name, U32 from, U32 to, Direction direc
 
 U32 Animation::Clip::GetFrameCount() const
 {
-	enAssert(mTo >= mFrom);
+   	enAssert(mTo >= mFrom);
     const U32 distance = (mTo - mFrom);
     if (mDirection != Direction::PingPong)
     {

@@ -214,9 +214,9 @@ struct CustomObjectEditor<en::Vector4<T>>
 			vec4f[3] = object.w;
 			if (ImGui::InputFloat4(name, vec4f))
 			{
-				object.x = static_cast<T>(vec3f[0]);
-				object.y = static_cast<T>(vec3f[1]);
-				object.z = static_cast<T>(vec3f[2]);
+				object.x = static_cast<T>(vec4f[0]);
+				object.y = static_cast<T>(vec4f[1]);
+				object.z = static_cast<T>(vec4f[2]);
 				object.w = static_cast<T>(vec4f[3]);
 				return true;
 			}
@@ -240,7 +240,7 @@ struct CustomObjectEditor<en::Matrix3<T>>
 		bool modified = false;
 		if (ImGui::CollapsingHeader(name))
 		{
-			for (U32 row = 0; row < en::Matrix3<T>::rows; ++row)
+			for (en::U32 row = 0; row < en::Matrix3<T>::rows; ++row)
 			{
 				static en::Vector3<T> matrixRow;
 				matrixRow = object.getRow(row);
@@ -265,7 +265,7 @@ struct CustomObjectEditor<en::Matrix4<T>>
 		bool modified = false;
 		if (ImGui::CollapsingHeader(name))
 		{
-			for (U32 row = 0; row < en::Matrix4<T>::rows; ++row)
+			for (en::U32 row = 0; row < en::Matrix4<T>::rows; ++row)
 			{
 				static en::Vector4<T> matrixRow;
 				matrixRow = object.getRow(row);

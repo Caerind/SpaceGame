@@ -150,4 +150,4 @@ private:
 
 } // namespace en
 
-ENLIVE_DEFINE_TYPE_INFO(en::Time);
+ENLIVE_DEFINE_TYPE_INFO(en::Time)

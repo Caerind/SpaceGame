@@ -113,7 +113,7 @@ public:
 	}
 
 	constexpr const char* GetName() const { return mName; }
-	constexpr U32 GetHash() const { return Hash::ConstexprHash(mName); }
+	constexpr U32 GetHash() const { return Hash::SlowHash(mName); }
 	constexpr U32 GetAttributes() const { return mAttributes; }
 
 	constexpr bool HasMemberPtr() const { return mHasMemberPtr; }
@@ -129,7 +129,7 @@ public:
 	{
 		static_assert(TypeInfo<Class>::IsKnown());
 		static_assert(TypeInfo<T>::IsKnown());
-		return Hash::Combine32(TypeInfo<Class>::GetHash(), Hash::Combine32(TypeInfo<T>::GetHash(), Hash::ConstexprHash(mName)));
+		return Hash::Combine32(TypeInfo<Class>::GetHash(), Hash::Combine32(TypeInfo<T>::GetHash(), GetHash()));
 	}
 
 	constexpr T& GetRef(Class& obj) const
@@ -188,7 +188,7 @@ public:
 		}
 	}
 
-	template <typename V, typename = Traits::EnableIf<std::is_constructible_v<T, V>::type>> // TODO : Remove this std::type_traits
+	template <typename V, typename = Traits::EnableIf<std::is_constructible<T, V>::value>> // TODO : Remove this std::type_traits
 	constexpr void Set(Class& obj, V&& value) const
 	{
 		if (HasMemberPtr())
@@ -293,7 +293,7 @@ using MemberTypeOf = typename Traits::Decay<T>::type::Type;
 template <typename T>
 constexpr bool HasMember(const char* name)
 {
-	constexpr U32 hash = Hash::ConstexprHash(name);
+	constexpr U32 hash = Hash::SlowHash(name);
 	bool found = false;
 	ForEachMember([&found, &hash](const auto& member)
 	{
@@ -308,7 +308,7 @@ constexpr bool HasMember(const char* name)
 template <typename T, typename MemberT>
 constexpr bool HasMemberOfType(const char* name)
 {
-	constexpr U32 hash = Hash::ConstexprHash(name);
+	constexpr U32 hash = Hash::SlowHash(name);
 	bool found = false;
 	ForEachMember([&found, &hash](const auto& member)
 	{
@@ -324,7 +324,7 @@ template <typename T, typename MemberT, typename F>
 constexpr void ForMember(const char* name, F&& f)
 {
 	static_assert(HasMemberOfType<T, MemberT>(name));
-	constexpr U32 hash = Hash::ConstexprHash(name);
+	constexpr U32 hash = Hash::SlowHash(name);
 	ForEachMember<T>([&](const auto& member)
 	{
 		if (member.GetHash() == hash)

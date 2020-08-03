@@ -86,7 +86,7 @@ U32 ResourceManager::Count() const
 
 ResourceID ResourceManager::StringToResourceID(const std::string& str)
 {
-	return Hash::Meow32(str.c_str());
+	return Hash::SlowHash(str.c_str());
 }
 
 } // namespace en

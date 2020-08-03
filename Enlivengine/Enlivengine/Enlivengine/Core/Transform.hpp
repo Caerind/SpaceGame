@@ -56,7 +56,7 @@ private:
 	F32 mRotation2D;
 	mutable bool mDirty;
 
-	ENLIVE_META_CLASS();
+	ENLIVE_META_CLASS()
 };
 
 static_assert(sizeof(Transform) <= 128);
