@@ -123,7 +123,7 @@ __inline__ static void trap_instruction(void)
 
 
 #ifndef DEBUG_BREAK_IMPL
-#define debug_break
+#define debug_break()
 #elif DEBUG_BREAK_IMPL == DEBUG_BREAK_USE_TRAP_INSTRUCTION
 __attribute__((gnu_inline, always_inline))
 __inline__ static void debug_break(void)
@@ -144,7 +144,7 @@ __inline__ static void debug_break(void)
 	raise(SIGTRAP);
 }
 #else
-#define debug_break
+#define debug_break()
 #endif
 
 #ifdef __cplusplus
