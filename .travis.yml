@@ -65,4 +65,4 @@ script:
 - eval "${MATRIX_EVAL}"
 - mkdir build && cd build
 - cmake .. $CMAKE_FLAGS
-- cmake --build . --target install
+- cmake --build .
