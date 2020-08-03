@@ -2,27 +2,6 @@ language: cpp
 notifications:
   email: false
 
-addons:
-  apt_packages:
-    - cmake
-    - libxrandr-dev
-    - libudev-dev
-    - libopenal-dev
-    - libflac-dev
-    - libvorbis-dev
-    - libgl1-mesa-dev
-        
-before_scirpt:
-- eval "${MATRIX_EVAL}"
-- mkdir build && cd build
-- cmake ..
-- cat CMakeFiles/CMakeOutput.log
-
-script:
-- cmake --build .
-
-
-
 matrix:
   include:
 
@@ -35,10 +14,19 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - cmake
+            - libxrandr-dev
+            - libudev-dev
+            - libopenal-dev
+            - libflac-dev
+            - libvorbis-dev
+            - libgl1-mesa-dev
             - gcc-9
             - g++-9
-    env:
-        - MATRIX_EVAL="export CC=gcc-9; export CXX=g++-9"
+    script:
+        - mkdir build && cd build
+        - cmake ..
+        - make
 
   - name: "Linux clang"
     os: linux
@@ -49,17 +37,50 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - cmake
+            - libxrandr-dev
+            - libudev-dev
+            - libopenal-dev
+            - libflac-dev
+            - libvorbis-dev
+            - libgl1-mesa-dev
             - libstdc++-7-dev
-    env:
-        - MATRIX_EVAL=""
+    script:
+        - mkdir build && cd build
+        - cmake ..
+        - make
 
-  - name: "macOS Xcode 10"
+  - name: "macOS Xcode 12"
     os: osx
-    osx_image: xcode10
-    env:
-        - MATRIX_EVAL=""
+    osx_image: xcode12
+    addons:
+        apt:
+          packages:
+            - cmake
+            - libxrandr-dev
+            - libudev-dev
+            - libopenal-dev
+            - libflac-dev
+            - libvorbis-dev
+            - libgl1-mesa-dev
+    script:
+        - mkdir build && cd build
+        - cmake ..
+        - make
     
   - name: "Visual studio 17 2019"
     os: windows
-    env:
-        - MATRIX_EVAL=""
+    addons:
+        apt:
+          packages:
+            - cmake
+            - libxrandr-dev
+            - libudev-dev
+            - libopenal-dev
+            - libflac-dev
+            - libvorbis-dev
+            - libgl1-mesa-dev
+    script:
+        - mkdir build && cd build
+        - cmake ..
+        - make
