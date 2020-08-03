@@ -5,7 +5,6 @@
 namespace en
 {
 
-static const DateTime UnixDate = DateTime(1970, 1, 1);
 static const DateTime ProgramStart = DateTime::Now();
 
 DateTime::DateTime()

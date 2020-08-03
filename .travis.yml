@@ -21,10 +21,8 @@ matrix:
             - libflac-dev
             - libvorbis-dev
             - libgl1-mesa-dev
-            - gcc-9
             - g++-9
     script:
-        - export CC=gcc-9
         - export CXX=g++-9
         - mkdir build && cd build
         - cmake ..
@@ -46,8 +44,9 @@ matrix:
             - libflac-dev
             - libvorbis-dev
             - libgl1-mesa-dev
-            - libstdc++-7-dev
+            - clang-10
     script:
+        - export CXX=clang-10
         - mkdir build && cd build
         - cmake ..
         - make
