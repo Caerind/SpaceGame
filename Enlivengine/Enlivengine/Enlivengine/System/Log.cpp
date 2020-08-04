@@ -97,7 +97,6 @@ void Logger::UnregisterLogger()
 LogManager::LogManager()
 	: mLoggers()
 	, mUserChannelStrings()
-	, mDefaultLogger(nullptr)
 	, mChannelFilter(U64_Max)
 	, mTypeFilter(U32_Max)
 {

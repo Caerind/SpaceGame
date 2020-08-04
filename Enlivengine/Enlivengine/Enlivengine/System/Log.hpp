@@ -124,7 +124,6 @@ private:
 private:
 	std::vector<Logger*> mLoggers;
 	std::vector<std::string_view> mUserChannelStrings;
-	Logger* mDefaultLogger;
 	U64 mChannelFilter;
 	U32 mTypeFilter;
 };
