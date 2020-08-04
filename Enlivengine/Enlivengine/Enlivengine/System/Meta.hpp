@@ -12,14 +12,18 @@ namespace en::Meta
 // I modified it to fit my needs and use C++17
 // Plus the different other usage I needed for serialization and such
 
+static constexpr en::U32 Attribute_None = 0;
+static constexpr en::U32 Attribute_NoEditor = 1 << 0;
+static constexpr en::U32 Attribute_NoSerialization = 1 << 1;
+
 template <typename Class, typename T>
 class Member
 {
 public:
-	using MemberPtrT = T Class::*;
 	using ClassType = Class;
 	using Type = T;
 
+	using MemberPtrT = T Class::*;
 	using ConstRefGetterFuncPtrT = const T& (Class::*)() const;
 	using ConstRefSetterFuncPtrT = void (Class::*)(const T&);
 	using NonConstRefGetterFuncPtrT = T& (Class::*)();
@@ -38,7 +42,17 @@ public:
 		, mCopySetter(nullptr)
 	{
 	}
-
+	constexpr Member(const char* name, NonConstRefGetterFuncPtrT getter, U32 attributes = 0)
+		: mName(name)
+		, mAttributes(attributes)
+		, mMemberPtr(nullptr)
+		, mConstRefGetter(nullptr)
+		, mNonConstRefGetter(getter)
+		, mCopyGetter(nullptr)
+		, mConstRefSetter(nullptr)
+		, mCopySetter(nullptr)
+	{
+	}
 	constexpr Member(const char* name, ConstRefGetterFuncPtrT getter, ConstRefSetterFuncPtrT setter, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
@@ -49,54 +63,6 @@ public:
 		, mCopyGetter(nullptr)
 		, mConstRefSetter(setter)
 		, mCopySetter(nullptr)
-	{
-	}
-	constexpr Member(const char* name, NonConstRefGetterFuncPtrT getter, ConstRefSetterFuncPtrT setter, U32 attributes = 0)
-		: mName(name)
-		, mAttributes(attributes)
-		, mHasMemberPtr(false)
-		, mMemberPtr(nullptr)
-		, mConstRefGetter(nullptr)
-		, mNonConstRefGetter(getter)
-		, mCopyGetter(nullptr)
-		, mConstRefSetter(setter)
-		, mCopySetter(nullptr)
-	{
-	}
-	constexpr Member(const char* name, CopyGetterFuncPtrT getter, ConstRefSetterFuncPtrT setter, U32 attributes = 0)
-		: mName(name)
-		, mAttributes(attributes)
-		, mHasMemberPtr(false)
-		, mMemberPtr(nullptr)
-		, mConstRefGetter(nullptr)
-		, mNonConstRefGetter(nullptr)
-		, mCopyGetter(getter)
-		, mConstRefSetter(setter)
-		, mCopySetter(nullptr)
-	{
-	}
-
-	constexpr Member(const char* name, ConstRefGetterFuncPtrT getter, CopySetterFuncPtrT setter, U32 attributes = 0)
-		: mName(name)
-		, mAttributes(attributes)
-		, mHasMemberPtr(false)
-		, mMemberPtr(nullptr)
-		, mConstRefGetter(getter)
-		, mNonConstRefGetter(nullptr)
-		, mCopyGetter(nullptr)
-		, mConstRefSetter(nullptr)
-		, mCopySetter(setter)
-	{
-	}
-	constexpr Member(const char* name, NonConstRefGetterFuncPtrT getter, CopySetterFuncPtrT setter, U32 attributes = 0)
-		: mName(name)
-		, mAttributes(attributes)
-		, mMemberPtr(nullptr)
-		, mConstRefGetter(nullptr)
-		, mNonConstRefGetter(getter)
-		, mCopyGetter(nullptr)
-		, mConstRefSetter(nullptr)
-		, mCopySetter(setter)
 	{
 	}
 	constexpr Member(const char* name, CopyGetterFuncPtrT getter, CopySetterFuncPtrT setter, U32 attributes = 0)
@@ -114,7 +80,10 @@ public:
 
 	constexpr const char* GetName() const { return mName; }
 	constexpr U32 GetHash() const { return Hash::SlowHash(mName); }
+
 	constexpr U32 GetAttributes() const { return mAttributes; }
+	constexpr bool HasEditor() const { return (mAttributes & en::Meta::Attribute_NoEditor) == 0; }
+	constexpr bool HasSerialization() const { return (mAttributes & en::Meta::Attribute_NoSerialization) == 0; }
 
 	constexpr bool HasMemberPtr() const { return mHasMemberPtr; }
 
@@ -174,10 +143,6 @@ public:
 		{
 			return (obj.*mConstRefGetter)();
 		}
-		else if (HasNonConstRefGetter())
-		{
-			return (obj.*mNonConstRefGetter)();
-		}
 		else if (HasCopyGetter())
 		{
 			return (obj.*mCopyGetter)();
@@ -194,6 +159,10 @@ public:
 		if (HasMemberPtr())
 		{
 			obj.*mMemberPtr = value;
+		}
+		else if (HasNonConstRefGetter())
+		{
+			(obj.*mNonConstRefGetter)() = value;
 		}
 		else if (HasConstRefSetter())
 		{
@@ -225,9 +194,9 @@ private:
 };
 
 template <typename Class, typename T>
-constexpr Member<Class, T> RegisterMember(const char* name, T Class::* memberPtr, U32 attributes = 0)
+constexpr Member<Class, T> RegisterMember(const char* name, T Class::* ptr, U32 attributes = 0)
 {
-	return Member<Class, T>(name, memberPtr, attributes);
+	return Member<Class, T>(name, ptr, attributes);
 }
 
 template <typename T>

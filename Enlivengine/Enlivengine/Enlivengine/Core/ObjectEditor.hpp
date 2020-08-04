@@ -68,9 +68,29 @@ public:
 			ImGui::Indent();
 			Meta::ForEachMember<T>([&object, &modified](const auto& member)
 			{
-				ImGui::PushID(member.GetHash());
-				modified = ImGuiEditor_Common(member.GetRef(object), member.GetName()) || modified;
-				ImGui::PopID();
+				if (member.HasEditor())
+				{
+					ImGui::PushID(member.GetHash());
+					using MemberType = typename Traits::Decay<decltype(member)>::type::Type;
+					if (member.HasMemberPtr() || member.HasNonConstRefGetter())
+					{
+						modified = ImGuiEditor_Common(member.GetRef(object), member.GetName()) || modified;
+					}
+					else if (Traits::IsCopyAssignable<MemberType>::value && (member.HasConstRefGetter() || member.HasCopyGetter()) && (member.HasConstRefSetter() || member.HasCopySetter()))
+					{
+						MemberType memberCopy = member.GetCopy(object);
+						if (ImGuiEditor_Common(memberCopy, member.GetName()))
+						{
+							member.Set(object, memberCopy);
+							modified = true;
+						}
+					}
+					else
+					{
+						enAssert(false);
+					}
+					ImGui::PopID();
+				}
 			});
 			ImGui::Unindent();
 		}
