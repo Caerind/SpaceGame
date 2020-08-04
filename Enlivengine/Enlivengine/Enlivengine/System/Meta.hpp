@@ -17,20 +17,38 @@ static constexpr en::U32 Attribute_NoEditor = 1 << 0;
 static constexpr en::U32 Attribute_NoSerialization = 1 << 1;
 
 template <typename Class, typename T>
+using MemberTypeT = T Class::*;
+
+template <typename Class, typename T>
+using ConstRefGetterFuncPtrT = const T& (Class::*)() const;
+
+template <typename Class, typename T>
+using ConstRefSetterFuncPtrT = void (Class::*)(const T&);
+
+template <typename Class, typename T>
+using NonConstRefGetterFuncPtrT = T& (Class::*)();
+
+template <typename Class, typename T>
+using CopyGetterFuncPtrT = T(Class::*)() const;
+
+template <typename Class, typename T>
+using CopySetterFuncPtrT = void (Class::*)(T);
+
+template <typename Class, typename T>
 class Member
 {
 public:
 	using ClassType = Class;
 	using Type = T;
 
-	using MemberPtrT = T Class::*;
-	using ConstRefGetterFuncPtrT = const T& (Class::*)() const;
-	using ConstRefSetterFuncPtrT = void (Class::*)(const T&);
-	using NonConstRefGetterFuncPtrT = T& (Class::*)();
-	using CopyGetterFuncPtrT = T (Class::*)() const;
-	using CopySetterFuncPtrT = void (Class::*)(T);
+	using MemberPtr = typename MemberTypeT<Class, T>;
+	using ConstRefGetterFuncPtr = typename ConstRefGetterFuncPtrT<Class, T>;
+	using ConstRefSetterFuncPtr = typename ConstRefSetterFuncPtrT<Class, T>;
+	using NonConstRefGetterFuncPtr = typename NonConstRefGetterFuncPtrT<Class, T>;
+	using CopyGetterFuncPtr = typename CopyGetterFuncPtrT<Class, T>;
+	using CopySetterFuncPtr = typename CopySetterFuncPtrT<Class, T>;
 
-	constexpr Member(const char* name, MemberPtrT ptr, U32 attributes = 0)
+	constexpr Member(const char* name, MemberPtr ptr, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
 		, mHasMemberPtr(true)
@@ -42,7 +60,7 @@ public:
 		, mCopySetter(nullptr)
 	{
 	}
-	constexpr Member(const char* name, NonConstRefGetterFuncPtrT getter, U32 attributes = 0)
+	constexpr Member(const char* name, NonConstRefGetterFuncPtr getter, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
 		, mMemberPtr(nullptr)
@@ -53,7 +71,7 @@ public:
 		, mCopySetter(nullptr)
 	{
 	}
-	constexpr Member(const char* name, ConstRefGetterFuncPtrT getter, ConstRefSetterFuncPtrT setter, U32 attributes = 0)
+	constexpr Member(const char* name, ConstRefGetterFuncPtr getter, ConstRefSetterFuncPtr setter, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
 		, mHasMemberPtr(false)
@@ -65,7 +83,7 @@ public:
 		, mCopySetter(nullptr)
 	{
 	}
-	constexpr Member(const char* name, CopyGetterFuncPtrT getter, CopySetterFuncPtrT setter, U32 attributes = 0)
+	constexpr Member(const char* name, CopyGetterFuncPtr getter, CopySetterFuncPtr setter, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
 		, mHasMemberPtr(false)
@@ -183,20 +201,38 @@ private:
 	U32 mAttributes;
 	bool mHasMemberPtr;
 
-	MemberPtrT mMemberPtr;
+	MemberPtr mMemberPtr;
 
-	ConstRefGetterFuncPtrT mConstRefGetter;
-	NonConstRefGetterFuncPtrT mNonConstRefGetter;
-	CopyGetterFuncPtrT mCopyGetter;
+	ConstRefGetterFuncPtr mConstRefGetter;
+	NonConstRefGetterFuncPtr mNonConstRefGetter;
+	CopyGetterFuncPtr mCopyGetter;
 
-	ConstRefSetterFuncPtrT mConstRefSetter;
-	CopySetterFuncPtrT mCopySetter;
+	ConstRefSetterFuncPtr mConstRefSetter;
+	CopySetterFuncPtr mCopySetter;
 };
 
 template <typename Class, typename T>
 constexpr Member<Class, T> RegisterMember(const char* name, T Class::* ptr, U32 attributes = 0)
 {
 	return Member<Class, T>(name, ptr, attributes);
+}
+
+template <typename Class, typename T>
+constexpr Member<Class, T> RegisterMember(const char* name, NonConstRefGetterFuncPtrT<Class, T> getter, U32 attributes = 0)
+{
+	return Member<Class, T>(name, getter, attributes);
+}
+
+template <typename Class, typename T>
+constexpr Member<Class, T> RegisterMember(const char* name, ConstRefGetterFuncPtrT<Class, T> getter, ConstRefSetterFuncPtrT<Class, T> setter, U32 attributes = 0)
+{
+	return Member<Class, T>(name, getter, setter, attributes);
+}
+
+template <typename Class, typename T>
+constexpr Member<Class, T> RegisterMember(const char* name, CopyGetterFuncPtrT<Class, T> getter, CopySetterFuncPtrT<Class, T> setter, U32 attributes = 0)
+{
+	return Member<Class, T>(name, getter, setter, attributes);
 }
 
 template <typename T>

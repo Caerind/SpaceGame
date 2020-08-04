@@ -64,7 +64,7 @@ static_assert(sizeof(Transform) <= 128);
 } // namespace en
 
 ENLIVE_META_CLASS_BEGIN(en::Transform)
-	ENLIVE_META_CLASS_MEMBER("Position", &en::Transform::mPosition),
-	ENLIVE_META_CLASS_MEMBER("Rotation", &en::Transform::mRotation2D),
-	ENLIVE_META_CLASS_MEMBER("Scale", &en::Transform::mScale)
+	ENLIVE_META_CLASS_MEMBER("Position", &en::Transform::GetPosition, &en::Transform::SetPosition),
+	ENLIVE_META_CLASS_MEMBER("Rotation", &en::Transform::GetRotation2D, &en::Transform::SetRotation2D),
+	ENLIVE_META_CLASS_MEMBER("Scale", &en::Transform::GetScale, &en::Transform::SetScale)
 ENLIVE_META_CLASS_END()

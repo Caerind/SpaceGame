@@ -127,7 +127,35 @@ bool DataFile::Serialize_Registered(const T& object, const char* name)
 		WriteCurrentType<T>();
 		Meta::ForEachMember<T>([this, &object](const auto& member)
 		{
-			Serialize_Common(member.GetConstRef(object), member.GetName());
+			if (member.HasSerialization())
+			{
+				if (member.HasMemberPtr() || member.HasConstRefGetter())
+				{
+					Serialize_Common(member.GetConstRef(object), member.GetName());
+				}
+				else if (member.HasNonConstRefGetter())
+				{
+					// TODO : Is this valid ?
+					//Serialize_Common(member.GetRef(object), member.GetName());
+					enAssert(false);
+				}
+				else if (member.HasCopyGetter())
+				{
+					using MemberType = typename Traits::Decay<decltype(member)>::type::Type;
+					if constexpr (Traits::IsCopyAssignable<MemberType>::value)
+					{
+						Serialize_Common(member.GetCopy(object), member.GetName());
+					}
+					else
+					{
+						enAssert(false);
+					}
+				}
+				else
+				{
+					enAssert(false);
+				}
+			}
 		});
 		mParserXml.CloseNode();
 		return true;
@@ -166,7 +194,33 @@ bool DataFile::Deserialize_Registered(T& object, const char* name)
 			// TODO : Use return of Serialize_Common for return
 			Meta::ForEachMember<T>([this, &object](const auto& member)
 			{
-				Deserialize_Common(member.GetRef(object), member.GetName());
+				if (member.HasSerialization())
+				{
+					if (member.HasMemberPtr() || member.HasNonConstRefGetter())
+					{
+						Deserialize_Common(member.GetRef(object), member.GetName());
+					}
+					else if ((member.HasConstRefGetter() || member.HasCopyGetter()) && (member.HasConstRefSetter() || member.HasCopySetter()))
+					{
+						using MemberType = typename Traits::Decay<decltype(member)>::type::Type;
+						if constexpr (Traits::IsCopyAssignable<MemberType>::value)
+						{
+							MemberType memberCopy = member.GetCopy(object);
+							if (Deserialize_Common(memberCopy, member.GetName()))
+							{
+								member.Set(object, memberCopy);
+							}
+						}
+						else
+						{
+							enAssert(false);
+						}
+					}
+					else
+					{
+						enAssert(false);
+					}
+				}
 			});
 		}
 		else

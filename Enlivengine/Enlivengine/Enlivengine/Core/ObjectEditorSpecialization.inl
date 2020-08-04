@@ -327,52 +327,6 @@ struct CustomObjectEditor<en::Rect<T>>
 	}
 };
 
-// en::Transform
-template <>
-struct CustomObjectEditor<en::Transform>
-{
-	static constexpr bool value = true;
-	static bool ImGuiEditor(en::Transform& object, const char* name)
-	{
-		bool modified = false;
-		if (ImGui::CollapsingHeader(name))
-		{
-			ImGui::Indent();
-
-			/*
-			if (en::World* world = en::Universe::GetInstance().GetCurrentWorld())
-			{
-				world->GetFreeCamView().setCenter(object.GetPosition2D());
-			}
-			*/
-
-			en::Vector3f position = object.GetPosition();
-			if (en::ObjectEditor::ImGuiEditor(position, "Position"))
-			{
-				object.SetPosition(position);
-				modified = true;
-			}
-
-			en::F32 rotation = object.GetRotation2D();
-			if (en::ObjectEditor::ImGuiEditor(rotation, "Rotation"))
-			{
-				object.SetRotation2D(rotation);
-				modified = true;
-			}
-
-			en::Vector3f scale = object.GetScale();
-			if (en::ObjectEditor::ImGuiEditor(scale, "Scale"))
-			{
-				object.SetScale(scale);
-				modified = true;
-			}
-
-			ImGui::Unindent();
-		}
-		return modified;
-	}
-};
-
 // en::Sprite
 template <>
 struct CustomObjectEditor<en::Sprite>
