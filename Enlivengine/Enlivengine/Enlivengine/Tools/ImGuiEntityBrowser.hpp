@@ -26,7 +26,6 @@ public:
 
 private:
 	std::vector<entt::entity> mSelectedEntities;
-	bool mNeedSave;
 };
 
 } // namespace en
