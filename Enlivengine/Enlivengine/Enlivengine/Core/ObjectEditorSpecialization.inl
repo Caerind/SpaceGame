@@ -378,13 +378,6 @@ struct CustomObjectEditor<en::Sprite>
 				modified = true;
 			}
 
-			en::Vector2f origin = object.GetOrigin();
-			if (en::ObjectEditor::ImGuiEditor(origin, "Origin"))
-			{
-				object.SetOrigin(origin);
-				modified = true;
-			}
-
 			ImGui::Unindent();
 		}
 		return modified;
@@ -469,13 +462,6 @@ struct CustomObjectEditor<en::Text>
 			if (en::ObjectEditor::ImGuiEditor(outlineThickness, "OutlineThickness"))
 			{
 				object.SetOutlineThickness(outlineThickness);
-				modified = true;
-			}
-
-			en::Vector2f origin = object.GetOrigin();
-			if (en::ObjectEditor::ImGuiEditor(origin, "Origin"))
-			{
-				object.SetOrigin(origin);
 				modified = true;
 			}
 

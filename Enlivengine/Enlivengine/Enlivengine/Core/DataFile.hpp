@@ -129,19 +129,13 @@ bool DataFile::Serialize_Registered(const T& object, const char* name)
 		{
 			if (member.HasSerialization())
 			{
-				if (member.HasMemberPtr() || member.HasConstRefGetter())
+				using MemberType = typename Traits::Decay<decltype(member)>::type::Type;
+				if (member.CanGetConstRef())
 				{
 					Serialize_Common(member.GetConstRef(object), member.GetName());
 				}
-				else if (member.HasNonConstRefGetter())
+				else if (member.CanGetCopy())
 				{
-					// TODO : Is this valid ?
-					//Serialize_Common(member.GetRef(object), member.GetName());
-					enAssert(false);
-				}
-				else if (member.HasCopyGetter())
-				{
-					using MemberType = typename Traits::Decay<decltype(member)>::type::Type;
 					if constexpr (Traits::IsCopyAssignable<MemberType>::value)
 					{
 						Serialize_Common(member.GetCopy(object), member.GetName());
@@ -196,11 +190,11 @@ bool DataFile::Deserialize_Registered(T& object, const char* name)
 			{
 				if (member.HasSerialization())
 				{
-					if (member.HasMemberPtr() || member.HasNonConstRefGetter())
+					if (member.CanGetRef())
 					{
 						Deserialize_Common(member.GetRef(object), member.GetName());
 					}
-					else if ((member.HasConstRefGetter() || member.HasCopyGetter()) && (member.HasConstRefSetter() || member.HasCopySetter()))
+					else if (member.CanGetCopy())
 					{
 						using MemberType = typename Traits::Decay<decltype(member)>::type::Type;
 						if constexpr (Traits::IsCopyAssignable<MemberType>::value)
@@ -208,7 +202,10 @@ bool DataFile::Deserialize_Registered(T& object, const char* name)
 							MemberType memberCopy = member.GetCopy(object);
 							if (Deserialize_Common(memberCopy, member.GetName()))
 							{
-								member.Set(object, memberCopy);
+								if (member.CanSet())
+								{
+									member.Set(object, memberCopy);
+								}
 							}
 						}
 						else

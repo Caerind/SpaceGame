@@ -71,11 +71,11 @@ public:
 				if (member.HasEditor())
 				{
 					ImGui::PushID(member.GetHash());
-					if (member.HasMemberPtr() || member.HasNonConstRefGetter())
+					if (member.CanGetRef())
 					{
 						modified = ImGuiEditor_Common(member.GetRef(object), member.GetName()) || modified;
 					}
-					else if ((member.HasConstRefGetter() || member.HasCopyGetter()) && (member.HasConstRefSetter() || member.HasCopySetter()))
+					else if (member.CanGetCopy())
 					{
 						using MemberType = typename Traits::Decay<decltype(member)>::type::Type;
 						if constexpr (Traits::IsCopyAssignable<MemberType>::value)
@@ -83,8 +83,11 @@ public:
 							MemberType memberCopy = member.GetCopy(object);
 							if (ImGuiEditor_Common(memberCopy, member.GetName()))
 							{
-								member.Set(object, memberCopy);
 								modified = true;
+								if (member.CanSet())
+								{
+									member.Set(object, memberCopy);
+								}
 							}
 						}
 						else

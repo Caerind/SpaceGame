@@ -63,6 +63,7 @@ public:
 	constexpr Member(const char* name, NonConstRefGetterFuncPtr getter, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
+		, mHasMemberPtr(false)
 		, mMemberPtr(nullptr)
 		, mConstRefGetter(nullptr)
 		, mNonConstRefGetter(getter)
@@ -104,13 +105,16 @@ public:
 	constexpr bool HasSerialization() const { return (mAttributes & en::Meta::Attribute_NoSerialization) == 0; }
 
 	constexpr bool HasMemberPtr() const { return mHasMemberPtr; }
-
 	constexpr bool HasConstRefGetter() const { return mConstRefGetter != nullptr; }
 	constexpr bool HasNonConstRefGetter() const { return mNonConstRefGetter != nullptr; }
 	constexpr bool HasCopyGetter() const { return mCopyGetter != nullptr; }
-
 	constexpr bool HasConstRefSetter() const { return mConstRefSetter != nullptr; }
 	constexpr bool HasCopySetter() const { return mCopySetter != nullptr; }
+
+	constexpr bool CanGetRef() const { return HasMemberPtr() || HasNonConstRefGetter(); }
+	constexpr bool CanGetConstRef() const { return HasMemberPtr() || HasNonConstRefGetter() || HasConstRefGetter(); }
+	constexpr bool CanGetCopy() const { return HasMemberPtr() || HasNonConstRefGetter() || HasConstRefGetter() || HasCopyGetter(); }
+	constexpr bool CanSet() const { return HasMemberPtr() || HasNonConstRefGetter() || HasConstRefSetter() || HasCopySetter(); }
 
 	constexpr U32 GetTotalHash() const
 	{
@@ -141,6 +145,10 @@ public:
 		{
 			return obj.*mMemberPtr;
 		}
+		else if (HasNonConstRefGetter())
+		{
+			return const_cast<const T&>((const_cast<Class&>(obj).*mNonConstRefGetter)());
+		}
 		else if (HasConstRefGetter())
 		{
 			return (obj.*mConstRefGetter)();
@@ -164,6 +172,10 @@ public:
 		else if (HasCopyGetter())
 		{
 			return (obj.*mCopyGetter)();
+		}
+		else if (HasNonConstRefGetter())
+		{
+			return (const_cast<Class&>(obj).*mNonConstRefGetter)();
 		}
 		else
 		{
@@ -257,7 +269,9 @@ namespace priv
 
 } // namespace priv
 
+// Used to access private members. Try to avoid using it if possible
 #define ENLIVE_META_CLASS() template <typename T> friend constexpr auto ::en::Meta::RegisterMembers();
+
 #define ENLIVE_META_CLASS_BEGIN(className) ENLIVE_DEFINE_TYPE_INFO(className) \
 	namespace en::Meta { \
 		template <> \

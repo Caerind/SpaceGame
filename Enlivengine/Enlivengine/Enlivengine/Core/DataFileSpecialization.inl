@@ -405,7 +405,6 @@ struct CustomXmlSerialization<en::Sprite>
 			dataFile.WriteCurrentType<en::Sprite>();
 			dataFile.Serialize_Common(static_cast<en::U32>(object.GetTextureID()), "TextureID");
 			dataFile.Serialize_Common(object.GetTextureRect(), "TextureRect");
-			dataFile.Serialize_Common(object.GetOrigin(), "Origin");
 			parser.CloseNode();
 			return true;
 		}
@@ -436,10 +435,6 @@ struct CustomXmlSerialization<en::Sprite>
 			en::Recti textureRect;
 			dataFile.Deserialize_Common(textureRect, "TextureRect");
 			object.SetTextureRect(textureRect);
-
-			en::Vector2f origin;
-			dataFile.Deserialize_Common(origin, "Origin");
-			object.SetOrigin(origin);
 
 			parser.CloseNode();
 			return true;
@@ -472,7 +467,6 @@ struct CustomXmlSerialization<en::Text>
 			dataFile.Serialize_Common(object.GetFillColor(), "FillColor");
 			dataFile.Serialize_Common(object.GetOutlineColor(), "OutlineColor");
 			dataFile.Serialize_Common(object.GetOutlineThickness(), "OutlineThickness");
-			dataFile.Serialize_Common(object.GetOrigin(), "Origin");
 			parser.CloseNode();
 			return true;
 		}
@@ -529,10 +523,6 @@ struct CustomXmlSerialization<en::Text>
 			en::F32 outlineThickness;
 			dataFile.Deserialize_Common(outlineThickness, "OutlineThickness");
 			object.SetOutlineThickness(outlineThickness);
-
-			en::Vector2f origin;
-			dataFile.Deserialize_Common(origin, "Origin");
-			object.SetOrigin(origin);
 
 			parser.CloseNode();
 			return true;

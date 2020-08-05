@@ -55,8 +55,6 @@ private:
 	Vector3f mScale;
 	F32 mRotation2D;
 	mutable bool mDirty;
-
-	ENLIVE_META_CLASS()
 };
 
 static_assert(sizeof(Transform) <= 128);
