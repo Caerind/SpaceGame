@@ -41,14 +41,7 @@ public:
 	using ClassType = Class;
 	using Type = T;
 
-	using MemberPtr = typename MemberTypeT<Class, T>;
-	using ConstRefGetterFuncPtr = typename ConstRefGetterFuncPtrT<Class, T>;
-	using ConstRefSetterFuncPtr = typename ConstRefSetterFuncPtrT<Class, T>;
-	using NonConstRefGetterFuncPtr = typename NonConstRefGetterFuncPtrT<Class, T>;
-	using CopyGetterFuncPtr = typename CopyGetterFuncPtrT<Class, T>;
-	using CopySetterFuncPtr = typename CopySetterFuncPtrT<Class, T>;
-
-	constexpr Member(const char* name, MemberPtr ptr, U32 attributes = 0)
+	constexpr Member(const char* name, MemberTypeT<Class, T> ptr, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
 		, mHasMemberPtr(true)
@@ -60,7 +53,7 @@ public:
 		, mCopySetter(nullptr)
 	{
 	}
-	constexpr Member(const char* name, NonConstRefGetterFuncPtr getter, U32 attributes = 0)
+	constexpr Member(const char* name, NonConstRefGetterFuncPtrT<Class, T> getter, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
 		, mHasMemberPtr(false)
@@ -72,7 +65,7 @@ public:
 		, mCopySetter(nullptr)
 	{
 	}
-	constexpr Member(const char* name, ConstRefGetterFuncPtr getter, ConstRefSetterFuncPtr setter, U32 attributes = 0)
+	constexpr Member(const char* name, ConstRefGetterFuncPtrT<Class, T> getter, ConstRefSetterFuncPtrT<Class, T> setter, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
 		, mHasMemberPtr(false)
@@ -84,7 +77,7 @@ public:
 		, mCopySetter(nullptr)
 	{
 	}
-	constexpr Member(const char* name, CopyGetterFuncPtr getter, CopySetterFuncPtr setter, U32 attributes = 0)
+	constexpr Member(const char* name, CopyGetterFuncPtrT<Class, T> getter, CopySetterFuncPtrT<Class, T> setter, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
 		, mHasMemberPtr(false)
@@ -213,14 +206,15 @@ private:
 	U32 mAttributes;
 	bool mHasMemberPtr;
 
-	MemberPtr mMemberPtr;
+	MemberTypeT<Class, T> mMemberPtr;
 
-	ConstRefGetterFuncPtr mConstRefGetter;
-	NonConstRefGetterFuncPtr mNonConstRefGetter;
-	CopyGetterFuncPtr mCopyGetter;
+	NonConstRefGetterFuncPtrT<Class, T> mNonConstRefGetter;
 
-	ConstRefSetterFuncPtr mConstRefSetter;
-	CopySetterFuncPtr mCopySetter;
+	ConstRefGetterFuncPtrT<Class, T> mConstRefGetter;
+	ConstRefSetterFuncPtrT<Class, T> mConstRefSetter;
+
+	CopyGetterFuncPtrT<Class, T> mCopyGetter;
+	CopySetterFuncPtrT<Class, T> mCopySetter;
 };
 
 template <typename Class, typename T>
