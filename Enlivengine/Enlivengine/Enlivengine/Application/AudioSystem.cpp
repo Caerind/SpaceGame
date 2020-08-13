@@ -666,9 +666,9 @@ U32 AudioSystem::GetLoadedSoundsCount() const
 
 SoundPtr AudioSystem::PlaySound(SoundID id)
 {
-	if (mSounds.size() < MAX_SOUNDS && ResourceManager::GetInstance().Has(id))
+	if (mSounds.size() < MAX_SOUNDS)
 	{
-		const SoundBufferPtr soundBuffer = ResourceManager::GetInstance().Get<en::SoundBuffer>(id);
+		const SoundBufferPtr soundBuffer = ResourceManager::GetInstance().Get<SoundBuffer>(id);
 		if (soundBuffer.IsValid())
 		{
 			mSounds.push_back(new Sound(soundBuffer, this));
@@ -705,7 +705,7 @@ void AudioSystem::ReleaseSound(SoundID id)
 	{
 		if (mLoadedSounds[i] == id)
 		{
-			ResourceManager::GetInstance().Release(id);
+			ResourceManager::GetInstance().Release<SoundBuffer>(id);
 			mLoadedSounds.erase(mLoadedSounds.begin() + i);
 			return;
 		}
@@ -751,7 +751,7 @@ void AudioSystem::ReleaseSounds()
 	const size_t size = mLoadedSounds.size();
 	for (size_t i = 0; i < size; ++i)
 	{
-		ResourceManager::GetInstance().Release(mLoadedSounds[i]);
+		ResourceManager::GetInstance().Release<SoundBuffer>(mLoadedSounds[i]);
 	}
 	mLoadedSounds.clear();
 }

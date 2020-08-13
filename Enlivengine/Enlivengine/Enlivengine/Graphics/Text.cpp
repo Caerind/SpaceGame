@@ -5,55 +5,33 @@ namespace en
 
 Text::Text()
 	: mText()
-	, mFont(nullptr)
+	, mFont()
 {
 }
 
-void Text::SetFont(const Font& font)
+void Text::SetFont(FontPtr font)
 {
-	mText.setFont(font);
-	mFont = &font;
+	if (font.IsValid())
+	{
+		mText.setFont(font.Get());
+		mFont = font;
+	}
 }
 
-const Font* Text::GetFont() const
+FontPtr Text::GetFont() const
 {
 	return mFont;
 }
 
-void Text::SetFontID(const ResourceID& fontID)
+void Text::SetString(const std::string& string)
 {
-	FontPtr fontPtr = ResourceManager::GetInstance().Get<Font>(fontID);
-	if (fontPtr.IsValid())
-	{
-		SetFont(fontPtr.Get());
-	}
-	else
-	{
-		enAssert(false);
-		mFont = nullptr;
-	}
-}
-
-ResourceID Text::GetFontID() const
-{
-	if (mFont != nullptr)
-	{
-		return mFont->GetID();
-	}
-	else
-	{
-		return InvalidResourceID;
-	}
-}
-
-void Text::SetString(const sf::String& string)
-{
+	mString = string;
 	mText.setString(string);
 }
 
-const sf::String& Text::GetString() const
+const std::string& Text::GetString() const
 {
-	return mText.getString();
+	return mString;
 }
 
 void Text::SetCharacterSize(U32 characterSize)
@@ -126,26 +104,23 @@ F32 Text::GetOutlineThickness() const
 	return static_cast<F32>(mText.getOutlineThickness());
 }
 
-void Text::SetOrigin(const Vector2f& origin)
+Rectf Text::GetLocalBounds() const
 {
-	mOrigin = origin;
+	return toEN(mText.getLocalBounds());
 }
 
-void Text::SetOrigin(F32 x, F32 y)
+Rectf Text::GetGlobalBounds() const
 {
-	mOrigin.set(x, y);
-}
-
-const Vector2f& Text::GetOrigin() const
-{
-	return mOrigin;
+	// TODO : Text::GetGlobalBounds()
+	enAssert(false);
+	return GetLocalBounds();
 }
 
 void Text::Render(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	if (mFont != nullptr)
+	if (!mString.empty() && mFont.HasValidID())
 	{
-		states.transform.translate(-mOrigin.x, -mOrigin.y);
+		states.transform *= toSF(GetMatrix());
 		target.draw(mText, states);
 	}
 }

@@ -8,36 +8,26 @@
 #include <Enlivengine/Math/Rect.hpp>
 #include <Enlivengine/Graphics/SFMLResources.hpp>
 #include <Enlivengine/Graphics/SFMLWrapper.hpp>
+#include <Enlivengine/Core/Transform.hpp>
 
 // TODO : Color ?
-// TODO : Origin ?
 
 namespace en
 {
 
-class Sprite
+class Sprite : public Transform
 {
 public:
 	Sprite();
-	Sprite(const Texture& texture);
-	Sprite(const Texture& texture, const Recti& textureRect);
-	Sprite(const ResourceID& textureID);
-	Sprite(const ResourceID& textureID, const Recti& textureRect);
 
-	void SetTexture(const Texture& texture, bool resetRect = false);
-	const Texture* GetTexture() const;
-
-	void SetTextureID(const ResourceID& textureID, bool resetRect = false);
-	ResourceID GetTextureID() const;
+	void SetTexture(TexturePtr texture);
+	TexturePtr GetTexture() const;
 
 	void SetTextureRect(const Recti& textureRect);
 	const Recti& GetTextureRect() const;
 
-	void SetOrigin(const Vector2f& origin);
-	void SetOrigin(F32 x, F32 y);
-	const Vector2f& GetOrigin() const;
-
-	Rectf GetBounds() const;
+	Rectf GetLocalBounds() const;
+	Rectf GetGlobalBounds() const;
 
 	void Render(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -47,12 +37,16 @@ private:
 
 private:
 	sf::Vertex mVertices[4];
-	const Texture* mTexture;
+	TexturePtr mTexture;
 	Recti mTextureRect;
-	Vector2f mOrigin;
 };
 
 } // namespace en
 
 ENLIVE_META_CLASS_BEGIN(en::Sprite)
+	ENLIVE_META_CLASS_MEMBER("Position", &en::Sprite::GetPosition, &en::Sprite::SetPosition),
+	ENLIVE_META_CLASS_MEMBER("Rotation", &en::Sprite::GetRotation2D, &en::Sprite::SetRotation2D),
+	ENLIVE_META_CLASS_MEMBER("Scale", &en::Sprite::GetScale, &en::Sprite::SetScale),
+	ENLIVE_META_CLASS_MEMBER("Texture", &en::Sprite::GetTexture, &en::Sprite::SetTexture),
+	ENLIVE_META_CLASS_MEMBER("TextureRect", &en::Sprite::GetTextureRect, &en::Sprite::SetTextureRect)
 ENLIVE_META_CLASS_END()

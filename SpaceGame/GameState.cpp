@@ -90,10 +90,14 @@ void GameState::render(sf::RenderTarget& target)
 	static sf::Sprite background;
 	if (!backgroundInitialized)
 	{
-		en::Texture& texture = en::ResourceManager::GetInstance().Get<en::Texture>("background").Get();
-		texture.setRepeated(true);
-		background.setTexture(texture);
-		background.setTextureRect(sf::IntRect(0, 0, 2048 * 6, 2048 * 6));
+		en::TexturePtr texturePtr = en::ResourceManager::GetInstance().Get<en::Texture>("background");
+		if (texturePtr.IsValid())
+		{
+			en::Texture& texture = texturePtr.Get();
+			texture.setRepeated(true);
+			background.setTexture(texture);
+			background.setTextureRect(sf::IntRect(0, 0, 2048 * 6, 2048 * 6));
+		}
 		backgroundInitialized = true;
 	}
 	en::I32 x = static_cast<en::I32>(GameSingleton::GetInstance().posCenter.x) / 2048;
@@ -331,9 +335,13 @@ void GameState::Init()
 		transformPlayer2.SetRotation2D(gameSing.startRotationPlayer2);
 	}
 
-	magicBarSprite.setTexture(en::ResourceManager::GetInstance().Get<en::Texture>("spaceMagicBar").Get());
-	magicBarSprite.setTextureRect(sf::IntRect(0, 0, 1024, 64));
-	magicBarSprite.setOrigin(0.0f, 32.0f);
+	en::TexturePtr magicBarTexturePtr = en::ResourceManager::GetInstance().Get<en::Texture>("spaceMagicBar");
+	if (magicBarTexturePtr.IsValid())
+	{
+		magicBarSprite.setTexture(magicBarTexturePtr.Get());
+		magicBarSprite.setTextureRect(sf::IntRect(0, 0, 1024, 64));
+		magicBarSprite.setOrigin(0.0f, 32.0f);
+	}
 	magicBarCurrent = 0;
 	magicBarAcc = en::Time::Zero();
 
@@ -713,9 +721,9 @@ void GameState::Shoot(const en::Entity& entity)
 			tProj.SetRotation2D(90.0f - angle);
 			tProj.SetPosition(f);
 			auto& sProj = proj.Add<en::SpriteComponent>().sprite;
-			sProj.SetTexture(en::ResourceManager::GetInstance().Get<en::Texture>("sheet").Get());
+			sProj.SetTexture(en::ResourceManager::GetInstance().Get<en::Texture>("sheet"));
 			sProj.SetTextureRect(en::Recti(856, 869, 9, 57));
-			sProj.SetOrigin(0.5f * sProj.GetTextureRect().getSize().x, 0.5f * sProj.GetTextureRect().getSize().y);
+			sProj.SetPosition(-0.5f * sProj.GetTextureRect().getSize().x, -0.5f * sProj.GetTextureRect().getSize().y);
 			auto& pProj = proj.Add<ShootComponent>();
 			pProj.direction = r;
 			pProj.speed = 300.0f;
@@ -747,8 +755,8 @@ void GameState::SpawnEnemy(const en::Vector2f& pos, en::F32 rotation, en::U32 sw
 	enemy.Add<en::RenderableComponent>();
 	enemy.Add<VelocityComponent>();
 	auto& ship = enemy.Add<ShipComponent>();
-	ship.body.SetTexture(en::ResourceManager::GetInstance().Get<en::Texture>("shipDefault").Get());
-	ship.body.SetOrigin(128, 128);
+	ship.body.SetTexture(en::ResourceManager::GetInstance().Get<en::Texture>("shipDefault"));
+	ship.body.SetPosition(-128, -128);
 	enemy.Add<BarkComponent>();
 	auto& ai = enemy.Add<AIComponent>();
 	ai.initPos = pos;
@@ -766,23 +774,27 @@ void GameState::SpawnPlanet(const en::Vector2f& pos)
 	transform.SetScale(2.0f);
 	planet.Add<en::RenderableComponent>();
 	auto& planetC = planet.Add<PlanetComponent>();
-	en::Texture& texture = en::ResourceManager::GetInstance().Get<en::Texture>("planets").Get();
-	if (!texture.isSmooth())
+	en::TexturePtr texturePtr = en::ResourceManager::GetInstance().Get<en::Texture>("planets");
+	if (texturePtr.IsValid())
 	{
-		texture.setSmooth(true);
+		en::Texture& texture = texturePtr.Get();
+		if (!texture.isSmooth())
+		{
+			texture.setSmooth(true);
+		}
 	}
-	planetC.atm.SetTexture(texture);
+	planetC.atm.SetTexture(texturePtr);
 	planetC.atm.SetTextureRect(en::Recti(en::Random::get(0, 3) * 320, 0, 320, 320));
-	planetC.atm.SetOrigin(160.0f, 160.0f);
-	planetC.core.SetTexture(texture);
+	planetC.atm.SetPosition(-160.0f, -160.0f);
+	planetC.core.SetTexture(texturePtr);
 	planetC.core.SetTextureRect(en::Recti(en::Random::get(0, 3) * 320, 320, 320, 320));
-	planetC.core.SetOrigin(160.0f, 160.0f);
-	planetC.tex.SetTexture(texture);
+	planetC.core.SetPosition(-160.0f, -160.0f);
+	planetC.tex.SetTexture(texturePtr);
 	planetC.tex.SetTextureRect(en::Recti(en::Random::get(0, 3) * 320, 640, 320, 320));
-	planetC.tex.SetOrigin(160.0f, 160.0f);
-	planetC.shad.SetTexture(texture);
+	planetC.tex.SetPosition(-160.0f, -160.0f);
+	planetC.shad.SetTexture(texturePtr);
 	planetC.shad.SetTextureRect(en::Recti(en::Random::get(0, 3) * 320, 960, 320, 320));
-	planetC.shad.SetOrigin(160.0f, 160.0f);
+	planetC.shad.SetPosition(-160.0f, -160.0f);
 	auto& phys = planet.Add<SpacePhysicComponent>();
 	phys.forceFactor = 20000000.0f;
 	phys.dMin = 400.0f;

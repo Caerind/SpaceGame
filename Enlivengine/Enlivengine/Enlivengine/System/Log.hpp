@@ -113,7 +113,7 @@ public:
 
 	template <typename EnumClient>
 	bool InitializeClientChannels();
-	std::string_view GetChannelString(U32 channelID) const;
+	std::string_view GetChannelName(U32 channelID) const;
 
 private:
 	friend class Logger;
@@ -123,7 +123,7 @@ private:
 
 private:
 	std::vector<Logger*> mLoggers;
-	std::vector<std::string_view> mUserChannelStrings;
+	std::vector<std::string_view> mClientChannelNames;
 	U64 mChannelFilter;
 	U32 mTypeFilter;
 };
@@ -152,18 +152,19 @@ template <typename EnumClient>
 bool LogManager::InitializeClientChannels()
 {
 	const auto enumValues = Meta::GetEnumValues<EnumClient>();
-	mUserChannelStrings.clear();
+	mClientChannelNames.clear();
 	if (static_cast<U32>(enumValues[0]) == static_cast<U32>(LogChannel::Max))
 	{
-		mUserChannelStrings.reserve(enumValues.size());
+		mClientChannelNames.reserve(enumValues.size());
 		for (const auto& enumValue : enumValues)
 		{
-			mUserChannelStrings.push_back(Meta::GetEnumName(enumValue));
+			mClientChannelNames.push_back(Meta::GetEnumName(enumValue));
 		}
 		return true;
 	}
 	else
 	{
+		enAssert(false);
 		return false;
 	}
 }

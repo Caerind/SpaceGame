@@ -28,7 +28,7 @@ std::string_view LogMessage::GetTypeString() const
 
 std::string_view LogMessage::GetChannelString() const
 {
-	return LogManager::GetInstance().GetChannelString(channel);
+	return LogManager::GetInstance().GetChannelName(channel);
 }
 
 std::string_view LogMessage::GetMessageString() const
@@ -96,7 +96,7 @@ void Logger::UnregisterLogger()
 
 LogManager::LogManager()
 	: mLoggers()
-	, mUserChannelStrings()
+	, mClientChannelNames()
 	, mChannelFilter(U64_Max)
 	, mTypeFilter(U32_Max)
 {
@@ -132,13 +132,13 @@ U32 LogManager::GetLoggerCount() const
 	return static_cast<U32>(mLoggers.size());
 }
 
-std::string_view LogManager::GetChannelString(U32 channelID) const
+std::string_view LogManager::GetChannelName(U32 channelID) const
 {
 	if (channelID >= static_cast<U32>(LogChannel::Max))
 	{
 		const U32 index = channelID - static_cast<U32>(LogChannel::Max);
-		enAssert(index < static_cast<U32>(mUserChannelStrings.size()));
-		return mUserChannelStrings[index];
+		enAssert(index < static_cast<U32>(mClientChannelNames.size()));
+		return mClientChannelNames[index];
 	}
 	else
 	{

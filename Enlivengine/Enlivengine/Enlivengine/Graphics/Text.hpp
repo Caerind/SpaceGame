@@ -8,23 +8,21 @@
 #include <Enlivengine/Math/Rect.hpp>
 #include <Enlivengine/Graphics/SFMLResources.hpp>
 #include <Enlivengine/Graphics/SFMLWrapper.hpp>
+#include <Enlivengine/Core/Transform.hpp>
 
 namespace en
 {
 
-class Text
+class Text : public Transform
 {
 public:
 	Text();
 
-	void SetFont(const Font& font);
-	const Font* GetFont() const;
+	void SetFont(FontPtr font);
+	FontPtr GetFont() const;
 
-	void SetFontID(const ResourceID& fontID);
-	ResourceID GetFontID() const;
-
-	void SetString(const sf::String& string);
-	const sf::String& GetString() const;
+	void SetString(const std::string& string);
+	const std::string& GetString() const;
 
 	void SetCharacterSize(U32 characterSize);
 	U32 GetCharacterSize() const;
@@ -47,19 +45,30 @@ public:
 	void SetOutlineThickness(F32 thickness);
 	F32 GetOutlineThickness() const;
 
-	void SetOrigin(const Vector2f& origin);
-	void SetOrigin(F32 x, F32 y);
-	const Vector2f& GetOrigin() const;
+	Rectf GetLocalBounds() const;
+	Rectf GetGlobalBounds() const;
 
 	void Render(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
 	sf::Text mText;
-	const Font* mFont;
-	Vector2f mOrigin;
+	std::string mString;
+	FontPtr mFont;
 };
 
 } // namespace en
 
 ENLIVE_META_CLASS_BEGIN(en::Text)
+	ENLIVE_META_CLASS_MEMBER("Position", &en::Text::GetPosition, &en::Text::SetPosition),
+	ENLIVE_META_CLASS_MEMBER("Rotation", &en::Text::GetRotation2D, &en::Text::SetRotation2D),
+	ENLIVE_META_CLASS_MEMBER("Scale", &en::Text::GetScale, &en::Text::SetScale),
+	ENLIVE_META_CLASS_MEMBER("Font", &en::Text::GetFont, &en::Text::SetFont),
+	ENLIVE_META_CLASS_MEMBER("String", &en::Text::GetString, &en::Text::SetString),
+	ENLIVE_META_CLASS_MEMBER("CharacterSize", &en::Text::GetCharacterSize, &en::Text::SetCharacterSize),
+	ENLIVE_META_CLASS_MEMBER("LineSpacing", &en::Text::GetLineSpacing, &en::Text::SetLineSpacing),
+	ENLIVE_META_CLASS_MEMBER("LetterSpacing", &en::Text::GetLetterSpacing, &en::Text::SetLetterSpacing),
+	ENLIVE_META_CLASS_MEMBER("Style", &en::Text::GetStyle, &en::Text::SetStyle),
+	ENLIVE_META_CLASS_MEMBER("FillColor", &en::Text::GetFillColor, &en::Text::SetFillColor),
+	ENLIVE_META_CLASS_MEMBER("OutlineColor", &en::Text::GetOutlineColor, &en::Text::SetOutlineColor),
+	ENLIVE_META_CLASS_MEMBER("OutlineThickness", &en::Text::GetOutlineThickness, &en::Text::SetOutlineThickness)
 ENLIVE_META_CLASS_END()

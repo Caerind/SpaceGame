@@ -1,14 +1,5 @@
 <?xml version="1.0"?>
-<Resources resourceCount="9" typeCount="8">
-	<Resource identifier="tahoma" filename="Fonts/Tahoma.ttf" type="0" />
-	<Resource identifier="shipDefault" filename="Textures/ship_default.png" type="1" />
-	<Resource identifier="shipTileset" filename="Textures/ship_tileset.png" type="6" />
-	<Resource identifier="spaceMagicBar" filename="Textures/spaceMagicBar.png" type="1" />
-	<Resource identifier="background" filename="Textures/background.png" type="1" />
-	<Resource identifier="sheet" filename="Textures/sheet.png" type="1" />
-	<Resource identifier="planets" filename="Textures/planet.png" type="1" />
-	<Resource identifier="spaceBase" filename="Musics/spaceBase.ogg" type="6" />
-	<Resource identifier="spaceNavigation" filename="Musics/spaceNavigation.ogg" type="6" />
-	<Resource identifier="spaceSafe" filename="Musics/spaceSafe.ogg" type="6" />
-	<Resource identifier="spaceCombat" filename="Musics/spaceCombat.ogg" type="6" />
+<Resources>
+	<Resource identifier="background" id="2399878105" type="2" filename="Textures/background.png" />
+	<Resource identifier="tahoma" id="3635134195" type="3" filename="Fonts/Tahoma.ttf" />
 </Resources>

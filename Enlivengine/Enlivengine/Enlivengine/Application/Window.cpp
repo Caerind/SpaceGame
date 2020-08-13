@@ -1,6 +1,7 @@
 #include <Enlivengine/Application/Window.hpp>
 
 #include <Enlivengine/System/Log.hpp>
+#include <Enlivengine/System/Profiler.hpp>
 
 namespace en
 {
@@ -330,6 +331,8 @@ void Window::draw(const sf::Vertex* vertices, std::size_t vertexCount, sf::Primi
 
 void Window::display()
 {
+	ENLIVE_PROFILE_FUNCTION();
+
 	if (mCursor == Cursor::Custom)
 	{
 		sf::View oldView = mWindow.getView();

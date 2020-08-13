@@ -16,6 +16,7 @@ public:
 	void SetExecutablePath(const char* executablePath);
 
 	const std::string& GetAssetsPath() const;
+	const std::string& GetAssetsPathAbsolute() const;
 	
 	const std::string& GetFontsPath() const;
 	const std::string& GetMapsPath() const;

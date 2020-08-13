@@ -4,79 +4,27 @@ namespace en
 {
 
 Sprite::Sprite()
-	: mTexture(nullptr)
+	: mTexture()
 	, mTextureRect()
 {
 }
 
-Sprite::Sprite(const Texture& texture)
-	: mTexture(nullptr)
-	, mTextureRect()
+void Sprite::SetTexture(TexturePtr texture)
 {
-	SetTexture(texture);
-}
-
-Sprite::Sprite(const Texture& texture, const Recti& textureRect)
-	: mTexture(nullptr)
-	, mTextureRect()
-{
-	SetTexture(texture);
-	SetTextureRect(textureRect);
-}
-
-Sprite::Sprite(const ResourceID& textureID)
-	: mTexture(nullptr)
-	, mTextureRect()
-{
-	SetTextureID(textureID);
-}
-
-Sprite::Sprite(const ResourceID& textureID, const Recti& textureRect)
-	: mTexture(nullptr)
-	, mTextureRect()
-{
-	SetTextureID(textureID);
-	SetTextureRect(textureRect);
-}
-
-void Sprite::SetTexture(const Texture& texture, bool resetRect)
-{
-	if (resetRect || (!mTexture && (mTextureRect == Recti())))
+	if (texture.IsValid())
 	{
-		SetTextureRect(Recti(0, 0, texture.getSize().x, texture.getSize().y));
+		if (!mTexture.IsValid() && (mTextureRect == Recti()))
+		{
+			Texture& textureRef = texture.Get();
+			SetTextureRect(Recti(0, 0, textureRef.getSize().x, textureRef.getSize().y));
+		}
+		mTexture = texture;
 	}
-	mTexture = &texture;
 }
 
-const Texture* Sprite::GetTexture() const
+TexturePtr Sprite::GetTexture() const
 {
 	return mTexture;
-}
-
-void Sprite::SetTextureID(const ResourceID& textureID, bool resetRect)
-{
-	TexturePtr texturePtr = ResourceManager::GetInstance().Get<Texture>(textureID);
-	if (texturePtr.IsValid())
-	{
-		SetTexture(texturePtr.Get(), resetRect);
-	}
-	else
-	{
-		enAssert(false);
-		mTexture = nullptr;
-	}
-}
-
-ResourceID Sprite::GetTextureID() const
-{
-	if (mTexture != nullptr)
-	{
-		return mTexture->GetID();
-	}
-	else
-	{
-		return InvalidResourceID;
-	}
 }
 
 void Sprite::SetTextureRect(const Recti& textureRect)
@@ -94,41 +42,33 @@ const Recti& Sprite::GetTextureRect() const
 	return mTextureRect;
 }
 
-void Sprite::SetOrigin(const Vector2f& origin)
-{
-	mOrigin = origin;
-}
-
-void Sprite::SetOrigin(F32 x, F32 y)
-{
-	mOrigin.set(x, y);
-}
-
-const Vector2f& Sprite::GetOrigin() const
-{
-	return mOrigin;
-}
-
-Rectf Sprite::GetBounds() const
+Rectf Sprite::GetLocalBounds() const
 {
 	const F32 x = static_cast<F32>(Math::Abs(mTextureRect.width()));
 	const F32 y = static_cast<F32>(Math::Abs(mTextureRect.height()));
 	return Rectf(0.0f, 0.0f, x, y);
 }
 
+Rectf Sprite::GetGlobalBounds() const
+{
+	// TODO : Sprite::GetGlobalBounds()
+	enAssert(false);
+	return GetLocalBounds();
+}
+
 void Sprite::Render(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	if (mTexture != nullptr)
+	if (mTexture.IsValid())
 	{
-		states.texture = mTexture;
-		states.transform.translate(-mOrigin.x, -mOrigin.y);
+		states.texture = mTexture.GetPtr();
+		states.transform *= toSF(GetMatrix());
 		target.draw(mVertices, 4, sf::PrimitiveType::TriangleStrip, states);
 	}
 }
 
 void Sprite::UpdatePositions()
 {
-	const Rectf bounds = GetBounds();
+	const Rectf bounds = GetLocalBounds();
 	mVertices[0].position = sf::Vector2f(0.0f, 0.0f);
 	mVertices[1].position = sf::Vector2f(0.0f, bounds.height());
 	mVertices[2].position = sf::Vector2f(bounds.width(), 0.0f);

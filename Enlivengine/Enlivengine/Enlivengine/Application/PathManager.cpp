@@ -44,10 +44,27 @@ const std::string& PathManager::GetAssetsPath() const
 		assetsPathDefined = true;
 	}
 #else
-	static std::string assetsPath = "Assets/";
+	static const std::string assetsPath = "Assets/";
 #endif // ENLIVE_DEBUG
 
 	return assetsPath;
+}
+
+const std::string& PathManager::GetAssetsPathAbsolute() const
+{
+	static bool initialized = false;
+	static std::string assetsPathAbsolute;
+	if (!initialized)
+	{
+		std::filesystem::path p = GetAssetsPath();
+		if (!p.is_absolute())
+		{
+			p = std::filesystem::absolute(p);
+		}
+		assetsPathAbsolute = p.string();
+		std::replace(assetsPathAbsolute.begin(), assetsPathAbsolute.end(), '\\', '/');
+	}
+	return assetsPathAbsolute;
 }
 
 const std::string& PathManager::GetFontsPath() const

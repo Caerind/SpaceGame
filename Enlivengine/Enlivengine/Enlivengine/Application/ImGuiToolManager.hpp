@@ -7,7 +7,7 @@
 #include <Enlivengine/Application/Window.hpp>
 #include <Enlivengine/System/Singleton.hpp>
 
-#include <IconFontCppHeaders/IconsFontAwesome5.h>
+#include <Enlivengine/Tools/ImGuiHelper.hpp>
 
 #include <vector>
 

@@ -41,7 +41,11 @@ public:
 	Time GetTotalDuration() const;
 
 	bool LoadResources();
-	bool LoadResource(I32 type, const std::string& identifier, const std::string& filename, ResourceID& resourceID);
+#ifdef ENLIVE_DEBUG
+	bool LoadResource(ResourceID resourceID, U32 type, const std::string& filename, const std::string& identifier);
+#else
+	bool LoadResource(ResourceID resourceID, U32 type, const std::string& filename);
+#endif // ENLIVE_DEBUG
 
 	enSignal(onApplicationStopped, const Application*);
 

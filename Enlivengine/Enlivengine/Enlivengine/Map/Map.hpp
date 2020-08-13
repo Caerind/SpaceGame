@@ -48,6 +48,9 @@ public:
 		Even = 1
 	};
 
+	static U32 GetStaticResourceType() { return static_cast<U32>(ResourceType::Map); }
+	U32 GetResourceType() const override { return GetStaticResourceType(); }
+
 	Map();
 
 	bool LoadFromFile(const std::string& filename);
@@ -125,7 +128,8 @@ public:
 		return ResourceLoader<Map>([&filename](Map& r)
 		{
 			const bool result = r.LoadFromFile(filename);
-			r.mFilename = (result) ? filename : "";
+			r.SetLoaded(result);
+			r.SetLoadInfo(ResourceLoadInfo(true, filename));
 			return result;
 		});
 	}

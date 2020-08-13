@@ -9,8 +9,7 @@
 #include <Enlivengine/Math/Matrix4.hpp>
 #include <Enlivengine/Math/Quaternion.hpp>
 #include <Enlivengine/Math/Rect.hpp>
-#include <Enlivengine/Graphics/Sprite.hpp>
-#include <Enlivengine/Graphics/Text.hpp>
+#include <Enlivengine/Application/ResourceManager.hpp>
 
 #include <Enlivengine/Core/CustomXmlSerialization.hpp>
 #include <Enlivengine/Core/DataFile.hpp>
@@ -392,19 +391,18 @@ struct CustomXmlSerialization<en::Rect<T>>
 	}
 };
 
-// en::Sprite
-template <>
-struct CustomXmlSerialization<en::Sprite>
+// en::ResourcePtr
+template <typename T>
+struct CustomXmlSerialization<en::ResourcePtr<T>>
 {
 	static constexpr bool value = true;
-	static bool Serialize(en::DataFile& dataFile, const en::Sprite& object, const char* name)
+	static bool Serialize(en::DataFile& dataFile, const en::ResourcePtr<T>& object, const char* name)
 	{
 		auto& parser = dataFile.GetParser();
 		if (parser.CreateNode(name))
 		{
-			dataFile.WriteCurrentType<en::Sprite>();
-			dataFile.Serialize_Common(static_cast<en::U32>(object.GetTextureID()), "TextureID");
-			dataFile.Serialize_Common(object.GetTextureRect(), "TextureRect");
+			dataFile.WriteCurrentType<en::ResourcePtr<T>>();
+			dataFile.Serialize_Common(static_cast<en::U32>(object.GetID()), "ResourceID");
 			parser.CloseNode();
 			return true;
 		}
@@ -413,116 +411,17 @@ struct CustomXmlSerialization<en::Sprite>
 			return false;
 		}
 	}
-	static bool Deserialize(en::DataFile& dataFile, en::Sprite& object, const char* name)
+	static bool Deserialize(en::DataFile& dataFile, en::ResourcePtr<T>& object, const char* name)
 	{
 		auto& parser = dataFile.GetParser();
 		if (parser.ReadNode(name))
 		{
-			enAssert(dataFile.ReadCurrentType() == en::TypeInfo<en::Sprite>::GetHash());
+			enAssert(dataFile.ReadCurrentType() == en::TypeInfo<en::ResourcePtr<T>>::GetHash());
 
-			en::U32 textureID;
-			dataFile.Deserialize_Common(textureID, "TextureID");
-			const en::ResourceID textureResourceID = static_cast<en::ResourceID>(textureID);
-			if (en::ResourceManager::GetInstance().Has(textureResourceID))
-			{
-				en::TexturePtr texturePtr = en::ResourceManager::GetInstance().Get<en::Texture>(textureResourceID);
-				if (texturePtr.IsValid())
-				{
-					object.SetTexture(texturePtr.Get());
-				}
-			}
+			en::U32 resourceID;
+			dataFile.Deserialize_Common(resourceID, "ResourceID");
 
-			en::Recti textureRect;
-			dataFile.Deserialize_Common(textureRect, "TextureRect");
-			object.SetTextureRect(textureRect);
-
-			parser.CloseNode();
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-};
-
-// en::Text
-template <>
-struct CustomXmlSerialization<en::Text>
-{
-	static constexpr bool value = true;
-	static bool Serialize(en::DataFile& dataFile, const en::Text& object, const char* name)
-	{
-		auto& parser = dataFile.GetParser();
-		if (parser.CreateNode(name))
-		{
-			dataFile.WriteCurrentType<en::Text>();
-			dataFile.Serialize_Common(static_cast<en::U32>(object.GetFontID()), "FontID");
-			std::string str = object.GetString();
-			dataFile.Serialize_Common(str, "String");
-			dataFile.Serialize_Common(object.GetCharacterSize(), "CharacterSize");
-			dataFile.Serialize_Common(object.GetLineSpacing(), "LineSpacing");
-			dataFile.Serialize_Common(object.GetLetterSpacing(), "LetterSpacing");
-			// TODO : Style
-			dataFile.Serialize_Common(object.GetFillColor(), "FillColor");
-			dataFile.Serialize_Common(object.GetOutlineColor(), "OutlineColor");
-			dataFile.Serialize_Common(object.GetOutlineThickness(), "OutlineThickness");
-			parser.CloseNode();
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	static bool Deserialize(en::DataFile& dataFile, en::Text& object, const char* name)
-	{
-		auto& parser = dataFile.GetParser();
-		if (parser.ReadNode(name))
-		{
-			enAssert(dataFile.ReadCurrentType() == en::TypeInfo<en::Text>::GetHash());
-
-			en::U32 fontID;
-			dataFile.Deserialize_Common(fontID, "FontID");
-			const en::ResourceID fontResourceID = static_cast<en::ResourceID>(fontID);
-			if (en::ResourceManager::GetInstance().Has(fontResourceID))
-			{
-				en::FontPtr fontPtr = en::ResourceManager::GetInstance().Get<en::Font>(fontResourceID);
-				if (fontPtr.IsValid())
-				{
-					object.SetFont(fontPtr.Get());
-				}
-			}
-
-			std::string str;
-			dataFile.Deserialize_Common(str, "String");
-			object.SetString(str);
-
-			en::U32 characterSize;
-			dataFile.Deserialize_Common(characterSize, "CharacterSize");
-			object.SetCharacterSize(characterSize);
-
-			en::F32 lineSpacing;
-			dataFile.Deserialize_Common(lineSpacing, "LineSpacing");
-			object.SetLineSpacing(lineSpacing);
-
-			en::F32 letterSpacing;
-			dataFile.Deserialize_Common(letterSpacing, "LetterSpacing");
-			object.SetLetterSpacing(letterSpacing);
-
-			// TODO : Style
-
-			en::Color fillColor;
-			dataFile.Deserialize_Common(fillColor, "FillColor");
-			object.SetFillColor(fillColor);
-
-			en::Color outlineColor;
-			dataFile.Deserialize_Common(outlineColor, "OutlineColor");
-			object.SetOutlineColor(outlineColor);
-
-			en::F32 outlineThickness;
-			dataFile.Deserialize_Common(outlineThickness, "OutlineThickness");
-			object.SetOutlineThickness(outlineThickness);
+			object = en::ResourcePtr<T>(static_cast<en::ResourceID>(resourceID));
 
 			parser.CloseNode();
 			return true;
