@@ -392,31 +392,31 @@ std::vector<Vector2u> Map::GetNeighbors(const Vector2u& tileCoords, bool diag /*
 	if (mOrientation == Orientation::Orthogonal)
 	{
 		n.resize(diag ? 8 : 4);
-		n[0].set(tileCoords.x, tileCoords.y - 1);
-		n[1].set(tileCoords.x, tileCoords.y + 1);
-		n[2].set(tileCoords.x - 1, tileCoords.y);
-		n[3].set(tileCoords.x + 1, tileCoords.y);
+		n[0].Set(tileCoords.x, tileCoords.y - 1);
+		n[1].Set(tileCoords.x, tileCoords.y + 1);
+		n[2].Set(tileCoords.x - 1, tileCoords.y);
+		n[3].Set(tileCoords.x + 1, tileCoords.y);
 		if (diag)
 		{
-			n[4].set(tileCoords.x + 1, tileCoords.y - 1);
-			n[5].set(tileCoords.x + 1, tileCoords.y + 1);
-			n[6].set(tileCoords.x - 1, tileCoords.y + 1);
-			n[7].set(tileCoords.x - 1, tileCoords.y - 1);
+			n[4].Set(tileCoords.x + 1, tileCoords.y - 1);
+			n[5].Set(tileCoords.x + 1, tileCoords.y + 1);
+			n[6].Set(tileCoords.x - 1, tileCoords.y + 1);
+			n[7].Set(tileCoords.x - 1, tileCoords.y - 1);
 		}
 	}
 	else if (mOrientation == Orientation::Isometric)
 	{
 		n.resize(diag ? 8 : 4);
-		n[0].set(tileCoords.x - 1, tileCoords.y);
-		n[1].set(tileCoords.x, tileCoords.y - 1);
-		n[2].set(tileCoords.x + 1, tileCoords.y);
-		n[3].set(tileCoords.x, tileCoords.y + 1);
+		n[0].Set(tileCoords.x - 1, tileCoords.y);
+		n[1].Set(tileCoords.x, tileCoords.y - 1);
+		n[2].Set(tileCoords.x + 1, tileCoords.y);
+		n[3].Set(tileCoords.x, tileCoords.y + 1);
 		if (diag)
 		{
-			n[4].set(tileCoords.x - 1, tileCoords.y - 1);
-			n[5].set(tileCoords.x + 1, tileCoords.y - 1);
-			n[6].set(tileCoords.x + 1, tileCoords.y + 1);
-			n[7].set(tileCoords.x - 1, tileCoords.y + 1);
+			n[4].Set(tileCoords.x - 1, tileCoords.y - 1);
+			n[5].Set(tileCoords.x + 1, tileCoords.y - 1);
+			n[6].Set(tileCoords.x + 1, tileCoords.y + 1);
+			n[7].Set(tileCoords.x - 1, tileCoords.y + 1);
 		}
 	}
 	else if (mOrientation == Orientation::Staggered)
@@ -424,25 +424,25 @@ std::vector<Vector2u> Map::GetNeighbors(const Vector2u& tileCoords, bool diag /*
 		n.resize(diag ? 8 : 4);
 		if (tileCoords.y % 2 == 0)
 		{
-			n[0].set(tileCoords.x - 1, tileCoords.y - 1);
-			n[1].set(tileCoords.x, tileCoords.y - 1);
-			n[2].set(tileCoords.x, tileCoords.y + 1);
-			n[3].set(tileCoords.x - 1, tileCoords.y + 1);
+			n[0].Set(tileCoords.x - 1, tileCoords.y - 1);
+			n[1].Set(tileCoords.x, tileCoords.y - 1);
+			n[2].Set(tileCoords.x, tileCoords.y + 1);
+			n[3].Set(tileCoords.x - 1, tileCoords.y + 1);
 		}
 		else
 		{
-			n[0].set(tileCoords.x, tileCoords.y - 1);
-			n[1].set(tileCoords.x + 1, tileCoords.y - 1);
-			n[2].set(tileCoords.x + 1, tileCoords.y + 1);
-			n[3].set(tileCoords.x, tileCoords.y + 1);
+			n[0].Set(tileCoords.x, tileCoords.y - 1);
+			n[1].Set(tileCoords.x + 1, tileCoords.y - 1);
+			n[2].Set(tileCoords.x + 1, tileCoords.y + 1);
+			n[3].Set(tileCoords.x, tileCoords.y + 1);
 		}
 
 		if (diag)
 		{
-			n[4].set(tileCoords.x, tileCoords.y - 2);
-			n[5].set(tileCoords.x + 1, tileCoords.y);
-			n[6].set(tileCoords.x, tileCoords.y + 2);
-			n[7].set(tileCoords.x - 1, tileCoords.y);
+			n[4].Set(tileCoords.x, tileCoords.y - 2);
+			n[5].Set(tileCoords.x + 1, tileCoords.y);
+			n[6].Set(tileCoords.x, tileCoords.y + 2);
+			n[7].Set(tileCoords.x - 1, tileCoords.y);
 		}
 	}
 	else if (mOrientation == Orientation::Hexagonal)
@@ -452,42 +452,42 @@ std::vector<Vector2u> Map::GetNeighbors(const Vector2u& tileCoords, bool diag /*
 		{
 			if ((tileCoords.y % 2) == static_cast<U32>(mStaggerIndex))
 			{
-				n[0].set(tileCoords.x - 1, tileCoords.y - 1);
-				n[1].set(tileCoords.x, tileCoords.y - 1);
-				n[2].set(tileCoords.x + 1, tileCoords.y);
-				n[3].set(tileCoords.x, tileCoords.y + 1);
-				n[4].set(tileCoords.x - 1, tileCoords.y + 1);
-				n[5].set(tileCoords.x - 1, tileCoords.y);
+				n[0].Set(tileCoords.x - 1, tileCoords.y - 1);
+				n[1].Set(tileCoords.x, tileCoords.y - 1);
+				n[2].Set(tileCoords.x + 1, tileCoords.y);
+				n[3].Set(tileCoords.x, tileCoords.y + 1);
+				n[4].Set(tileCoords.x - 1, tileCoords.y + 1);
+				n[5].Set(tileCoords.x - 1, tileCoords.y);
 			}
 			else
 			{
-				n[0].set(tileCoords.x, tileCoords.y - 1);
-				n[1].set(tileCoords.x + 1, tileCoords.y - 1);
-				n[2].set(tileCoords.x + 1, tileCoords.y);
-				n[3].set(tileCoords.x + 1, tileCoords.y + 1);
-				n[4].set(tileCoords.x, tileCoords.y + 1);
-				n[5].set(tileCoords.x - 1, tileCoords.y);
+				n[0].Set(tileCoords.x, tileCoords.y - 1);
+				n[1].Set(tileCoords.x + 1, tileCoords.y - 1);
+				n[2].Set(tileCoords.x + 1, tileCoords.y);
+				n[3].Set(tileCoords.x + 1, tileCoords.y + 1);
+				n[4].Set(tileCoords.x, tileCoords.y + 1);
+				n[5].Set(tileCoords.x - 1, tileCoords.y);
 			}
 		}
 		else // Flat
 		{
 			if ((tileCoords.x % 2) == static_cast<U32>(mStaggerIndex))
 			{
-				n[0].set(tileCoords.x - 1, tileCoords.y - 1);
-				n[1].set(tileCoords.x, tileCoords.y - 1);
-				n[2].set(tileCoords.x + 1, tileCoords.y - 1);
-				n[3].set(tileCoords.x + 1, tileCoords.y);
-				n[4].set(tileCoords.x, tileCoords.y + 1);
-				n[5].set(tileCoords.x - 1, tileCoords.y);
+				n[0].Set(tileCoords.x - 1, tileCoords.y - 1);
+				n[1].Set(tileCoords.x, tileCoords.y - 1);
+				n[2].Set(tileCoords.x + 1, tileCoords.y - 1);
+				n[3].Set(tileCoords.x + 1, tileCoords.y);
+				n[4].Set(tileCoords.x, tileCoords.y + 1);
+				n[5].Set(tileCoords.x - 1, tileCoords.y);
 			}
 			else
 			{
-				n[0].set(tileCoords.x - 1, tileCoords.y);
-				n[1].set(tileCoords.x, tileCoords.y - 1);
-				n[2].set(tileCoords.x + 1, tileCoords.y);
-				n[3].set(tileCoords.x + 1, tileCoords.y + 1);
-				n[4].set(tileCoords.x, tileCoords.y + 1);
-				n[5].set(tileCoords.x - 1, tileCoords.y + 1);
+				n[0].Set(tileCoords.x - 1, tileCoords.y);
+				n[1].Set(tileCoords.x, tileCoords.y - 1);
+				n[2].Set(tileCoords.x + 1, tileCoords.y);
+				n[3].Set(tileCoords.x + 1, tileCoords.y + 1);
+				n[4].Set(tileCoords.x, tileCoords.y + 1);
+				n[5].Set(tileCoords.x - 1, tileCoords.y + 1);
 			}
 		}
 	}

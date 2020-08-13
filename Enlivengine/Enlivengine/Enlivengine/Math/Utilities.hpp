@@ -10,6 +10,7 @@
 #include <algorithm> // std::swap
 
 // TODO : Real : Float/Double
+// TODO : constexpr : Sqrt, Cos, Sin, Atan2
 // TODO : More constexpr + fast functions
 // TODO : See https://github.com/pmttavara/pt_math
 

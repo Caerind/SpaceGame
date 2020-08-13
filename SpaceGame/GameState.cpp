@@ -148,7 +148,7 @@ void GameState::render(sf::RenderTarget& target)
 		en::F32 scale = deltaPlayerD / 1024.0f;
 		magicBarSprite.setScale(scale, 1.0f);
 		magicBarSprite.setPosition(en::toSF(pPlayer2));
-		magicBarSprite.setRotation(deltaPlayerV.getPolarAngle());
+		magicBarSprite.setRotation(deltaPlayerV.GetPolarAngle());
 		target.draw(magicBarSprite);
 
 		auto transformView = world.GetEntityManager().View<en::RenderableComponent>();
@@ -363,7 +363,7 @@ void GameState::Velocity(en::Time dt)
 		en::Entity entity(world.GetEntityManager(), entt);
 		if (entity.IsValid())
 		{
-			entity.Get<VelocityComponent>().velocity.set(0.0f, 0.0f);
+			entity.Get<VelocityComponent>().velocity.Set(0.0f, 0.0f);
 		}
 	}
 
@@ -408,7 +408,7 @@ void GameState::Velocity(en::Time dt)
 		{
 			auto& vel = entity.Get<VelocityComponent>();
 			auto& transform = entity.Get<en::TransformComponent>();
-			if (vel.velocity.getSquaredLength() > 0.5f)
+			if (vel.velocity.GetSquaredLength() > 0.5f)
 			{
 				transform.transform.Move(vel.velocity * 3.0f * dt.AsSeconds());
 			}
@@ -447,20 +447,20 @@ void GameState::PlayerMvt(en::Time dt, en::U32 index)
 			en::Vector2f dirPlayer;
 			dirPlayer.x = sf::Joystick::getAxisPosition(index, sf::Joystick::Axis::X);
 			dirPlayer.y = sf::Joystick::getAxisPosition(index, sf::Joystick::Axis::Y);
-			if (dirPlayer.getSquaredLength() > 1000.0f)
+			if (dirPlayer.GetSquaredLength() > 1000.0f)
 			{
-				const en::F32 dirAngle = 90 - dirPlayer.getPolarAngle();
-				polarAngle = en::Vector2f::polar(dirAngle, 1.0f);
+				const en::F32 dirAngle = 90 - dirPlayer.GetPolarAngle();
+				polarAngle = en::Vector2f::Polar(dirAngle, 1.0f);
 
 				const en::F32 angleBegin = -(270 + tra.GetRotation2D()) - 90;
-				const en::Vector2f polarAngleBegin = en::Vector2f::polar(angleBegin, 1.0f);
+				const en::Vector2f polarAngleBegin = en::Vector2f::Polar(angleBegin, 1.0f);
 
 				const en::F32 lerpPercent = GameSingleton::GetInstance().degPerSecond * dt.AsSeconds(); // TODO : pla.GetAgility();
 				polarAngle.x = en::Math::Lerp(polarAngleBegin.x, polarAngle.x, lerpPercent);
 				polarAngle.y = en::Math::Lerp(polarAngleBegin.y, polarAngle.y, lerpPercent);
 
 				// Angle
-				const en::F32 finalAngle = en::Math::Equals(polarAngle.y, 0.0f) ? 0.0f : polarAngle.getPolarAngle();
+				const en::F32 finalAngle = en::Math::Equals(polarAngle.y, 0.0f) ? 0.0f : polarAngle.GetPolarAngle();
 
 				enLogInfo(0, "{} {} {}", dirAngle, angleBegin, finalAngle);
 
@@ -468,7 +468,7 @@ void GameState::PlayerMvt(en::Time dt, en::U32 index)
 			}
 			else
 			{
-				polarAngle = en::Vector2f::polar(tra.GetRotation2D(), 1.0f);
+				polarAngle = en::Vector2f::Polar(tra.GetRotation2D(), 1.0f);
 				enLogInfo(0, "{}", tra.GetRotation2D());
 			}
 
@@ -506,10 +506,10 @@ void GameState::PlayerMvt(en::Time dt, en::U32 index)
 					mvtPlayer.x += 100.0f;
 			}
 
-			if (mvtPlayer.getSquaredLength() > 1000.0f)
+			if (mvtPlayer.GetSquaredLength() > 1000.0f)
 			{
-				const en::F32 angle = (90.0f - mvtPlayer.getPolarAngle());
-				enLogInfo(0, "p2Angle{} - p2MvtAngle{}", angle, mvtPlayer.getPolarAngle());
+				const en::F32 angle = (90.0f - mvtPlayer.GetPolarAngle());
+				enLogInfo(0, "p2Angle{} - p2MvtAngle{}", angle, mvtPlayer.GetPolarAngle());
 				// Mvt
 				vel += mvtPlayer * GameSingleton::GetInstance().energyFactor;
 				// Angle
@@ -557,7 +557,7 @@ void GameState::AIMvt(en::Time dt)
 					if (pEntity.IsValid())
 					{
 						auto d = pEntity.GetPosition2D() - p1;
-						if (d.getSquaredLength() < 128.0f * 128.0f)
+						if (d.GetSquaredLength() < 128.0f * 128.0f)
 						{
 							ship.damage -= 0.25f;
 							entityManager.DestroyEntity(pEntity);
@@ -577,7 +577,7 @@ void GameState::AIMvt(en::Time dt)
 				auto dp = (GameSingleton::GetInstance().posCenter - p1);
 
 				ai.cooldown -= dt;
-				if (ai.cooldown <= en::Time::Zero() && dp.getSquaredLength() < aiParams.plD * aiParams.plD)
+				if (ai.cooldown <= en::Time::Zero() && dp.GetSquaredLength() < aiParams.plD * aiParams.plD)
 				{
 					ai.cooldown = aiParams.cooldown + en::Time::Seconds(en::Random::getDev(0.0f, aiParams.cooldownDev.AsSeconds()));
 					Shoot(entity);
@@ -604,51 +604,51 @@ void GameState::AIMvt(en::Time dt)
 								auto p2 = entity2.GetPosition2D();
 								auto delta = p2 - p1;
 
-								if (delta.getSquaredLength() < aiParams.evD * aiParams.evD)
+								if (delta.GetSquaredLength() < aiParams.evD * aiParams.evD)
 								{
 									ev += delta;
 								}
 
-								al += en::Vector2f::polar(ai2.angle, 1.0f);
+								al += en::Vector2f::Polar(ai2.angle, 1.0f);
 							}
 						}
 					}
-					if (ev.getSquaredLength() > 0.01f)
+					if (ev.GetSquaredLength() > 0.01f)
 					{
-						ev.normalize();
+						ev.Normalize();
 					}
-					if (al.getSquaredLength() > 0.01f)
+					if (al.GetSquaredLength() > 0.01f)
 					{
-						al.normalize();
+						al.Normalize();
 					}
 
 					// Player pos
-					en::Vector2f pl = dp.normalized();
+					en::Vector2f pl = dp.Normalized();
 					auto p = aiParams.plF;
-					if (dp.getSquaredLength() > aiParams.plD* aiParams.plD)
+					if (dp.GetSquaredLength() > aiParams.plD* aiParams.plD)
 					{
 						p = 0.0f;
 					}
 
 					// Initial pos
 					auto di = ai.initPos - p1;
-					auto pi = di.normalized();
+					auto pi = di.Normalized();
 					auto fi = aiParams.plI;
-					if (di.getSquaredLength() > aiParams.plD* aiParams.plD)
+					if (di.GetSquaredLength() > aiParams.plD* aiParams.plD)
 					{
 						fi = 0.0f;
 					}
 
 					// Random
-					en::Vector2f rn = en::Vector2f::polar(ai.angle + en::Random::getDev(0.0f, aiParams.randDev), 1.0f);
+					en::Vector2f rn = en::Vector2f::Polar(ai.angle + en::Random::getDev(0.0f, aiParams.randDev), 1.0f);
 
 					en::Vector2f final = -aiParams.evF * ev + aiParams.alF * al + p * pl + aiParams.rnF * rn + fi * pi;
-					final.normalize();
-					ai.angle = final.getPolarAngle();
+					final.Normalize();
+					ai.angle = final.GetPolarAngle();
 				}
 
 				entity.Get<en::TransformComponent>().transform.SetRotation2D(90 - ai.angle);
-				entity.Get<VelocityComponent>().velocity += en::Vector2f::polar(ai.angle, 90.0f);
+				entity.Get<VelocityComponent>().velocity += en::Vector2f::Polar(ai.angle, 90.0f);
 			}
 		}
 	}
@@ -706,7 +706,7 @@ void GameState::Shoot(const en::Entity& entity)
 		auto& t = entity.Get<en::TransformComponent>().transform;
 		auto p = t.GetPosition2D();
 		auto angle = -(270.0f + t.GetRotation2D());
-		auto r = en::Vector2f::polar(angle, 1.0f);
+		auto r = en::Vector2f::Polar(angle, 1.0f);
 		auto f = p + r * 200.0f;
 
 		en::Entity proj = GameSingleton::GetInstance().world.GetEntityManager().CreateEntity();
@@ -844,7 +844,7 @@ void GameState::DebugUpdate(en::Time dt)
 		constexpr en::F32 speed = 400.0f;
 		en::F32 speedMulti = (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) ? 2.0f : 1.0f;
 		en::F32 speedDiv = (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)) ? 0.5f : 1.0f;
-		en::Vector2f velocity(en::Vector2f::zero);
+		en::Vector2f velocity(en::Vector2f::Zero());
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
 			velocity.y -= 1.0f;
@@ -861,9 +861,9 @@ void GameState::DebugUpdate(en::Time dt)
 		{
 			velocity.x += 1.0f;
 		}
-		if (velocity.getSquaredLength() > 0.01f)
+		if (velocity.GetSquaredLength() > 0.01f)
 		{
-			velocity.normalize();
+			velocity.Normalize();
 		}
 		velocity *= speed * speedMulti * speedDiv * dt.AsSeconds();
 		GameSingleton::GetInstance().world.GetFreeCamView().move(velocity);

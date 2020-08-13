@@ -321,21 +321,21 @@ inline Matrix3<T> Matrix3<T>::operator*(const Matrix3<T>& m) const
 	Vector3<T> c2(m.getColumn(2));
 	{
 		Vector3<T> row(getRow(0));
-		out.data[0] = c0.dotProduct(row);
-		out.data[3] = c1.dotProduct(row);
-		out.data[6] = c2.dotProduct(row);
+		out.data[0] = c0.DotProduct(row);
+		out.data[3] = c1.DotProduct(row);
+		out.data[6] = c2.DotProduct(row);
 	}
 	{
 		Vector3<T> row(getRow(1));
-		out.data[1] = c0.dotProduct(row);
-		out.data[4] = c1.dotProduct(row);
-		out.data[7] = c2.dotProduct(row);
+		out.data[1] = c0.DotProduct(row);
+		out.data[4] = c1.DotProduct(row);
+		out.data[7] = c2.DotProduct(row);
 	}
 	{
 		Vector3<T> row(getRow(2));
-		out.data[2] = c0.dotProduct(row);
-		out.data[5] = c1.dotProduct(row);
-		out.data[8] = c2.dotProduct(row);
+		out.data[2] = c0.DotProduct(row);
+		out.data[5] = c1.DotProduct(row);
+		out.data[8] = c2.DotProduct(row);
 	}
 	return out;
 }
@@ -379,15 +379,15 @@ inline Matrix3<T>& Matrix3<T>::operator*=(const Matrix3<T>& m)
 	Vector3<T> c0(m.getColumn(0));
 	Vector3<T> c1(m.getColumn(1));
 	Vector3<T> c2(m.getColumn(2));
-	data[0] = c0.dotProduct(r0);
-	data[3] = c1.dotProduct(r0);
-	data[6] = c2.dotProduct(r0);
-	data[1] = c0.dotProduct(r1);
-	data[4] = c1.dotProduct(r1);
-	data[7] = c2.dotProduct(r1);
-	data[2] = c0.dotProduct(r2);
-	data[5] = c1.dotProduct(r2);
-	data[8] = c2.dotProduct(r2);
+	data[0] = c0.DotProduct(r0);
+	data[3] = c1.DotProduct(r0);
+	data[6] = c2.DotProduct(r0);
+	data[1] = c0.DotProduct(r1);
+	data[4] = c1.DotProduct(r1);
+	data[7] = c2.DotProduct(r1);
+	data[2] = c0.DotProduct(r2);
+	data[5] = c1.DotProduct(r2);
+	data[8] = c2.DotProduct(r2);
 	return *this;
 }
 

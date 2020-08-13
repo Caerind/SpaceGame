@@ -479,31 +479,31 @@ inline Matrix4<T> Matrix4<T>::operator*(const Matrix4<T>& m) const
 	Vector4<T> c3(m.getColumn(3));
 	{
 		Vector4<T> row(getRow(0));
-		out.data[0] = c0.dotProduct(row);
-		out.data[4] = c1.dotProduct(row);
-		out.data[8] = c2.dotProduct(row);
-		out.data[12] = c3.dotProduct(row);
+		out.data[0] = c0.DotProduct(row);
+		out.data[4] = c1.DotProduct(row);
+		out.data[8] = c2.DotProduct(row);
+		out.data[12] = c3.DotProduct(row);
 	}
 	{
 		Vector4<T> row(getRow(1));
-		out.data[1] = c0.dotProduct(row);
-		out.data[5] = c1.dotProduct(row);
-		out.data[9] = c2.dotProduct(row);
-		out.data[13] = c3.dotProduct(row);
+		out.data[1] = c0.DotProduct(row);
+		out.data[5] = c1.DotProduct(row);
+		out.data[9] = c2.DotProduct(row);
+		out.data[13] = c3.DotProduct(row);
 	}
 	{
 		Vector4<T> row(getRow(2));
-		out.data[2] = c0.dotProduct(row);
-		out.data[6] = c1.dotProduct(row);
-		out.data[10] = c2.dotProduct(row);
-		out.data[14] = c3.dotProduct(row);
+		out.data[2] = c0.DotProduct(row);
+		out.data[6] = c1.DotProduct(row);
+		out.data[10] = c2.DotProduct(row);
+		out.data[14] = c3.DotProduct(row);
 	}
 	{
 		Vector4<T> row(getRow(3));
-		out.data[3] = c0.dotProduct(row);
-		out.data[7] = c1.dotProduct(row);
-		out.data[11] = c2.dotProduct(row);
-		out.data[15] = c3.dotProduct(row);
+		out.data[3] = c0.DotProduct(row);
+		out.data[7] = c1.DotProduct(row);
+		out.data[11] = c2.DotProduct(row);
+		out.data[15] = c3.DotProduct(row);
 	}
 	return out;
 }
@@ -563,22 +563,22 @@ inline Matrix4<T>& Matrix4<T>::operator*=(const Matrix4<T>& m)
 	Vector4<T> c1(m.getColumn(1));
 	Vector4<T> c2(m.getColumn(2));
 	Vector4<T> c3(m.getColumn(3));
-	data[0] = c0.dotProduct(r0);
-	data[4] = c1.dotProduct(r0);
-	data[8] = c2.dotProduct(r0);
-	data[12] = c3.dotProduct(r0);
-	data[1] = c0.dotProduct(r1);
-	data[5] = c1.dotProduct(r1);
-	data[9] = c2.dotProduct(r1);
-	data[13] = c3.dotProduct(r1);
-	data[2] = c0.dotProduct(r2);
-	data[6] = c1.dotProduct(r2);
-	data[10] = c2.dotProduct(r2);
-	data[14] = c3.dotProduct(r2);
-	data[3] = c0.dotProduct(r3);
-	data[7] = c1.dotProduct(r3);
-	data[11] = c2.dotProduct(r3);
-	data[15] = c3.dotProduct(r3);
+	data[0] = c0.DotProduct(r0);
+	data[4] = c1.DotProduct(r0);
+	data[8] = c2.DotProduct(r0);
+	data[12] = c3.DotProduct(r0);
+	data[1] = c0.DotProduct(r1);
+	data[5] = c1.DotProduct(r1);
+	data[9] = c2.DotProduct(r1);
+	data[13] = c3.DotProduct(r1);
+	data[2] = c0.DotProduct(r2);
+	data[6] = c1.DotProduct(r2);
+	data[10] = c2.DotProduct(r2);
+	data[14] = c3.DotProduct(r2);
+	data[3] = c0.DotProduct(r3);
+	data[7] = c1.DotProduct(r3);
+	data[11] = c2.DotProduct(r3);
+	data[15] = c3.DotProduct(r3);
 	return *this;
 }
 
@@ -1371,10 +1371,10 @@ inline Matrix4<T> Matrix4<T>::viewMatrix(const Vector3<T>& translation, const Qu
 template<typename T>
 inline Matrix4<T> Matrix4<T>::lookAt(const Vector3<T>& eye, const Vector3<T>& target, const Vector3<T>& up)
 {
-	const Vector3f f((target - eye).normalized());
-	const Vector3f s(f.crossProduct(up).normalized());
-	const Vector3f u(s.crossProduct(f));
-	return Matrix4<T>(s.x, u.x, -f.x, 0, s.y, u.y, -f.y, 0, s.z, u.z, -f.z, 0, -s.dotProduct(eye), -u.dotProduct(eye), f.dotProduct(eye), 1);
+	const Vector3f f((target - eye).Normalized());
+	const Vector3f s(f.CrossProduct(up).Normalized());
+	const Vector3f u(s.CrossProduct(f));
+	return Matrix4<T>(s.x, u.x, -f.x, 0, s.y, u.y, -f.y, 0, s.z, u.z, -f.z, 0, -s.DotProduct(eye), -u.DotProduct(eye), f.DotProduct(eye), 1);
 }
 
 template<typename T>

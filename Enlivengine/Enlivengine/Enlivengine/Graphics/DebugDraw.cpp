@@ -76,8 +76,8 @@ void DebugDraw::drawLine(F32 x1, F32 y1, F32 x2, F32 y2, const Color& color, F32
 		rectangle.setFillColor(toSF(color));
 		rectangle.setPosition(x1, y1 - thickness * 0.5f);
 		const Vector2f v(x2 - x1, y2 - y1);
-		rectangle.setSize(sf::Vector2f(v.getLength(), thickness));
-		rectangle.setRotation(v.getPolarAngle());
+		rectangle.setSize(sf::Vector2f(v.GetLength(), thickness));
+		rectangle.setRotation(v.GetPolarAngle());
 	}
 }
 

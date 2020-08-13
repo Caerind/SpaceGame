@@ -149,7 +149,7 @@ Vector2f Tileset::ToPos(U32 tileId) const
 			(F32)((tileId / mColumns) * (mTileSize.y + mSpacing) + mMargin)
 		};
 	}
-	return Vector2f::zero;
+	return Vector2f::Zero();
 }
 
 } // namespace tmx

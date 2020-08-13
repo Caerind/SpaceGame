@@ -24,25 +24,25 @@ const Vector3f& Transform::GetPosition() const
 
 void Transform::SetPosition(const Vector2f& position)
 {
-	mPosition.set(position, mPosition.z);
+	mPosition.Set(position, mPosition.z);
 	mDirty = true;
 }
 
 void Transform::SetPosition(const Vector3f& position)
 {
-	mPosition.set(position);
+	mPosition.Set(position);
 	mDirty = true;
 }
 
 void Transform::SetPosition(F32 x, F32 y)
 {
-	mPosition.set(x, y, mPosition.z);
+	mPosition.Set(x, y, mPosition.z);
 	mDirty = true;
 }
 
 void Transform::SetPosition(F32 x, F32 y, F32 z)
 {
-	mPosition.set(x, y, z);
+	mPosition.Set(x, y, z);
 	mDirty = true;
 }
 
@@ -105,31 +105,31 @@ const Vector3f& Transform::GetScale() const
 
 void Transform::SetScale(F32 uniformScale)
 {
-	mScale.set(uniformScale);
+	mScale.Set(uniformScale);
 	mDirty = true;
 }
 
 void Transform::SetScale(const Vector2f& scale)
 {
-	mScale.set(scale, mScale.z);
+	mScale.Set(scale, mScale.z);
 	mDirty = true;
 }
 
 void Transform::SetScale(const Vector3f& scale)
 {
-	mScale.set(scale);
+	mScale.Set(scale);
 	mDirty = true;
 }
 
 void Transform::SetScale(F32 x, F32 y)
 {
-	mScale.set(x, y, mScale.z);
+	mScale.Set(x, y, mScale.z);
 	mDirty = true;
 }
 
 void Transform::SetScale(F32 x, F32 y, F32 z)
 {
-	mScale.set(x, y, z);
+	mScale.Set(x, y, z);
 	mDirty = true;
 }
 

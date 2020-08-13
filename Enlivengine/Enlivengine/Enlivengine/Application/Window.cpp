@@ -385,7 +385,7 @@ sf::IntRect Window::getViewport(const View& view) const
 
 Vector2f Window::mapPixelToCoords(const Vector2f& point, const View& view)
 {
-	if (view.getSize().isZero())
+	if (view.getSize().IsZero())
 	{	
 		return toEN(mWindow.mapPixelToCoords({ (I32)point.x, (I32)point.y }));
 	}
@@ -397,7 +397,7 @@ Vector2f Window::mapPixelToCoords(const Vector2f& point, const View& view)
 
 Vector2f Window::mapCoordsToPixel(const Vector2f& point, const View& view)
 {
-	if (view.getSize().isZero())
+	if (view.getSize().IsZero())
 	{
 		return toEN(static_cast<sf::Vector2f>(mWindow.mapCoordsToPixel(toSF(point))));
 	}

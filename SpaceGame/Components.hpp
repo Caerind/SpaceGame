@@ -46,13 +46,13 @@ struct SpacePhysicComponent
 	en::Vector2f ComputeForce(const en::Vector2f& thisPosition, const en::Vector2f& otherPosition)
 	{
 		en::Vector2f delta = thisPosition - otherPosition;
-		const en::F32 dSquared = delta.getSquaredLength();
+		const en::F32 dSquared = delta.GetSquaredLength();
 		const en::F32 dMinSquared = dMin * dMin;
 		const en::F32 dMaxSquared = dMax * dMax;
 		if (dSquared > dMinSquared && dSquared < dMaxSquared && dSquared > 0.01f)
 		{
 			const en::F32 factor = forceFactor / (dSquared);
-			delta.normalize();
+			delta.Normalize();
 			return delta * factor;
 		}
 		else

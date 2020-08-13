@@ -193,8 +193,8 @@ public:
 		en::Vector2f p1Pos = player1.Get<en::TransformComponent>().transform.GetPosition2D();
 		en::Vector2f p2Pos = player2.Get<en::TransformComponent>().transform.GetPosition2D();
 		en::Vector2f delta = p2Pos - p1Pos;
-		en::F32 playerDistanceSqr = delta.getSquaredLength();
-		playerDelta = delta.getLength();
+		en::F32 playerDistanceSqr = delta.GetSquaredLength();
+		playerDelta = delta.GetLength();
 		posCenter = (p1Pos + p2Pos) * 0.5f;
 		const en::F32 startMaxThreshold = (idealDistancePlayer * 2) - thresholdDistancePlayer;
 		const en::F32 startMaxThresholdSqr = startMaxThreshold * startMaxThreshold;
@@ -217,18 +217,18 @@ public:
 				playerForceFactor *= 2.0f * energyFactorEnv;
 			}
 		}
-		playerForceVector = playerForceFactor * delta.normalized();
+		playerForceVector = playerForceFactor * delta.Normalized();
 
 		world.GetFreeCamView().setCenter(posCenter);
 		world.GetGameView().setCenter(posCenter);
 
-		if (posCenter.getSquaredLength() < 1.0f)
+		if (posCenter.GetSquaredLength() < 1.0f)
 		{
 			energyFactor = 1.0f;
 		}
 		else
 		{
-			energyFactor = energyFactorEnv * ((-posCenter.getLength()/ distanceMax) + 2.0f);
+			energyFactor = energyFactorEnv * ((-posCenter.GetLength()/ distanceMax) + 2.0f);
 		}
 	}
 
