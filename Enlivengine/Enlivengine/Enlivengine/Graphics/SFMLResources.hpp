@@ -16,6 +16,7 @@ namespace en
 class Image : public Resource<Image>, public sf::Image
 {
 public:
+	~Image() {}
 	static U32 GetStaticResourceType() { return static_cast<U32>(ResourceType::Image); }
 	U32 GetResourceType() const override { return GetStaticResourceType(); }
 };
@@ -24,6 +25,7 @@ public:
 class Texture : public Resource<Texture>, public sf::Texture 
 {
 public:
+	~Texture() {}
 	static U32 GetStaticResourceType() { return static_cast<U32>(ResourceType::Texture); }
 	U32 GetResourceType() const override { return GetStaticResourceType(); }
 };
@@ -32,6 +34,7 @@ public:
 class Font : public Resource<Font>, public sf::Font
 {
 public:
+	~Font() {}
 	static U32 GetStaticResourceType() { return static_cast<U32>(ResourceType::Font); }
 	U32 GetResourceType() const override { return GetStaticResourceType(); }
 };
@@ -40,6 +43,7 @@ public:
 class SoundBuffer : public Resource<SoundBuffer>, public sf::SoundBuffer
 {
 public:
+	~SoundBuffer() {}
 	static U32 GetStaticResourceType() { return static_cast<U32>(ResourceType::Sound); }
 	U32 GetResourceType() const override { return GetStaticResourceType(); }
 };
@@ -47,7 +51,8 @@ public:
 // MusicBuffer
 class MusicBuffer : public Resource<MusicBuffer>, public sf::Music
 {
-public: 
+public:
+	~MusicBuffer() {}
 	static U32 GetStaticResourceType() { return static_cast<U32>(ResourceType::Music); }
 	U32 GetResourceType() const override { return GetStaticResourceType(); }
 };
@@ -56,6 +61,7 @@ public:
 class Shader : public Resource<Shader>, public sf::Shader
 {
 public:
+	~Shader() {}
 	static U32 GetStaticResourceType() { return static_cast<U32>(ResourceType::Shader); }
 	U32 GetResourceType() const override { return GetStaticResourceType(); }
 };

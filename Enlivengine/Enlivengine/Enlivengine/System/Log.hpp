@@ -164,7 +164,6 @@ bool LogManager::InitializeClientChannels()
 	}
 	else
 	{
-		enAssert(false);
 		return false;
 	}
 }

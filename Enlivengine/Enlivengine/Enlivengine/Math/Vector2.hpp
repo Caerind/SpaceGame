@@ -2,9 +2,7 @@
 
 #include <Enlivengine/Math/Utilities.hpp>
 
-// TODO : constexpr Sqrt : SetLength, Normalize, Normalized
 // TODO : constexpr Atan2 : GetPolarAngle
-// TODO : constexpr Cos/Sin : SetPolarAngle, Rotate, Polar, MakePolar
 
 namespace en
 {
@@ -56,7 +54,7 @@ public:
 	constexpr Vector2<T>& operator+=(T scalar) { x += scalar; y += scalar; return *this; }
 	constexpr Vector2<T>& operator-=(T scalar) { x -= scalar; y -= scalar; return *this; }
 	constexpr Vector2<T>& operator*=(T scalar) { x *= scalar; y *= scalar; return *this; }
-	constexpr Vector2<T>& operator/=(T scalar) { const T inv = T(1) / scalar; x /= inv; y /= inv; return *this; }
+	constexpr Vector2<T>& operator/=(T scalar) { const T inv = T(1) / scalar; x *= inv; y *= inv; return *this; }
 
 	constexpr bool IsZero() const { return operator==(Zero()); }
 	constexpr bool operator==(const Vector2<T>& vec) const { return Math::Equals(x, vec.x) && Math::Equals(y, vec.y); }
@@ -65,14 +63,14 @@ public:
 	constexpr bool operator<=(const Vector2<T>& vec) const { return x <= vec.x && y <= vec.y; }
 	constexpr bool operator>(const Vector2<T>& vec) const { return !operator<=(vec); }
 	constexpr bool operator>=(const Vector2<T>& vec) const { return !operator<(vec); }
-	static constexpr bool Equals(const Vector2<T>& v1, const Vector2<T>& v2, const T& epsilon = std::numeric_limits<T>::epsilon()) { return Math::Equals(x, vec.x, epsilon) && Math::Equals(y, vec.y, epsilon); }
+	static constexpr bool Equals(const Vector2<T>& v1, const Vector2<T>& v2, const T& epsilon = std::numeric_limits<T>::epsilon()) { return Math::Equals(v1.x, v2.x, epsilon) && Math::Equals(v1.y, v2.y, epsilon); }
 
 	constexpr T DotProduct(const Vector2<T>& v) const { return x * v.x + y * v.y; }
 	static constexpr T DotProduct(const Vector2<T>& v1, const Vector2<T>& v2) { return v1.x * v2.x + v1.y * v2.y; }
 
 	constexpr T GetSquaredLength() const { return DotProduct(*this); }
-	inline T GetLength() const { return Math::Sqrt(GetSquaredLength()); }
-	inline Vector2<T>& SetLength(const T& length, T* oldLength = nullptr)
+	constexpr T GetLength() const { return Math::Sqrt(GetSquaredLength()); }
+	constexpr Vector2<T>& SetLength(const T& length, T* oldLength = nullptr)
 	{
 		const T currentLength = GetLength();
 		if (oldLength != nullptr)
@@ -85,20 +83,20 @@ public:
 		return *this;
 	}
 
-	inline Vector2<T>& Normalize(T* oldLength = nullptr) { return SetLength(T(1), oldLength); }
-	inline Vector2<T> Normalized(T* oldLength = nullptr) const { return Vector2<T>(*this).Normalize(oldLength); }
+	constexpr Vector2<T>& Normalize(T* oldLength = nullptr) { return SetLength(T(1), oldLength); }
+	constexpr Vector2<T> Normalized(T* oldLength = nullptr) const { return Vector2<T>(*this).Normalize(oldLength); }
 
-	inline T GetPolarAngle() const { return Math::Atan2(x, y); }
-	inline Vector2<T>& SetPolarAngle(const T& angle)
+	inline T GetPolarAngle() const { Vector2<T> n = Normalized(); return Math::Atan2(n.x, n.y); }
+	constexpr Vector2<T>& SetPolarAngle(const T& angle)
 	{
 		const T length = GetLength();
 		x = Math::Cos(angle) * length;
 		y = Math::Sin(angle) * length;
 		return *this;
 	}
-	static inline Vector2<T> Polar(const T& angle, const T& length = T(1)) { return Vector2<T>(Math::Cos(angle) * length, Math::Sin(angle) * length); }
+	static constexpr Vector2<T> Polar(const T& angle, const T& length = T(1)) { return Vector2<T>(Math::Cos(angle) * length, Math::Sin(angle) * length); }
 
-	inline Vector2<T>& Rotate(const T& angle)
+	constexpr Vector2<T>& Rotate(const T& angle)
 	{
 		const T c = Math::Cos(angle);
 		const T s = Math::Sin(angle);
@@ -107,7 +105,7 @@ public:
 		x = tx;
 		return *this;
 	}
-	inline Vector2<T> Rotated(const T& angle) const
+	constexpr Vector2<T> Rotated(const T& angle) const
 	{
 		const T c = Math::Cos(angle);
 		const T s = Math::Sin(angle);
@@ -119,14 +117,14 @@ public:
 	constexpr Vector2<T>& Maximize(const Vector2<T>& v) { if (v.x > x) x = v.x; if (v.y > y) y = v.y; return *this; }
 	static constexpr Vector2<T> Maximum(const Vector2<T>& v1, const Vector2<T>& v2) { return Vector2<T>(Math::Max(v1.x, v2.x), Math::Max(v1.y, v2.y)); }
 
-	constexpr Vector2<T>& Minimize(const Vector2<T>& v) { f(v.x < x) x = v.x; if (v.y < y) y = v.y; return *this; }
+	constexpr Vector2<T>& Minimize(const Vector2<T>& v) { if (v.x < x) x = v.x; if (v.y < y) y = v.y; return *this; }
 	static constexpr Vector2<T> Minimum(const Vector2<T>& v1, const Vector2<T>& v2) { return Vector2<T>(Math::Min(v1.x, v2.x), Math::Min(v1.y, v2.y)); }
 
 	constexpr Vector2<T>& MakeUnit() { return Set(Unit()); }
 	constexpr Vector2<T>& MakeUnitX() { return Set(UnitX()); }
 	constexpr Vector2<T>& MakeUnitY() { return Set(UnitY()); }
 	constexpr Vector2<T>& MakeZero() { return Set(Zero()); }
-	inline Vector2<T>& MakePolar(T angle, T length = T(1)) { return Set(Math::Cos(angle) * length, Math::Sin(angle) * length); }
+	constexpr Vector2<T>& MakePolar(T angle, T length = T(1)) { return Set(Math::Cos(angle) * length, Math::Sin(angle) * length); }
 
 	static constexpr Vector2<T> Unit() { return Vector2<T>(1, 1); }
 	static constexpr Vector2<T> UnitX() { return Vector2<T>(1, 0); }

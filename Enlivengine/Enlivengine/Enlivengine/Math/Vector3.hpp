@@ -3,8 +3,6 @@
 #include <Enlivengine/Math/Utilities.hpp>
 #include <Enlivengine/Math/Vector2.hpp>
 
-// TODO : constexpr Sqrt : SetLength, Normalize, Normalized
-
 namespace en
 {
 
@@ -68,7 +66,7 @@ public:
 	constexpr bool operator<=(const Vector3<T>& vec) const { return x <= vec.x && y <= vec.y && z <= vec.z; }
 	constexpr bool operator>(const Vector3<T>& vec) const { return !operator<=(vec); }
 	constexpr bool operator>=(const Vector3<T>& vec) const { return !operator<(vec); }
-	static constexpr bool Equals(const Vector3<T>& v1, const Vector3<T>& v2, const T& epsilon = std::numeric_limits<T>::epsilon()) { return Math::Equals(x, vec.x, epsilon) && Math::Equals(y, vec.y, epsilon) && Math::Equals(z, vec.z, epsilon); }
+	static constexpr bool Equals(const Vector3<T>& v1, const Vector3<T>& v2, const T& epsilon = std::numeric_limits<T>::epsilon()) { return Math::Equals(v1.x, v2.x, epsilon) && Math::Equals(v1.y, v2.y, epsilon) && Math::Equals(v1.z, v2.z, epsilon); }
 
 	constexpr Vector2<T> xy() const { return Vector2<T>(x, y); }
 	constexpr Vector2<T> xz() const { return Vector2<T>(x, z); }
@@ -78,8 +76,8 @@ public:
 	static constexpr T DotProduct(const Vector3<T>& v1, const Vector3<T>& v2) { return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z; }
 
 	constexpr T GetSquaredLength() const { return DotProduct(*this); }
-	inline T GetLength() const { return Math::Sqrt(GetSquaredLength()); }
-	inline Vector3<T>& SetLength(const T& length, T* oldLength = nullptr)
+	constexpr T GetLength() const { return Math::Sqrt(GetSquaredLength()); }
+	constexpr Vector3<T>& SetLength(const T& length, T* oldLength = nullptr)
 	{
 		const T currentLength = GetLength();
 		if (oldLength != nullptr)
@@ -93,8 +91,8 @@ public:
 		return *this;
 	}
 
-	inline Vector3<T>& Normalize(T* oldLength = nullptr) { return SetLength(T(1), oldLength); }
-	inline Vector3<T> Normalized(T* oldLength = nullptr) const { return Vector3<T>(*this).Normalize(oldLength); }
+	constexpr Vector3<T>& Normalize(T* oldLength = nullptr) { return SetLength(T(1), oldLength); }
+	constexpr Vector3<T> Normalized(T* oldLength = nullptr) const { return Vector3<T>(*this).Normalize(oldLength); }
 
 	constexpr Vector3<T> CrossProduct(const Vector3<T>& v) const { return Vector3<T>(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); }
 	static constexpr Vector3<T> CrossProduct(const Vector3<T>& v1, const Vector3<T>& v2) { return Vector3<T>(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x); }

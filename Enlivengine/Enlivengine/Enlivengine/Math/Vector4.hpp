@@ -66,7 +66,7 @@ public:
 	constexpr bool operator<=(const Vector4<T>& vec) const { return x <= vec.x && y <= vec.y && z <= vec.z && w <= vec.w; }
 	constexpr bool operator>(const Vector4<T>& vec) const { return !operator<=(vec); }
 	constexpr bool operator>=(const Vector4<T>& vec) const { return !operator<(vec); }
-	static constexpr bool Equals(const Vector4<T>& v1, const Vector4<T>& v2, const T& epsilon = std::numeric_limits<T>::epsilon()) { return Math::Equals(x, vec.x, epsilon) && Math::Equals(y, vec.y, epsilon) && Math::Equals(z, vec.z, epsilon) && Math::Equals(w, vec.w, epsilon); }
+	static constexpr bool Equals(const Vector4<T>& v1, const Vector4<T>& v2, const T& epsilon = std::numeric_limits<T>::epsilon()) { return Math::Equals(v1.x, v2.x, epsilon) && Math::Equals(v1.y, v2.y, epsilon) && Math::Equals(v1.z, v2.z, epsilon) && Math::Equals(v1.w, v2.w, epsilon); }
 
 	constexpr Vector3<T> xyz() const { return Vector3<T>(x, y, z); }
 	constexpr Vector2<T> xy() const { return Vector2<T>(x, y); }
@@ -77,8 +77,8 @@ public:
 	static constexpr T DotProduct(const Vector4<T>& v1, const Vector4<T>& v2) { return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w; }
 
 	constexpr T GetSquaredLength() const { return DotProduct(*this); }
-	inline T GetLength() const { return Math::Sqrt(GetSquaredLength()); }
-	inline Vector4<T>& SetLength(const T& length, T* oldLength = nullptr)
+	constexpr T GetLength() const { return Math::Sqrt(GetSquaredLength()); }
+	constexpr Vector4<T>& SetLength(const T& length, T* oldLength = nullptr)
 	{
 		const T currentLength = GetLength();
 		if (oldLength != nullptr)
@@ -93,8 +93,8 @@ public:
 		return *this;
 	}
 
-	inline Vector4<T>& Normalize(T* oldLength = nullptr) { return SetLength(T(1), oldLength); }
-	inline Vector4<T> Normalized(T* oldLength = nullptr) const { return Vector4<T>(*this).Normalize(oldLength); }
+	constexpr Vector4<T>& Normalize(T* oldLength = nullptr) { return SetLength(T(1), oldLength); }
+	constexpr Vector4<T> Normalized(T* oldLength = nullptr) const { return Vector4<T>(*this).Normalize(oldLength); }
 
 	static constexpr Vector4<T> Lerp(const Vector4<T>& v1, const Vector4<T>& v2, const T& percent) { const T one_minus_percent = T(1) - percent; return Vector4<T>(one_minus_percent * v1.x + percent * v2.x, one_minus_percent * v1.y + percent * v2.y, one_minus_percent * v1.z + percent * v2.z, one_minus_percent * v1.w + percent * v2.w); }
 
