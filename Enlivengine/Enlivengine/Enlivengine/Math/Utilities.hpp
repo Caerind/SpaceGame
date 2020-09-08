@@ -22,17 +22,17 @@ class Math
 public:
 	Math() = delete;
 
-	static constexpr F32 EPSILON { 0.0001f };
-	static constexpr F32 PI { 3.141592653589793238462643383f };
-	static constexpr F32 TWO_PI { 2.0f * PI };
-	static constexpr F32 HALF_PI { 0.5f * PI };
-	static constexpr F32 INV_PI { 1.0f / PI };
-	static constexpr F32 INV_TWO_PI { 1.0f / TWO_PI };
-	static constexpr F32 DEG_TO_RAD { PI / 180.0f };
-	static constexpr F32 RAD_TO_DEG { 180.0f / PI };
+	static constexpr F32 Epsilon { 0.0001f };
+	static constexpr F32 Pi { 3.141592653589793238462643383f };
+	static constexpr F32 TwoPi { 2.0f * Pi };
+	static constexpr F32 HalfPi { 0.5f * Pi };
+	static constexpr F32 InvPi { 1.0f / Pi };
+	static constexpr F32 InvTwoPi { 1.0f / TwoPi };
+	static constexpr F32 kDegToRad { Pi / 180.0f };
+	static constexpr F32 kRadToDeg { 180.0f / Pi };
 
-	static constexpr F32 DegToRad(F32 value) { return value * DEG_TO_RAD; }
-	static constexpr F32 RadToDeg(F32 value) { return value * RAD_TO_DEG; }
+	static constexpr F32 DegToRad(F32 value) { return value * kDegToRad; }
+	static constexpr F32 RadToDeg(F32 value) { return value * kRadToDeg; }
 
 	static constexpr F32 Cos(F32 value)
 	{
@@ -135,7 +135,8 @@ public:
 		return f;
 	}
 	static constexpr F32 InvSqrt(F32 value) 
-	{ 
+	{
+		// TODO : This may be improved
 		return 1.0f / Sqrt(value);
 	}
 
@@ -179,7 +180,7 @@ public:
 
 	template <typename T>
 	static constexpr bool InRange(T value, T valueMin, T valueMax) { return value >= valueMin && value <= valueMax; }
-	static constexpr bool Equals(F32 x, F32 y, F32 epsilon = EPSILON) { return Abs(x - y) < epsilon; }
+	static constexpr bool Equals(F32 x, F32 y, F32 epsilon = Epsilon) { return Abs(x - y) < epsilon; }
 	static constexpr bool Equals(I32 x, I32 y) { return x == y; }
 	static constexpr bool Equals(U32 x, U32 y) { return x == y; }
 };

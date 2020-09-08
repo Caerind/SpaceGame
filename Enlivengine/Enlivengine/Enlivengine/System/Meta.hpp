@@ -77,6 +77,18 @@ public:
 		, mCopySetter(nullptr)
 	{
 	}
+	constexpr Member(const char* name, CopyGetterFuncPtrT<Class, T> getter, ConstRefSetterFuncPtrT<Class, T> setter, U32 attributes = 0)
+		: mName(name)
+		, mAttributes(attributes)
+		, mHasMemberPtr(false)
+		, mMemberPtr(nullptr)
+		, mConstRefGetter(nullptr)
+		, mNonConstRefGetter(nullptr)
+		, mCopyGetter(getter)
+		, mConstRefSetter(setter)
+		, mCopySetter(nullptr)
+	{
+	}
 	constexpr Member(const char* name, CopyGetterFuncPtrT<Class, T> getter, CopySetterFuncPtrT<Class, T> setter, U32 attributes = 0)
 		: mName(name)
 		, mAttributes(attributes)
@@ -231,6 +243,12 @@ constexpr Member<Class, T> RegisterMember(const char* name, NonConstRefGetterFun
 
 template <typename Class, typename T>
 constexpr Member<Class, T> RegisterMember(const char* name, ConstRefGetterFuncPtrT<Class, T> getter, ConstRefSetterFuncPtrT<Class, T> setter, U32 attributes = 0)
+{
+	return Member<Class, T>(name, getter, setter, attributes);
+}
+
+template <typename Class, typename T>
+constexpr Member<Class, T> RegisterMember(const char* name, CopyGetterFuncPtrT<Class, T> getter, ConstRefSetterFuncPtrT<Class, T> setter, U32 attributes = 0)
 {
 	return Member<Class, T>(name, getter, setter, attributes);
 }

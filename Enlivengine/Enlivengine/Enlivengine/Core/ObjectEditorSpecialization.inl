@@ -13,7 +13,7 @@
 #include <Enlivengine/Math/Rect.hpp>
 #include <Enlivengine/Application/ResourceManager.hpp>
 
-#include <Enlivengine/Core/CustomObjectEditor.hpp>
+#include <Enlivengine/Core/CustomTraits.hpp>
 #include <Enlivengine/Core/ObjectEditor.hpp>
 
 //#include <Enlivengine/Core/Universe.hpp>

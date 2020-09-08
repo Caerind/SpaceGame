@@ -5,6 +5,7 @@
 #include <Enlivengine/System/String.hpp>
 #include <Enlivengine/System/ClassManager.hpp>
 #include <Enlivengine/Core/Components.hpp>
+#include <Enlivengine/Core/PhysicComponent.hpp>
 #include <Enlivengine/Core/ComponentManager.hpp>
 
 #include "Components.hpp"
@@ -30,6 +31,7 @@ int main(int argc, char** argv)
 	en::ClassManager::Register<en::TextComponent>();
 	en::ClassManager::Register<en::RenderableComponent>();
 	en::ClassManager::Register<en::UIDComponent>();
+	en::ClassManager::Register<en::PhysicComponent>();
 	en::ClassManager::Register<VelocityComponent>();
 	en::ClassManager::Register<ShipComponent>();
 	en::ClassManager::Register<ShootComponent>();
@@ -47,6 +49,7 @@ int main(int argc, char** argv)
 	en::ComponentManager::Register<en::TextComponent>();
 	en::ComponentManager::Register<en::RenderableComponent>();
 	en::ComponentManager::Register<en::UIDComponent>();
+	en::ComponentManager::Register<en::PhysicComponent>();
 	en::ComponentManager::Register<VelocityComponent>();
 	en::ComponentManager::Register<ShipComponent>();
 	en::ComponentManager::Register<ShootComponent>();
@@ -102,6 +105,7 @@ int main(int argc, char** argv)
 		actionSystem.AddInputOr("player2Fire", actionSystem.GetInputByName("player2JoystickFire")->GetID(), actionSystem.GetInputByName("player2KeyFire")->GetID());
 
 #ifdef ENLIVE_DEBUG
+		actionSystem.AddInputKey("togglePhysic", sf::Keyboard::P, en::ActionType::Pressed, static_cast<en::U32>(en::ActionInputKey::KeyCombination::Shift));
 		actionSystem.AddInputKey("save", sf::Keyboard::S, en::ActionType::Pressed, static_cast<en::U32>(en::ActionInputKey::KeyCombination::Ctrl));
 		actionSystem.AddInputMouse("rightMouseButton", sf::Mouse::Button::Right, en::ActionType::Pressed);
 		actionSystem.AddInputMouse("middleMouseButton", sf::Mouse::Button::Middle, en::ActionType::Pressed);

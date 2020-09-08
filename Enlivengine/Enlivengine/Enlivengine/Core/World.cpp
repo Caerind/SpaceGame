@@ -5,12 +5,21 @@ namespace en
 
 World::World()
 	: mEntityManager(*this)
+	, mPhysicSystem(nullptr)
 	, mGameView()
 #ifdef ENLIVE_DEBUG
 	, mFreeCamView()
 #endif // ENLIVE_DEBUG
 	, mPlaying(false)
 {
+}
+
+World::~World()
+{
+	if (mPhysicSystem != nullptr)
+	{
+		delete mPhysicSystem;
+	}
 }
 
 EntityManager& World::GetEntityManager()
@@ -21,6 +30,21 @@ EntityManager& World::GetEntityManager()
 const EntityManager& World::GetEntityManager() const
 {
 	return mEntityManager;
+}
+
+bool World::HasPhysicSystem() const
+{
+	return mPhysicSystem != nullptr;
+}
+
+PhysicSystem* World::GetPhysicSystem()
+{
+	return mPhysicSystem;
+}
+
+const PhysicSystem* World::GetPhysicSystem() const
+{
+	return mPhysicSystem;
 }
 
 View& World::GetGameView()
@@ -58,6 +82,24 @@ void World::Pause()
 bool World::IsPlaying() const
 {
 	return mPlaying;
+}
+
+void World::Update(Time dt)
+{
+	if (mPhysicSystem != nullptr)
+	{
+		mPhysicSystem->Update(dt);
+	}
+}
+
+void World::Render(sf::RenderTarget& target)
+{
+#ifdef ENLIVE_DEBUG
+	if (mPhysicSystem != nullptr)
+	{
+		mPhysicSystem->Render(target);
+	}
+#endif // ENLIVE_DEBUG
 }
 
 } // namespace en

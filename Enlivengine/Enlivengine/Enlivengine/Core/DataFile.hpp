@@ -13,7 +13,7 @@
 #include <Enlivengine/System/ParserXml.hpp>
 #include <Enlivengine/System/ClassManager.hpp>
 
-#include <Enlivengine/Core/CustomXmlSerialization.hpp>
+#include <Enlivengine/Core/CustomTraits.hpp>
 
 // TODO : Factorise common code in Serialize/Deserialize (Array/vector/array)
 

@@ -7,6 +7,9 @@
 #include <Enlivengine/Core/Components.hpp>
 #include <Enlivengine/Core/Universe.hpp>
 
+#include <Enlivengine/Core/EntitySpecialization.hpp>
+#include <Enlivengine/Core/EntityManagerSpecialization.hpp>
+
 namespace en
 {
 

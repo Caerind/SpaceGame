@@ -1,9 +1,6 @@
 #pragma once
 
-#include <entt/entt.hpp>
-
 #include <Enlivengine/System/Meta.hpp>
-#include <Enlivengine/Core/ComponentDependencyTrait.hpp>
 #include <Enlivengine/Core/Entity.hpp>
 
 #include <string>
@@ -62,21 +59,6 @@ struct TextComponent
 	Text text;
 };
 
-struct ChildComponent
-{
-	ChildComponent() : parentEntity(entt::null) {}
-	ChildComponent(const entt::entity& pParentEntity) : parentEntity(pParentEntity) {}
-
-	entt::entity parentEntity;
-};
-
-struct ParentComponent
-{
-	ParentComponent() : childEntities() {}
-
-	std::vector<entt::entity> childEntities;
-};
-
 } // namespace en
 
 ENLIVE_META_CLASS_BEGIN(en::NameComponent)
@@ -101,53 +83,3 @@ ENLIVE_META_CLASS_END()
 ENLIVE_META_CLASS_BEGIN(en::TextComponent)
 	ENLIVE_META_CLASS_MEMBER("text", &en::TextComponent::text)
 ENLIVE_META_CLASS_END()
-
-ENLIVE_META_CLASS_BEGIN(en::ChildComponent)
-ENLIVE_META_CLASS_END()
-
-ENLIVE_META_CLASS_BEGIN(en::ParentComponent)
-ENLIVE_META_CLASS_END()
-
-// SpriteComponent needs RenderableComponent
-template <>
-struct ComponentDependencyTrait<en::SpriteComponent>
-{
-	static constexpr bool hasDependency = true;
-	static bool CanEntityHaveThisComponent(const en::Entity& entity)
-	{
-		return entity.Has<en::RenderableComponent>();
-	}
-}; 
-
-// TextComponent needs RenderableComponent
-template <>
-struct ComponentDependencyTrait<en::TextComponent>
-{
-	static constexpr bool hasDependency = true;
-	static bool CanEntityHaveThisComponent(const en::Entity& entity)
-	{
-		return entity.Has<en::RenderableComponent>();
-	}
-};
-
-// ChildComponent needs UIDComponent
-template <>
-struct ComponentDependencyTrait<en::ChildComponent>
-{
-	static constexpr bool hasDependency = true;
-	static bool CanEntityHaveThisComponent(const en::Entity& entity)
-	{
-		return entity.Has<en::UIDComponent>();
-	}
-};
-
-// ParentComponent needs UIDComponent
-template <>
-struct ComponentDependencyTrait<en::ParentComponent>
-{
-	static constexpr bool hasDependency = true;
-	static bool CanEntityHaveThisComponent(const en::Entity& entity)
-	{
-		return entity.Has<en::UIDComponent>();
-	}
-};

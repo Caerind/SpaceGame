@@ -151,12 +151,10 @@ set(SRC_APPLICATION
 source_group("Application" FILES ${SRC_APPLICATION})
 
 set(SRC_CORE
-	Enlivengine/Core/ComponentDependencyTrait.hpp
 	Enlivengine/Core/ComponentManager.cpp
 	Enlivengine/Core/ComponentManager.hpp
 	Enlivengine/Core/Components.hpp
-	Enlivengine/Core/CustomObjectEditor.hpp
-	Enlivengine/Core/CustomXmlSerialization.hpp
+	Enlivengine/Core/CustomTraits.hpp
 	Enlivengine/Core/DataFile.cpp
 	Enlivengine/Core/DataFile.hpp
 	Enlivengine/Core/DataFileSpecialization.inl
@@ -164,9 +162,15 @@ set(SRC_CORE
 	Enlivengine/Core/Entity.hpp
 	Enlivengine/Core/EntityManager.cpp
 	Enlivengine/Core/EntityManager.hpp
+	Enlivengine/Core/EntityManagerSpecialization.hpp
+	Enlivengine/Core/EntitySpecialization.hpp
 	Enlivengine/Core/ObjectEditor.cpp
 	Enlivengine/Core/ObjectEditor.hpp
 	Enlivengine/Core/ObjectEditorSpecialization.inl
+	Enlivengine/Core/PhysicComponent.cpp
+	Enlivengine/Core/PhysicComponent.hpp
+	Enlivengine/Core/PhysicSystem.cpp
+	Enlivengine/Core/PhysicSystem.hpp
 	Enlivengine/Core/Transform.cpp
 	Enlivengine/Core/Transform.hpp
 	Enlivengine/Core/Universe.cpp

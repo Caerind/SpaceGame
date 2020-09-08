@@ -6,8 +6,10 @@
 #include <Enlivengine/Tools/ImGuiEntityBrowser.hpp>
 #include <Enlivengine/Graphics/DebugDraw.hpp>
 #include <Enlivengine/Math/Random.hpp>
+#include <Enlivengine/Core/PhysicSystem.hpp>
 
 #include <Enlivengine/Core/Components.hpp>
+#include <Enlivengine/Core/PhysicComponent.hpp>
 #include "Components.hpp"
 
 #include "GameSingleton.hpp"
@@ -41,6 +43,8 @@ bool GameState::update(en::Time dt)
 
 	GameSingleton::GetInstance().UpdateStats(dt);
 
+	GameSingleton::GetInstance().world.Update(dt);
+
 	Velocity(dt);
 
 	// Shoot player
@@ -70,6 +74,8 @@ void GameState::render(sf::RenderTarget& target)
 	const sf::View previousView = target.getView();
 
 	auto& world = GameSingleton::GetInstance().world;
+	
+	/*
 
 #ifdef ENLIVE_DEBUG
 	bool editor = true;
@@ -84,6 +90,8 @@ void GameState::render(sf::RenderTarget& target)
 #else
 	target.setView(world.GetGameView().getHandle());
 #endif // ENLIVE_DEBUG
+
+	*/
 
 	// Background
 	static bool backgroundInitialized = false;
@@ -254,6 +262,8 @@ void GameState::render(sf::RenderTarget& target)
 		}
 	}
 
+	world.Render(target);
+
 	target.setView(previousView);
 }
 
@@ -261,6 +271,9 @@ void GameState::Init()
 {
 	auto& gameSing = GameSingleton::GetInstance();
 	auto& world = gameSing.world;
+
+	world.CreatePhysicSystem();
+	world.GetPhysicSystem()->DisableGravity();
 
 	world.GetEntityManager().ClearEntities();
 	gameSing.player1 = en::Entity();
@@ -304,6 +317,7 @@ void GameState::Init()
 		transformPlayer1.SetPosition(gameSing.startPosition + gameSing.startOffsetPlayer1);
 		transformPlayer1.SetRotation2D(gameSing.startRotationPlayer1);
 		player1.Add<en::RenderableComponent>();
+		player1.Add<en::PhysicComponent>();
 		player1.Add<VelocityComponent>();
 		player1.Add<ShipComponent>();
 		player1.Add<BarkComponent>();
@@ -323,6 +337,7 @@ void GameState::Init()
 		transformPlayer2.SetPosition(gameSing.startPosition + gameSing.startOffsetPlayer2);
 		transformPlayer2.SetRotation2D(gameSing.startRotationPlayer2);
 		player2.Add<en::RenderableComponent>();
+		player2.Add<en::PhysicComponent>();
 		player2.Add<VelocityComponent>();
 		player2.Add<ShipComponent>();
 		player2.Add<BarkComponent>();
@@ -870,8 +885,12 @@ void GameState::DebugUpdate(en::Time dt)
 	}
 
 #ifdef ENLIVE_DEBUG
-	if (getApplication().GetActionSystem().IsInputActive("save"))
+	if (getApplication().GetActionSystem().IsInputActive("togglePhysic"))
 	{
+		world.GetPhysicSystem()->SetDebugRendering(!world.GetPhysicSystem()->IsDebugRendering());
+	}
+	if (getApplication().GetActionSystem().IsInputActive("save"))
+	{	
 		en::DataFile fileWorld;
 		fileWorld.CreateEmptyFile();
 		fileWorld.Serialize(GameSingleton::GetInstance().world, "World");

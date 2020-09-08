@@ -11,7 +11,7 @@
 #include <Enlivengine/Math/Rect.hpp>
 #include <Enlivengine/Application/ResourceManager.hpp>
 
-#include <Enlivengine/Core/CustomXmlSerialization.hpp>
+#include <Enlivengine/Core/CustomTraits.hpp>
 #include <Enlivengine/Core/DataFile.hpp>
 
 // en::Time

@@ -4,6 +4,8 @@
 
 #include <Enlivengine/System/Meta.hpp>
 
+#include <Enlivengine/Core/Entity.hpp>
+
 #ifdef ENLIVE_ENABLE_IMGUI
 #include <Enlivengine/Core/ObjectEditor.hpp>
 #endif // ENLIVE_ENABLE_IMGUI
@@ -39,38 +41,39 @@ public:
 		mComponents[hash].name = TypeInfo<T>::GetName();
 		mComponents[hash].enttID = entt::type_info<T>::id();
 #ifdef ENLIVE_ENABLE_IMGUI
-		mComponents[hash].editor = [](entt::registry& reg, entt::entity ent)
+		mComponents[hash].editor = [](Entity& entity)
 		{
-			return ObjectEditor::ImGuiEditor(reg.get<T>(ent), TypeInfo<T>::GetName());
+			T& component = entity.Get<T>();
+			return ObjectEditor::ImGuiEditor(component, TypeInfo<T>::GetName());
 		};
-		mComponents[hash].add = [](entt::registry& reg, entt::entity ent)
+		mComponents[hash].add = [](Entity& entity)
 		{
-			reg.assign<T>(ent);
+			entity.Add<T>();
 		};
-		mComponents[hash].remove = [](entt::registry& reg, entt::entity ent)
+		mComponents[hash].remove = [](Entity& entity)
 		{
-			reg.remove<T>(ent);
+			entity.Remove<T>();
 		};
 #endif // ENLIVE_ENABLE_IMGUI
-		mComponents[hash].serialize = [](DataFile& dataFile, const entt::registry& reg, entt::entity ent)
+		mComponents[hash].serialize = [](DataFile& dataFile, const Entity& entity)
 		{
-			return dataFile.Serialize(reg.get<T>(ent), TypeInfo<T>::GetName());
+			return dataFile.Serialize(entity.Get<T>(), TypeInfo<T>::GetName());
 		};
-		mComponents[hash].deserialize = [](DataFile& dataFile, entt::registry& reg, entt::entity ent)
+		mComponents[hash].deserialize = [](DataFile& dataFile, Entity& entity)
 		{
-			T& component = reg.assign<T>(ent);
+			T& component = entity.Add<T>();
 			return dataFile.Deserialize(component, TypeInfo<T>::GetName());
 		};
 		return true;
 	}
 
 #ifdef ENLIVE_ENABLE_IMGUI
-	using EditorCallback = std::function<bool(entt::registry&, entt::entity)>;
-	using AddCallback = std::function<void(entt::registry&, entt::entity)>;
-	using RemoveCallback = std::function<void(entt::registry&, entt::entity)>;
+	using EditorCallback = std::function<bool(Entity&)>;
+	using AddCallback = std::function<void(Entity&)>;
+	using RemoveCallback = std::function<void(Entity&)>;
 #endif // ENLIVE_ENABLE_IMGUI
-	using SerializeCallback = std::function<bool(DataFile&, const entt::registry&, entt::entity)>;
-	using DeserializeCallback = std::function<bool(DataFile&, entt::registry&, entt::entity)>;
+	using SerializeCallback = std::function<bool(DataFile&, const Entity&)>;
+	using DeserializeCallback = std::function<bool(DataFile&, Entity&)>;
 
 	struct ComponentInfo
 	{

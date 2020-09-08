@@ -10,9 +10,9 @@
 #include <array>
 #include <vector>
 
-#include <imgui/imgui.h>
+#include <Enlivengine/Tools/ImGuiHelper.hpp>
 
-#include "CustomObjectEditor.hpp"
+#include <Enlivengine/Core/CustomTraits.hpp>
 
 namespace en
 {
