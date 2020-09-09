@@ -63,10 +63,20 @@ bool PhysicSystem::Initialize(const Entity& entity, PhysicComponent& component)
 	if (component.IsValid())
 	{
 		b2CircleShape circleShape;
-		circleShape.m_p.Set(0, 0);
-		circleShape.m_radius = 1;
+		circleShape.m_p.Set(0.f, 0.f);
+		circleShape.m_radius = 3.f;
+
+		b2PolygonShape polygonShape;
+		polygonShape.SetAsBox(0.5f, 0.5f);
+
 		b2FixtureDef myFixtureDef;
+
 		myFixtureDef.shape = &circleShape;
+		myFixtureDef.isSensor = true;
+		component.mBody->CreateFixture(&myFixtureDef);
+
+		myFixtureDef.shape = &polygonShape;
+		myFixtureDef.isSensor = false;
 		component.mBody->CreateFixture(&myFixtureDef);
 	}
 

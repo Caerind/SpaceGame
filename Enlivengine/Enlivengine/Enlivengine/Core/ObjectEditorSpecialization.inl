@@ -364,9 +364,3 @@ struct CustomObjectEditor<en::ResourcePtr<T>>
 		return modified;
 	}
 };
-
-// en::Entity
-// TODO : Figure how to move it here
-
-// en::EntityManager
-// TODO : Figure how to move it here

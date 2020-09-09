@@ -432,9 +432,3 @@ struct CustomXmlSerialization<en::ResourcePtr<T>>
 		}
 	}
 };
-
-// en::Entity
-// TODO : Figure how to move it here
-
-// en::EntityManager
-// TODO : Figure how to move it here
