@@ -75,8 +75,6 @@ void GameState::render(sf::RenderTarget& target)
 
 	auto& world = GameSingleton::GetInstance().world;
 	
-	/*
-
 #ifdef ENLIVE_DEBUG
 	bool editor = true;
 	if (editor)
@@ -90,8 +88,6 @@ void GameState::render(sf::RenderTarget& target)
 #else
 	target.setView(world.GetGameView().getHandle());
 #endif // ENLIVE_DEBUG
-
-	*/
 
 	// Background
 	static bool backgroundInitialized = false;
@@ -272,7 +268,7 @@ void GameState::Init()
 	auto& gameSing = GameSingleton::GetInstance();
 	auto& world = gameSing.world;
 
-	world.CreatePhysicSystem();
+	world.CreateSystem<en::PhysicSystem>();
 	world.GetPhysicSystem()->DisableGravity();
 
 	world.GetEntityManager().ClearEntities();
@@ -841,18 +837,6 @@ void GameState::DebugUpdate(en::Time dt)
 		getApplication().Stop();
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
-	{
-		if (GameSingleton::GetInstance().world.IsPlaying())
-		{
-			GameSingleton::GetInstance().world.Pause();
-		}
-		else
-		{
-			GameSingleton::GetInstance().world.Play();
-		}
-	}
-
 	// TODO : Move to Engine ?
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 	{
@@ -885,10 +869,6 @@ void GameState::DebugUpdate(en::Time dt)
 	}
 
 #ifdef ENLIVE_DEBUG
-	if (getApplication().GetActionSystem().IsInputActive("togglePhysic"))
-	{
-		world.GetPhysicSystem()->SetDebugRendering(!world.GetPhysicSystem()->IsDebugRendering());
-	}
 	if (getApplication().GetActionSystem().IsInputActive("save"))
 	{	
 		en::DataFile fileWorld;

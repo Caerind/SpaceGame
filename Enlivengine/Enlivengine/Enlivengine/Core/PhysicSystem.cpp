@@ -13,7 +13,7 @@ namespace en
 {
 
 PhysicSystem::PhysicSystem(World& world)
-	: mWorld(world)
+	: System(world)
 	, mPhysicWorld(nullptr)
 	, mPixelsPerMeter(32.0f)
 	, mVelocityIterations(8)
@@ -49,7 +49,7 @@ bool PhysicSystem::Initialize(const Entity& entity, PhysicComponent& component)
 	{
 		const Transform& transform = entity.Get<TransformComponent>().transform;
 		bodyDef.position.Set(transform.GetPosition2D().x / mPixelsPerMeter, transform.GetPosition2D().y / mPixelsPerMeter);
-		bodyDef.angle = transform.GetRotation2D();
+		bodyDef.angle = Math::DegToRad(transform.GetRotation2D());
 	}
 	else
 	{
@@ -58,27 +58,6 @@ bool PhysicSystem::Initialize(const Entity& entity, PhysicComponent& component)
 	}
 
 	component.mBody = mPhysicWorld->CreateBody(&bodyDef);
-
-	// TODO : Do fixture properly and remove this test
-	if (component.IsValid())
-	{
-		b2CircleShape circleShape;
-		circleShape.m_p.Set(0.f, 0.f);
-		circleShape.m_radius = 3.f;
-
-		b2PolygonShape polygonShape;
-		polygonShape.SetAsBox(0.5f, 0.5f);
-
-		b2FixtureDef myFixtureDef;
-
-		myFixtureDef.shape = &circleShape;
-		myFixtureDef.isSensor = true;
-		component.mBody->CreateFixture(&myFixtureDef);
-
-		myFixtureDef.shape = &polygonShape;
-		myFixtureDef.isSensor = false;
-		component.mBody->CreateFixture(&myFixtureDef);
-	}
 
 	return component.IsValid();
 }
@@ -282,8 +261,12 @@ void PhysicSystem::DrawTransform(const b2Transform& xf)
 
 void PhysicSystem::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
-	sf::CircleShape circle(size * mPixelsPerMeter);
-	circle.setOrigin(size * mPixelsPerMeter, size * mPixelsPerMeter);
+	ENLIVE_UNUSED(size);
+
+	static constexpr en::F32 radius = 5.0f;
+
+	sf::CircleShape circle(radius);
+	circle.setOrigin(radius, radius);
 	circle.setPosition(p.x * mPixelsPerMeter, p.y * mPixelsPerMeter);
 	circle.setFillColor(sf::Color(static_cast<sf::Uint8>(color.r * 255), static_cast<sf::Uint8>(color.g * 255), static_cast<sf::Uint8>(color.b * 255)));
 

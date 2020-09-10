@@ -1,10 +1,9 @@
 #pragma once
 
 #include <Box2D/Box2D.h>
-#include <SFML/Graphics/RenderTarget.hpp>
 
-#include <Enlivengine/System/Time.hpp>
 #include <Enlivengine/Math/Vector2.hpp>
+#include <Enlivengine/Core/System.hpp>
 
 namespace en
 {
@@ -13,16 +12,16 @@ class World;
 class Entity;
 class PhysicComponent;
 
-class PhysicSystem : public b2Draw, public b2ContactListener
+class PhysicSystem : public System, public b2Draw, public b2ContactListener
 {
     public:
         PhysicSystem(World& world);
-        ~PhysicSystem();
+		~PhysicSystem();
+
+		void Update(Time dt) override;
 
 		bool Initialize(const Entity& entity, PhysicComponent& component);
         
-        void Update(Time dt);
-
 		void Play();
 		void Pause();
 		bool IsPlaying() const;
@@ -40,7 +39,7 @@ class PhysicSystem : public b2Draw, public b2ContactListener
         U32 GetPositionIterations() const;
 
 #ifdef ENLIVE_DEBUG
-		void Render(sf::RenderTarget& target);
+		void Render(sf::RenderTarget& target) override;
 
 		void SetDebugRendering(bool value);
 		bool IsDebugRendering() const;
@@ -60,7 +59,6 @@ class PhysicSystem : public b2Draw, public b2ContactListener
         // TODO : ContactListener
 
     protected:
-        World& mWorld;
 		b2World* mPhysicWorld;
         F32 mPixelsPerMeter;
         U32 mVelocityIterations;

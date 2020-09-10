@@ -2,15 +2,17 @@
 
 #ifdef ENLIVE_ENABLE_IMGUI
 
-#include <Enlivengine/System/Hash.hpp>
-#include <Enlivengine/System/Assert.hpp>
-#include <Enlivengine/System/Profiler.hpp>
-#include <Enlivengine/Application/PathManager.hpp>
+#include <filesystem>
 
 #include <imgui/imgui.h>
 #include <imgui-sfml/imgui-SFML.h>
 
-#include <filesystem>
+#include <Enlivengine/System/Hash.hpp>
+#include <Enlivengine/System/Assert.hpp>
+#include <Enlivengine/System/Profiler.hpp>
+#include <Enlivengine/Application/PathManager.hpp>
+#include <Enlivengine/Core/Universe.hpp>
+#include <Enlivengine/Core/World.hpp>
 
 namespace en
 {
@@ -240,6 +242,25 @@ void ImGuiToolManager::ImGuiMain()
 				ImGui::EndMenu();
 			}
 		}
+
+		if (World* world = Universe::GetInstance().GetCurrentWorld())
+		{
+			if (world->IsPlaying())
+			{
+				if (ImGui::SmallButton("" ICON_FA_PAUSE))
+				{
+					world->Pause();
+				}
+			}
+			else
+			{
+				if (ImGui::SmallButton("" ICON_FA_PLAY))
+				{
+					world->Play();
+				}
+			}
+		}
+
 		ImGui::EndMainMenuBar();
 	}
 

@@ -105,7 +105,6 @@ int main(int argc, char** argv)
 		actionSystem.AddInputOr("player2Fire", actionSystem.GetInputByName("player2JoystickFire")->GetID(), actionSystem.GetInputByName("player2KeyFire")->GetID());
 
 #ifdef ENLIVE_DEBUG
-		actionSystem.AddInputKey("togglePhysic", sf::Keyboard::P, en::ActionType::Pressed, static_cast<en::U32>(en::ActionInputKey::KeyCombination::Shift));
 		actionSystem.AddInputKey("save", sf::Keyboard::S, en::ActionType::Pressed, static_cast<en::U32>(en::ActionInputKey::KeyCombination::Ctrl));
 		actionSystem.AddInputMouse("rightMouseButton", sf::Mouse::Button::Right, en::ActionType::Pressed);
 		actionSystem.AddInputMouse("middleMouseButton", sf::Mouse::Button::Middle, en::ActionType::Pressed);

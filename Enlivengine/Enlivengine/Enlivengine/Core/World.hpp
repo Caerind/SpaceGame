@@ -1,7 +1,9 @@
 #pragma once
 
+#include <Enlivengine/System/Array.hpp>
 #include <Enlivengine/Graphics/View.hpp>
 #include <Enlivengine/Core/EntityManager.hpp>
+#include <Enlivengine/Core/System.hpp>
 #include <Enlivengine/Core/PhysicSystem.hpp>
 
 namespace en
@@ -16,8 +18,9 @@ public:
 	EntityManager& GetEntityManager();
 	const EntityManager& GetEntityManager() const;
 
-	template <typename T = PhysicSystem>
-	bool CreatePhysicSystem();
+	template <typename T, typename ... Args>
+	T* CreateSystem(Args&& ... args);
+
 	bool HasPhysicSystem() const;
 	PhysicSystem* GetPhysicSystem();
 	const PhysicSystem* GetPhysicSystem() const;
@@ -39,6 +42,8 @@ public:
 
 private:
 	EntityManager mEntityManager;
+
+	std::vector<System*> mSystems;
 	PhysicSystem* mPhysicSystem;
 
 	View mGameView;
@@ -50,11 +55,24 @@ private:
 	bool mPlaying;
 };
 
-template <typename T>
-bool World::CreatePhysicSystem()
+template <typename T, typename ... Args>
+T* en::World::CreateSystem(Args&& ... args)
 {
-	mPhysicSystem = new T(*this);
-	return mPhysicSystem != nullptr;
+	static_assert(en::Traits::IsBaseOf<en::System, T>::value);
+
+	T* system = new T(*this, std::forward<Args>(args)...);
+	mSystems.push_back(system);
+
+	if constexpr (en::Traits::IsBaseOf<en::PhysicSystem, T>::value)
+	{
+		if (mPhysicSystem != nullptr)
+		{
+			enLogWarning(LogChannel::Core, "World have too many PhysicSystems");
+		}
+		mPhysicSystem = system;
+	}
+
+	return system;
 }
 
 } // namespace en

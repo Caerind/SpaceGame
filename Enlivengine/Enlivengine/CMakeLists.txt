@@ -171,6 +171,8 @@ set(SRC_CORE
 	Enlivengine/Core/PhysicComponent.hpp
 	Enlivengine/Core/PhysicSystem.cpp
 	Enlivengine/Core/PhysicSystem.hpp
+	Enlivengine/Core/System.cpp
+	Enlivengine/Core/System.hpp
 	Enlivengine/Core/Transform.cpp
 	Enlivengine/Core/Transform.hpp
 	Enlivengine/Core/Universe.cpp

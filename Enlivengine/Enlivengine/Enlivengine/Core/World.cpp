@@ -5,6 +5,7 @@ namespace en
 
 World::World()
 	: mEntityManager(*this)
+	, mSystems()
 	, mPhysicSystem(nullptr)
 	, mGameView()
 #ifdef ENLIVE_DEBUG
@@ -16,9 +17,9 @@ World::World()
 
 World::~World()
 {
-	if (mPhysicSystem != nullptr)
+	for (System* system : mSystems)
 	{
-		delete mPhysicSystem;
+		delete system;
 	}
 }
 
@@ -86,20 +87,18 @@ bool World::IsPlaying() const
 
 void World::Update(Time dt)
 {
-	if (mPhysicSystem != nullptr)
+	for (System* system : mSystems)
 	{
-		mPhysicSystem->Update(dt);
+		system->Update(dt);
 	}
 }
 
 void World::Render(sf::RenderTarget& target)
 {
-#ifdef ENLIVE_DEBUG
-	if (mPhysicSystem != nullptr)
+	for (System* system : mSystems)
 	{
-		mPhysicSystem->Render(target);
+		system->Render(target);
 	}
-#endif // ENLIVE_DEBUG
 }
 
 } // namespace en

@@ -15,12 +15,24 @@ namespace en
 
 class Entity;
 
-enum class BodyType
+enum class PhysicBodyType
 {
 	Dynamic,
 	Static,
 	Kinematic
 };
+b2BodyType ToB2BodyType(PhysicBodyType type);
+PhysicBodyType FromB2BodyType(b2BodyType type);
+
+enum class PhysicShapeType
+{
+	Circle,
+	Edge,
+	Polygon,
+	Chain
+};
+b2Shape::Type ToB2ShapeType(PhysicShapeType type);
+PhysicShapeType FromB2ShapeType(b2Shape::Type type);
 
 class PhysicComponent
 {
@@ -30,8 +42,8 @@ class PhysicComponent
         
         bool IsValid() const;
         
-        void SetBodyType(BodyType type);
-        BodyType GetBodyType() const;
+        void SetBodyType(PhysicBodyType type);
+		PhysicBodyType GetBodyType() const;
         
         void SetLinearVelocity(const Vector2f& velocity);
         Vector2f GetLinearVelocity() const;
@@ -53,13 +65,15 @@ class PhysicComponent
         
         void SetBullet(bool value);
         bool IsBullet() const;
+
+		F32 GetMass() const;
         
         // TODO : AllowSleeping/Awake/Enable
         
         // TODO : Fixtures
 
-		b2Body* GetBody() { return mBody; }
-		const b2Body* GetBody() const { return mBody; }
+		b2Body* GetBody();
+		const b2Body* GetBody() const;
 
     private:
 		friend class PhysicSystem;
@@ -69,7 +83,8 @@ class PhysicComponent
 
 } // namespace en
 
-ENLIVE_DEFINE_TYPE_INFO(en::BodyType)
+ENLIVE_DEFINE_TYPE_INFO(en::PhysicBodyType)
+ENLIVE_DEFINE_TYPE_INFO(en::PhysicShapeType)
 
 ENLIVE_META_CLASS_BEGIN(en::PhysicComponent)
 	ENLIVE_META_CLASS_MEMBER("type", &en::PhysicComponent::GetBodyType, &en::PhysicComponent::SetBodyType),
@@ -101,7 +116,7 @@ struct CustomObjectEditor<en::PhysicComponent>
 					object.SetBodyType(bType);
 					modified = true;
 				}
-				if (bType == en::BodyType::Dynamic || bType == en::BodyType::Kinematic)
+				if (bType == en::PhysicBodyType::Dynamic || bType == en::PhysicBodyType::Kinematic)
 				{
 					auto linearVelocity = object.GetLinearVelocity();
 					if (en::ObjectEditor::ImGuiEditor(linearVelocity, "LinearVelocity"))
@@ -152,7 +167,21 @@ struct CustomObjectEditor<en::PhysicComponent>
 			{
 				ImGui::Indent();
 				auto* body = object.GetBody();
-				// TODO : Add new fixture
+
+				ImGui::Text("Total mass : %f", body->GetMass());
+
+				if (ImGui::Button("Add new fixture"))
+				{
+					b2FixtureDef newFixtureDef;
+					newFixtureDef.density = 1.0f;
+					newFixtureDef.isSensor = false;
+					b2CircleShape circleShape;
+					circleShape.m_radius = 1.0f;
+					circleShape.m_p.Set(0.0f, 0.0f);
+					newFixtureDef.shape = &circleShape;
+					body->CreateFixture(&newFixtureDef);
+				}
+
 				en::U32 fixtureID = 0;
 				for (b2Fixture* fixture = body->GetFixtureList(); fixture; )
 				{
@@ -161,43 +190,310 @@ struct CustomObjectEditor<en::PhysicComponent>
 						ImGui::Separator();
 						ImGui::PushID(fixtureID);
 
-						// TODO : Edit shape
+						b2Shape* shape = fixture->GetShape();
 
-						auto density = fixture->GetDensity();
-						if (en::ObjectEditor::ImGuiEditor(density, "Density"))
+						bool shapeChanged = false;
+						en::PhysicShapeType shapeType = en::FromB2ShapeType(shape->GetType());
+						if (en::ObjectEditor::ImGuiEditor(shapeType, "ShapeType"))
 						{
-							fixture->SetDensity(density);
-							body->ResetMassData();
+							shapeChanged = true;
 							modified = true;
-						}
-						auto friction = fixture->GetFriction();
-						if (en::ObjectEditor::ImGuiEditor(friction, "Friction"))
-						{
-							fixture->SetFriction(friction);
-							modified = true;
-						}
-						auto restitution = fixture->GetRestitution();
-						if (en::ObjectEditor::ImGuiEditor(restitution, "Restitution"))
-						{
-							fixture->SetRestitution(restitution);
-							modified = true;
-						}
-						auto sensor = fixture->IsSensor();
-						if (en::ObjectEditor::ImGuiEditor(sensor, "Sensor"))
-						{
-							fixture->SetSensor(sensor);
-							modified = true;
-						}
 
-						if (ImGui::Button("Remove"))
-						{
+							b2FixtureDef newFixtureDef;
+							newFixtureDef.density = fixture->GetDensity();
+							newFixtureDef.friction = fixture->GetFriction();
+							newFixtureDef.restitution = fixture->GetRestitution();
+							newFixtureDef.isSensor = fixture->IsSensor();
+
+							switch (shapeType)
+							{
+							case en::PhysicShapeType::Circle:
+							{
+								b2CircleShape circleShape;
+								circleShape.m_radius = 1.0f;
+								circleShape.m_p.Set(0.0f, 0.0f);
+								newFixtureDef.shape = &circleShape;
+								body->CreateFixture(&newFixtureDef);
+							} break;
+							case en::PhysicShapeType::Edge:
+							{
+								b2EdgeShape edgeShape;
+								edgeShape.m_vertex1.Set(-1.0f, 0.0f);
+								edgeShape.m_vertex2.Set(1.0f, 0.0f);
+								edgeShape.m_vertex0.Set(-2.0f, 0.0f);
+								edgeShape.m_vertex3.Set(2.0f, 0.0f);
+								edgeShape.m_hasVertex0 = false;
+								edgeShape.m_hasVertex3 = false;
+								newFixtureDef.shape = &edgeShape;
+								body->CreateFixture(&newFixtureDef);
+							} break;
+							case en::PhysicShapeType::Polygon:
+							{
+								b2PolygonShape polygonShape;
+								polygonShape.SetAsBox(0.5f, 0.5f);
+								newFixtureDef.shape = &polygonShape;
+								body->CreateFixture(&newFixtureDef);
+							} break;
+							case en::PhysicShapeType::Chain:
+							{
+								b2ChainShape chainShape;
+								b2Vec2 vertices[2];
+								vertices[0].Set(-1.0f, 0.0f);
+								vertices[1].Set(1.0f, 0.0f);
+								chainShape.CreateChain(vertices, 2);
+								chainShape.m_prevVertex.Set(-2.0f, 0.0f);
+								chainShape.m_nextVertex.Set(2.0f, 0.0f);
+								chainShape.m_hasPrevVertex = false;
+								chainShape.m_hasNextVertex = false;
+								newFixtureDef.shape = &chainShape;
+								body->CreateFixture(&newFixtureDef);
+							} break;
+							default: enAssert(false);
+							}
+
 							b2Fixture* temp = fixture;
 							fixture = fixture->GetNext();
 							body->DestroyFixture(temp);
 						}
 						else
 						{
-							fixture = fixture->GetNext();
+							ImGui::Indent();
+							switch (shapeType)
+							{
+							case en::PhysicShapeType::Circle:
+							{
+								b2CircleShape* circleShape = static_cast<b2CircleShape*>(shape);
+
+								en::Vector2f position(circleShape->m_p.x, circleShape->m_p.y);
+								if (en::ObjectEditor::ImGuiEditor(position, "Position"))
+								{
+									circleShape->m_p.Set(position.x, position.y);
+									modified = true;
+								}
+								if (en::ObjectEditor::ImGuiEditor(circleShape->m_radius, "Radius"))
+								{
+									modified = true;
+								}
+							} break;
+							case en::PhysicShapeType::Edge:
+							{
+								b2EdgeShape* edgeShape = static_cast<b2EdgeShape*>(shape);
+								en::Vector2f v1(edgeShape->m_vertex1.x, edgeShape->m_vertex1.y);
+								if (en::ObjectEditor::ImGuiEditor(v1, "v1"))
+								{
+									edgeShape->m_vertex1.Set(v1.x, v1.y);
+									modified = true;
+								}
+								en::Vector2f v2(edgeShape->m_vertex2.x, edgeShape->m_vertex2.y);
+								if (en::ObjectEditor::ImGuiEditor(v2, "v2"))
+								{
+									edgeShape->m_vertex2.Set(v2.x, v2.y);
+									modified = true;
+								}
+								if (en::ObjectEditor::ImGuiEditor(edgeShape->m_hasVertex0, "HasV0"))
+								{
+									modified = true;
+								}
+								if (edgeShape->m_hasVertex0)
+								{
+									en::Vector2f v0(edgeShape->m_vertex0.x, edgeShape->m_vertex0.y);
+									if (en::ObjectEditor::ImGuiEditor(v0, "v0"))
+									{
+										edgeShape->m_vertex0.Set(v0.x, v0.y);
+										modified = true;
+									}
+								}
+								if (en::ObjectEditor::ImGuiEditor(edgeShape->m_hasVertex3, "HasV3"))
+								{
+									modified = true;
+								}
+								if (edgeShape->m_hasVertex3)
+								{
+									en::Vector2f v3(edgeShape->m_vertex3.x, edgeShape->m_vertex3.y);
+									if (en::ObjectEditor::ImGuiEditor(v3, "v3"))
+									{
+										edgeShape->m_vertex3.Set(v3.x, v3.y);
+										modified = true;
+									}
+								}
+							} break;
+							case en::PhysicShapeType::Polygon:
+							{
+								b2PolygonShape* polygonShape = static_cast<b2PolygonShape*>(shape);
+								bool polygonModified = false;
+								b2Vec2 vertices[b2_maxPolygonVertices];
+								en::U32 vertexCount = static_cast<en::U32>(polygonShape->m_count);
+								for (en::U32 i = 0; i < vertexCount; ++i)
+								{
+									vertices[i] = polygonShape->m_vertices[i];
+								}
+								for (en::U32 i = 0; i < vertexCount; ++i)
+								{
+									en::Vector2f v(vertices[i].x, vertices[i].y);
+									std::string vertexName = "v" + en::ToString(i);
+									ImGui::PushID(vertexName.c_str());
+									if (vertexCount > 3 && ImGui::Button("x"))
+									{
+										vertexCount--;
+										for (en::U32 j = i; j < vertexCount; ++j)
+										{ 
+											vertices[j] = vertices[j + 1];
+										}
+										ImGui::SameLine();
+										en::ObjectEditor::ImGuiEditor(v, vertexName.c_str()); // Only display
+										polygonModified = true;
+									}
+									else
+									{
+										if (vertexCount > 3)
+										{
+											ImGui::SameLine();
+										}
+										if (en::ObjectEditor::ImGuiEditor(v, vertexName.c_str()))
+										{
+											vertices[i].Set(v.x, v.y);
+											polygonModified = true;
+										}
+									}
+									ImGui::PopID();
+								}
+								if (vertexCount < b2_maxPolygonVertices)
+								{
+									if (ImGui::Button("Add"))
+									{
+										vertices[vertexCount].Set(0.5f * (vertices[0].x + vertices[vertexCount - 1].x), 0.5f * (vertices[0].y + vertices[vertexCount - 1].y));
+										vertexCount++;
+										polygonModified = true;
+									}
+								}
+								if (polygonModified)
+								{
+									polygonShape->Set(vertices, static_cast<int>(vertexCount));
+									modified = true;
+								}
+							} break;
+							case en::PhysicShapeType::Chain:
+							{
+								b2ChainShape* chainShape = static_cast<b2ChainShape*>(shape);
+								
+								// TODO : Modify chain vertices
+								/*
+								bool chainModified = false;
+								std::vector<b2Vec2> vertices;
+								en::U32 vertexCount = static_cast<en::U32>(chainShape->m_count);
+								vertices.reserve(static_cast<std::size_t>(vertexCount));
+								for (en::U32 i = 0; i < vertexCount; ++i)
+								{
+									vertices.push_back(chainShape->m_vertices[i]);
+								}
+								for (en::U32 i = 0; i < vertexCount; ++i)
+								{
+									en::Vector2f v(vertices[i].x, vertices[i].y);
+									std::string vertexName = "v" + en::ToString(i);
+									ImGui::PushID(vertexName.c_str());
+									if (vertexCount > 2 && ImGui::Button("x"))
+									{
+										vertexCount--;
+										for (en::U32 j = i; j < vertexCount; ++j)
+										{
+											vertices[j] = vertices[j + 1];
+										}
+										ImGui::SameLine();
+										en::ObjectEditor::ImGuiEditor(v, vertexName.c_str()); // Only display
+										chainModified = true;
+									}
+									else
+									{
+										if (vertexCount > 3)
+										{
+											ImGui::SameLine();
+										}
+										if (en::ObjectEditor::ImGuiEditor(v, vertexName.c_str()))
+										{
+											vertices[i].Set(v.x, v.y);
+											chainModified = true;
+										}
+									}
+									ImGui::PopID();
+								}
+								if (ImGui::Button("Add"))
+								{
+									vertices.push_back(b2Vec2(vertices[vertexCount - 1].x + 1.0f, vertices[vertexCount - 1].x + 1.0f));
+									chainModified = true;
+								}
+								if (chainModified)
+								{
+									chainShape->CreateChain(vertices.data(), static_cast<int32>(vertices.size()));
+								}
+								*/
+
+								if (en::ObjectEditor::ImGuiEditor(chainShape->m_hasPrevVertex, "HasPrevVertex"))
+								{
+									modified = true;
+								}
+								if (chainShape->m_hasPrevVertex)
+								{
+									en::Vector2f prev(chainShape->m_prevVertex.x, chainShape->m_prevVertex.y);
+									if (en::ObjectEditor::ImGuiEditor(prev, "PrevVertex"))
+									{
+										chainShape->m_prevVertex.Set(prev.x, prev.y);
+										modified = true;
+									}
+								}
+								if (en::ObjectEditor::ImGuiEditor(chainShape->m_hasNextVertex, "HasNextVertex"))
+								{
+									modified = true;
+								}
+								if (chainShape->m_hasNextVertex)
+								{
+									en::Vector2f next(chainShape->m_nextVertex.x, chainShape->m_nextVertex.y);
+									if (en::ObjectEditor::ImGuiEditor(next, "NextVertex"))
+									{
+										chainShape->m_nextVertex.Set(next.x, next.y);
+										modified = true;
+									}
+								}
+							} break;
+							default: enAssert(false);
+							}
+							ImGui::Unindent();
+
+							auto density = fixture->GetDensity();
+							if (en::ObjectEditor::ImGuiEditor(density, "Density"))
+							{
+								fixture->SetDensity(density);
+								body->ResetMassData(); // ResetMassData should be called
+								modified = true;
+							}
+							auto friction = fixture->GetFriction();
+							if (en::ObjectEditor::ImGuiEditor(friction, "Friction"))
+							{
+								fixture->SetFriction(friction);
+								modified = true;
+							}
+							auto restitution = fixture->GetRestitution();
+							if (en::ObjectEditor::ImGuiEditor(restitution, "Restitution"))
+							{
+								fixture->SetRestitution(restitution);
+								modified = true;
+							}
+							auto sensor = fixture->IsSensor();
+							if (en::ObjectEditor::ImGuiEditor(sensor, "Sensor"))
+							{
+								fixture->SetSensor(sensor);
+								modified = true;
+							}
+
+							if (ImGui::Button("Remove"))
+							{
+								b2Fixture* temp = fixture;
+								fixture = fixture->GetNext();
+								body->DestroyFixture(temp);
+							}
+							else
+							{
+								fixture = fixture->GetNext();
+							}
 						}
 
 						ImGui::PopID();

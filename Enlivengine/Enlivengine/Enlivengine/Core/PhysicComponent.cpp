@@ -5,6 +5,56 @@
 
 namespace en
 {
+
+b2BodyType ToB2BodyType(PhysicBodyType type)
+{
+	switch (type)
+	{
+	case PhysicBodyType::Dynamic: return b2_dynamicBody; break;
+	case PhysicBodyType::Static: return b2_staticBody; break;
+	case PhysicBodyType::Kinematic: return b2_kinematicBody; break;
+	default: enAssert(false);
+	}
+	return b2_dynamicBody;
+}
+
+PhysicBodyType FromB2BodyType(b2BodyType type)
+{
+	switch (type)
+	{
+	case b2_dynamicBody: return PhysicBodyType::Dynamic; break;
+	case b2_staticBody: return PhysicBodyType::Static; break;
+	case b2_kinematicBody: return PhysicBodyType::Kinematic; break;
+	default: enAssert(false);
+	}
+	return PhysicBodyType::Dynamic;
+}
+
+b2Shape::Type ToB2ShapeType(PhysicShapeType type)
+{
+	switch (type)
+	{
+	case PhysicShapeType::Circle: return b2Shape::Type::e_circle; break;
+	case PhysicShapeType::Edge: return b2Shape::Type::e_edge; break;
+	case PhysicShapeType::Polygon: return b2Shape::Type::e_polygon; break;
+	case PhysicShapeType::Chain: return b2Shape::Type::e_chain; break;
+	default: enAssert(false);
+	}
+	return b2Shape::Type::e_circle;
+}
+
+PhysicShapeType FromB2ShapeType(b2Shape::Type type)
+{
+	switch (type)
+	{
+	case b2Shape::Type::e_circle: return PhysicShapeType::Circle; break;
+	case b2Shape::Type::e_edge: return PhysicShapeType::Edge; break;
+	case b2Shape::Type::e_polygon: return PhysicShapeType::Polygon; break;
+	case b2Shape::Type::e_chain: return PhysicShapeType::Chain; break;
+	default: enAssert(false);
+	}
+	return PhysicShapeType::Circle;
+}
 	
 PhysicComponent::PhysicComponent()
 	: mBody(nullptr)
@@ -20,34 +70,24 @@ bool PhysicComponent::IsValid() const
 	return mBody != nullptr;
 }
 
-void PhysicComponent::SetBodyType(BodyType type)
+void PhysicComponent::SetBodyType(PhysicBodyType type)
 {
 	if (IsValid())
 	{
-		switch (type)
-		{
-		case BodyType::Dynamic: mBody->SetType(b2_dynamicBody); break;
-		case BodyType::Static: mBody->SetType(b2_staticBody); break;
-		case BodyType::Kinematic: mBody->SetType(b2_kinematicBody); break;
-		default: enAssert(false);
-		}
+		mBody->SetType(ToB2BodyType(type));
 	}
 }
 
-BodyType PhysicComponent::GetBodyType() const
+PhysicBodyType PhysicComponent::GetBodyType() const
 {
 	if (IsValid())
 	{
-		const b2BodyType type = mBody->GetType();
-		switch (type)
-		{
-		case b2_dynamicBody: return BodyType::Dynamic; break;
-		case b2_staticBody: return BodyType::Static; break;
-		case b2_kinematicBody: return BodyType::Kinematic; break;
-		default: enAssert(false);
-		}
+		return FromB2BodyType(mBody->GetType());
 	}
-	return BodyType::Static;
+	else
+	{
+		return PhysicBodyType::Static;
+	}
 }
 
 void PhysicComponent::SetLinearVelocity(const Vector2f& velocity)
@@ -189,6 +229,28 @@ bool PhysicComponent::IsBullet() const
 	{
 		return false;
 	}
+}
+
+en::F32 PhysicComponent::GetMass() const
+{
+	if (IsValid())
+	{
+		return mBody->GetMass();
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
+b2Body* PhysicComponent::GetBody()
+{
+	return mBody;
+}
+
+const b2Body* PhysicComponent::GetBody() const
+{
+	return mBody;
 }
 
 } // namespace en
