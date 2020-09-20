@@ -27,6 +27,7 @@ public:
 
 	bool IsValid() const;
 	U32 GetID() const;
+	void Destroy();
 
 	const char* GetName() const;
 	Vector2f GetPosition2D() const;
@@ -76,7 +77,7 @@ T& Entity::Add()
 	//enAssert(ComponentManager::IsRegistered<T>());
 	enAssert(IsValid());
 
-	T& component = GetRegistry().assign<T>(mEntity);
+	T& component = GetRegistry().emplace<T>(mEntity);
 	if constexpr (CustomComponentInitialization<T>::value)
 	{
 		CustomComponentInitialization<T>::Initialize(*this, component);

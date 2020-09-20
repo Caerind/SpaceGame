@@ -34,6 +34,7 @@ enum class LogChannel
 	Map,
 	Animation,
 	Core,
+	Physic,
 
 	// TODO : Add others
 

@@ -36,6 +36,12 @@ U32 Entity::GetID() const
 	return static_cast<U32>(entt::to_integral(mEntity));
 }
 
+void Entity::Destroy()
+{
+	enAssert(IsValid());
+	mManager->DestroyEntity(*this);
+}
+
 const char* Entity::GetName() const
 {
 	if (!IsValid() || !Has<NameComponent>())

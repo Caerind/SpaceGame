@@ -33,8 +33,7 @@ PhysicSystem::PhysicSystem(World& world)
 	SetFlags(mDebugRenderFlags);
 #endif // ENLIVE_DEBUG
 
-	// TODO : ContactListener
-	//mPhysicWorld->SetContactListener(this);
+	mPhysicWorld->SetContactListener(this);
 }
 
 PhysicSystem::~PhysicSystem()
@@ -44,6 +43,11 @@ PhysicSystem::~PhysicSystem()
 
 bool PhysicSystem::Initialize(const Entity& entity, PhysicComponent& component)
 {
+	if (!entity.IsValid())
+	{
+		return false;
+	}
+
 	static b2BodyDef bodyDef;
 	if (entity.Has<TransformComponent>())
 	{
@@ -57,9 +61,39 @@ bool PhysicSystem::Initialize(const Entity& entity, PhysicComponent& component)
 		bodyDef.angle = 0.0f;
 	}
 
+	component.mEntity = entity;
 	component.mBody = mPhysicWorld->CreateBody(&bodyDef);
+	if (component.mBody != nullptr)
+	{
+		component.mBody->SetUserData(&component);
+	}
 
 	return component.IsValid();
+}
+
+bool PhysicSystem::Deinitialize(const Entity& entity, PhysicComponent& component)
+{
+	if (!entity.IsValid())
+	{
+		return false;
+	}
+
+	if (component.mBody != nullptr)
+	{
+		// Unregister BeginContact/EndContact signals
+		auto itr = mContactSignals.find(component.mBody);
+		if (itr != mContactSignals.end())
+		{
+			mContactSignals.erase(itr);
+		}
+
+		if (mPhysicWorld != nullptr)
+		{
+			mPhysicWorld->DestroyBody(component.mBody);
+		}
+	}
+
+	return true;
 }
 
 void PhysicSystem::Update(Time dt)
@@ -130,6 +164,56 @@ void PhysicSystem::SetPositionIterations(U32 value)
 U32 PhysicSystem::GetPositionIterations() const
 {
 	return mPositionIterations;
+}
+
+void PhysicSystem::BeginContact(b2Contact* contact)
+{
+	if (contact != nullptr)
+	{
+		b2Fixture* fA = contact->GetFixtureA();
+		b2Fixture* fB = contact->GetFixtureB();
+
+		if (fA != nullptr)
+		{
+			if (b2Body* bA = fA->GetBody())
+			{
+				mContactSignals[bA].BeginContact(contact, fA, fB);
+			}
+		}
+
+		if (fB != nullptr)
+		{
+			if (b2Body* bB = fB->GetBody())
+			{
+				mContactSignals[bB].BeginContact(contact, fB, fA);
+			}
+		}
+	}
+}
+
+void PhysicSystem::EndContact(b2Contact* contact)
+{
+	if (contact != nullptr)
+	{
+		b2Fixture* fA = contact->GetFixtureA();
+		b2Fixture* fB = contact->GetFixtureB();
+
+		if (fA != nullptr)
+		{
+			if (b2Body* bA = fA->GetBody())
+			{
+				mContactSignals[bA].EndContact(contact, fA, fB);
+			}
+		}
+
+		if (fB != nullptr)
+		{
+			if (b2Body* bB = fB->GetBody())
+			{
+				mContactSignals[bB].EndContact(contact, fB, fA);
+			}
+		}
+	}
 }
 
 #ifdef ENLIVE_DEBUG

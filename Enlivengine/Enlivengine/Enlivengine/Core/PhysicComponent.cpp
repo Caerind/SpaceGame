@@ -55,14 +55,40 @@ PhysicShapeType FromB2ShapeType(b2Shape::Type type)
 	}
 	return PhysicShapeType::Circle;
 }
-	
+
 PhysicComponent::PhysicComponent()
-	: mBody(nullptr)
+	: mEntity()
+	, mBody(nullptr)
 {
+}
+
+PhysicComponent::PhysicComponent(PhysicComponent&& other) noexcept
+	: mEntity(other.mEntity)
+	, mBody(other.mBody)
+{
+	other.mEntity = Entity();
+	other.mBody = nullptr;
 }
 
 PhysicComponent::~PhysicComponent()
 {
+	if (mEntity.IsValid())
+	{
+		en::World& world = const_cast<en::World&>(mEntity.GetWorld());
+		if (world.HasPhysicSystem())
+		{
+			world.GetPhysicSystem()->Deinitialize(mEntity, *this);
+		}
+	}
+}
+
+PhysicComponent& PhysicComponent::operator=(PhysicComponent&& other) noexcept
+{
+	mEntity = other.mEntity;
+	mBody = other.mBody;
+	other.mEntity = Entity();
+	other.mBody = nullptr;
+	return *this;
 }
 
 bool PhysicComponent::IsValid() const
@@ -251,6 +277,35 @@ b2Body* PhysicComponent::GetBody()
 const b2Body* PhysicComponent::GetBody() const
 {
 	return mBody;
+}
+
+Entity PhysicComponent::GetEntity() const
+{
+	return mEntity;
+}
+
+World* PhysicComponent::GetWorld()
+{
+	if (mEntity.IsValid())
+	{
+		return &mEntity.GetWorld();
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+const World* PhysicComponent::GetWorld() const
+{
+	if (mEntity.IsValid())
+	{
+		return &mEntity.GetWorld();
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 } // namespace en

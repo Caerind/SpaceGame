@@ -7,13 +7,12 @@
 
 #include <Enlivengine/Core/CustomTraits.hpp>
 #include <Enlivengine/Core/World.hpp>
+#include <Enlivengine/Core/Entity.hpp>
 
 #include <Enlivengine/Core/ObjectEditor.hpp> // TODO : Should be moved elsewhere to have clear Components
 
 namespace en
 {
-
-class Entity;
 
 enum class PhysicBodyType
 {
@@ -37,10 +36,15 @@ PhysicShapeType FromB2ShapeType(b2Shape::Type type);
 class PhysicComponent
 {
     public:
-        PhysicComponent();
-        ~PhysicComponent();
-        
-        bool IsValid() const;
+		PhysicComponent();
+		PhysicComponent(PhysicComponent&& other) noexcept;
+		PhysicComponent(const PhysicComponent&) = delete;
+		~PhysicComponent();
+
+		PhysicComponent& operator=(PhysicComponent&& other) noexcept;
+		PhysicComponent& operator=(const PhysicComponent&) = delete;
+
+		bool IsValid() const;
         
         void SetBodyType(PhysicBodyType type);
 		PhysicBodyType GetBodyType() const;
@@ -75,9 +79,14 @@ class PhysicComponent
 		b2Body* GetBody();
 		const b2Body* GetBody() const;
 
+		Entity GetEntity() const;
+		World* GetWorld();
+		const World* GetWorld() const;
+
     private:
 		friend class PhysicSystem;
 
+		Entity mEntity;
         b2Body* mBody;
 };
 
@@ -484,6 +493,30 @@ struct CustomObjectEditor<en::PhysicComponent>
 								modified = true;
 							}
 
+							if (ImGui::CollapsingHeader("Filter"))
+							{
+								bool filterModified = false;
+								b2Filter filter = fixture->GetFilterData();
+
+								if (en::ObjectEditor::ImGuiEditor(filter.categoryBits, "Category"))
+								{
+									filterModified = true;
+								}
+								if (en::ObjectEditor::ImGuiEditor(filter.maskBits, "Mask"))
+								{
+									filterModified = true;
+								}
+								if (en::ObjectEditor::ImGuiEditor(filter.groupIndex, "GroupIndex"))
+								{
+									filterModified = true;
+								}
+
+								if (filterModified)
+								{
+									fixture->SetFilterData(filter);
+								}
+							}
+
 							if (ImGui::Button("Remove"))
 							{
 								b2Fixture* temp = fixture;
@@ -514,14 +547,14 @@ struct CustomComponentInitialization<en::PhysicComponent>
 	static constexpr bool value = true;
 	static bool Initialize(const en::Entity& entity, en::PhysicComponent& component)
 	{
-		en::World& world = const_cast<en::World&>(entity.GetWorld());
-		if (world.HasPhysicSystem())
+		if (entity.IsValid())
 		{
-			return world.GetPhysicSystem()->Initialize(entity, component);
+			en::World& world = const_cast<en::World&>(entity.GetWorld());
+			if (world.HasPhysicSystem())
+			{
+				return world.GetPhysicSystem()->Initialize(entity, component);
+			}
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 };

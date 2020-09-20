@@ -5,6 +5,8 @@
 #include <Enlivengine/Math/Vector2.hpp>
 #include <Enlivengine/Core/System.hpp>
 
+#include <Enlivengine/System/Signal.hpp>
+
 namespace en
 {
 
@@ -12,7 +14,7 @@ class World;
 class Entity;
 class PhysicComponent;
 
-class PhysicSystem : public System, public b2Draw, public b2ContactListener
+class PhysicSystem : public System, public b2ContactListener, public b2Draw
 {
     public:
         PhysicSystem(World& world);
@@ -21,6 +23,7 @@ class PhysicSystem : public System, public b2Draw, public b2ContactListener
 		void Update(Time dt) override;
 
 		bool Initialize(const Entity& entity, PhysicComponent& component);
+		bool Deinitialize(const Entity& entity, PhysicComponent& component);
         
 		void Play();
 		void Pause();
@@ -36,7 +39,18 @@ class PhysicSystem : public System, public b2Draw, public b2ContactListener
         void SetVelocityIterations(U32 value);
         U32 GetVelocityIterations() const;
         void SetPositionIterations(U32 value);
-        U32 GetPositionIterations() const;
+		U32 GetPositionIterations() const;
+
+		void BeginContact(b2Contact* contact) override;
+		void EndContact(b2Contact* contact) override;
+
+		using BeginContactSlotType = ::en::Signal<b2Contact*, b2Fixture*, b2Fixture*>::ConnectionGuard;
+		using EndContactSlotType = ::en::Signal<b2Contact*, b2Fixture*, b2Fixture*>::ConnectionGuard;
+
+		template <typename F>
+		bool AddBeginContactSlot(BeginContactSlotType& slot, const PhysicComponent& component, F&& fct);
+		template <typename F>
+		bool AddEndContactSlot(EndContactSlotType& slot, const PhysicComponent& component, F&& fct);
 
 #ifdef ENLIVE_DEBUG
 		void Render(sf::RenderTarget& target) override;
@@ -56,8 +70,6 @@ class PhysicSystem : public System, public b2Draw, public b2ContactListener
 		void DrawPoint(const b2Vec2& p, float32 size, const b2Color& color);
 #endif // ENLIVE_DEBUG
 
-        // TODO : ContactListener
-
     protected:
 		b2World* mPhysicWorld;
         F32 mPixelsPerMeter;
@@ -65,11 +77,56 @@ class PhysicSystem : public System, public b2Draw, public b2ContactListener
 		U32 mPositionIterations;
 		bool mPlaying;
 
+		struct ContactSignals
+		{
+			enSignal(BeginContact, b2Contact*, b2Fixture*, b2Fixture*);
+			enSignal(EndContact, b2Contact*, b2Fixture*, b2Fixture*);
+		};
+		std::unordered_map<b2Body*, ContactSignals> mContactSignals;
+
 #ifdef ENLIVE_DEBUG
 		sf::RenderTarget* mDebugRenderTarget;
 		U32 mDebugRenderFlags;
         bool mDebugRender;
 #endif // ENLIVE_DEBUG
 };
-        
+
+template <typename F>
+bool PhysicSystem::AddBeginContactSlot(BeginContactSlotType& slot, const PhysicComponent& component, F&& fct)
+{
+	if (b2Body* body = component.mBody)
+	{
+		auto itr = mContactSignals.find(body);
+		if (itr == mContactSignals.end())
+		{
+			itr = mContactSignals.emplace(std::make_pair(component.mBody, ContactSignals())).first;
+		}
+		if (itr != mContactSignals.end())
+		{
+			slot.Connect(itr->second.BeginContact, fct);
+			return true;
+		}
+	}
+	return false;
+}
+
+template <typename F>
+bool PhysicSystem::AddEndContactSlot(EndContactSlotType& slot, const PhysicComponent& component, F&& fct)
+{
+	if (b2Body* body = component.mBody)
+	{
+		auto itr = mContactSignals.find(body);
+		if (itr == mContactSignals.end())
+		{
+			itr = mContactSignals.emplace(std::make_pair(component.mBody, ContactSignals())).first;
+		}
+		if (itr != mContactSignals.end())
+		{
+			slot.Connect(itr->second.EndContact, fct);
+			return true;
+		}
+	}
+	return false;
+}
+
 } // namespace en

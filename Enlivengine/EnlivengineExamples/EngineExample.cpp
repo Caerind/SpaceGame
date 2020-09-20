@@ -13,6 +13,124 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
+//////////////////////////////////
+// Components
+//////////////////////////////////
+
+struct PlayerComponent
+{
+	en::U32 id; // Just to not be empty
+};
+
+struct MarkedForDestructionComponent
+{
+	en::U32 id; // Just to not be empty
+};
+
+struct CanJumpComponent
+{
+	bool CanJump() const
+	{
+		return numContacts > 0;
+	}
+
+	en::I32 numContacts{ 0 };
+
+	en::PhysicSystem::BeginContactSlotType beginContactSlot;
+	en::PhysicSystem::EndContactSlotType endContactSlot;
+};
+
+template <>
+struct CustomComponentInitialization<CanJumpComponent>
+{
+	static constexpr bool value = true;
+	static bool Initialize(const en::Entity& entity, CanJumpComponent& component)
+	{
+		if (entity.IsValid() && entity.Has<en::PhysicComponent>())
+		{
+			const en::PhysicComponent& physComp = entity.Get<en::PhysicComponent>();
+
+			en::World& world = const_cast<en::World&>(entity.GetWorld());
+			if (world.HasPhysicSystem())
+			{
+				en::PhysicSystem* physicSystem = world.GetPhysicSystem();
+
+				physicSystem->AddBeginContactSlot(component.beginContactSlot, physComp, [&component](b2Contact*, b2Fixture* fixture, b2Fixture* otherFixture)
+				{
+					if (fixture != nullptr && otherFixture != nullptr)
+					{
+						if (fixture->IsSensor() && fixture->GetBody() != otherFixture->GetBody())
+						{
+							component.numContacts++;
+						}
+					}
+				});
+				physicSystem->AddEndContactSlot(component.endContactSlot, physComp, [&component](b2Contact*, b2Fixture* fixture, b2Fixture* otherFixture)
+				{
+					if (fixture != nullptr && otherFixture != nullptr)
+					{
+						if (fixture->IsSensor() && fixture->GetBody() != otherFixture->GetBody())
+						{
+							component.numContacts--;
+						}
+					}
+				});
+
+				return true;
+			}
+		}
+		return false;
+	}
+};
+
+struct ProjectileComponent
+{
+	en::Time lifetime{ en::Time::Seconds(5.0f) };
+	en::PhysicSystem::BeginContactSlotType beginContactSlot;
+};
+
+template <>
+struct CustomComponentInitialization<ProjectileComponent>
+{
+	static constexpr bool value = true;
+	static bool Initialize(const en::Entity& entity, ProjectileComponent& component)
+	{
+		if (entity.IsValid() && entity.Has<en::PhysicComponent>())
+		{
+			const en::PhysicComponent& physComp = entity.Get<en::PhysicComponent>();
+
+			en::World& world = const_cast<en::World&>(entity.GetWorld());
+			if (world.HasPhysicSystem())
+			{
+				en::PhysicSystem* physicSystem = world.GetPhysicSystem();
+
+				physicSystem->AddBeginContactSlot(component.beginContactSlot, physComp, [&component](b2Contact* contact, b2Fixture* fixture, b2Fixture* otherFixture)
+				{
+					if (fixture != nullptr && otherFixture != nullptr && fixture->GetBody() != otherFixture->GetBody() && contact != nullptr && contact->IsTouching())
+					{
+						if (en::PhysicComponent* physComp = static_cast<en::PhysicComponent*>(fixture->GetBody()->GetUserData()))
+						{
+							en::Entity entity = physComp->GetEntity(); // TODO : This is buggy af
+							if (entity.IsValid() && !entity.Has<MarkedForDestructionComponent>())
+							{
+								entity.Add<MarkedForDestructionComponent>();
+							}
+						}
+					}
+				});
+
+				return true;
+			}
+		}
+		return false;
+	}
+};
+
+
+//////////////////////////////////
+// Systems
+//////////////////////////////////
+
 // Transform -> Physic
 class BeforePhysicSystem : public en::System
 {
@@ -83,11 +201,6 @@ public:
 	}
 };
 
-struct PlayerComponent
-{
-	en::U32 id; // Just to not be empty
-};
-
 class PlayerMovementSystem : public en::System
 {
 public:
@@ -101,7 +214,7 @@ public:
 		static constexpr en::F32 jumpStrength = 10.0f;
 		auto& actionSystem = en::Application::GetInstance().GetActionSystem();
 		auto& entityManager = mWorld.GetEntityManager();
-		auto view = entityManager.View<PlayerComponent, en::PhysicComponent>();
+		auto view = entityManager.View<PlayerComponent, CanJumpComponent, en::PhysicComponent>();
 		for (auto entt : view)
 		{
 			en::Entity entity(entityManager, entt);
@@ -141,12 +254,110 @@ public:
 						body->ApplyLinearImpulseToCenter(b2Vec2(impulse, 0.0f), true);
 					}
 
-					if (actionSystem.IsInputActive("jump"))
+					const auto& jumpComp = entity.Get<CanJumpComponent>();
+					if (jumpComp.CanJump() && actionSystem.IsInputActive("jump"))
 					{
 						const en::F32 impulse = mass * jumpStrength;
 						body->ApplyLinearImpulseToCenter(b2Vec2(0.0f, -impulse), true);
 					}
 				}
+			}
+		}
+	}
+};
+
+class PlayerShootSystem : public en::System
+{
+public:
+	PlayerShootSystem(en::World& world) : en::System(world), accumulator(en::Time::Seconds(-2.0f)) {}
+
+	void Update(en::Time dt) override
+	{
+		accumulator += dt;
+		if (accumulator >= kCooldownTime)
+		{
+			accumulator = en::Time::Zero();
+			const auto mousePos = en::Application::GetInstance().GetWindow().getCursorPosition();
+			auto& entityManager = mWorld.GetEntityManager();
+			auto view = entityManager.View<PlayerComponent, en::TransformComponent>();
+			for (auto entt : view)
+			{
+				en::Entity entity(entityManager, entt);
+				if (entity.IsValid())
+				{
+					const auto pos = entity.GetPosition2D();
+					auto delta = mousePos - pos;
+					auto angle = delta.GetPolarAngle();
+					auto polar = en::Vector2f::Polar(angle);
+					const en::F32 bulletStartOffset = 1.5f * mWorld.GetPhysicSystem()->GetPixelsPerMeter();
+					const en::F32 bulletLinearSpeed = 40.0f;
+
+					auto bulletEntity = mWorld.GetEntityManager().CreateEntity();
+					bulletEntity.Add<en::NameComponent>("Bullet");
+					bulletEntity.Add<en::RenderableComponent>();
+					auto& bulletTransform = bulletEntity.Add<en::TransformComponent>().transform;
+					bulletTransform.SetPosition(pos + polar * bulletStartOffset);
+					bulletTransform.SetRotation2D(angle);
+					auto& bulletPhys = bulletEntity.Add<en::PhysicComponent>();
+					bulletPhys.SetBodyType(en::PhysicBodyType::Dynamic);
+					bulletPhys.SetBullet(true);
+					bulletPhys.SetLinearVelocity(polar * bulletLinearSpeed);
+					// TODO : Improve fixture via code
+					b2PolygonShape bulletShape;
+					bulletShape.SetAsBox(0.25f, 0.125f);
+					b2FixtureDef bulletFixture;
+					bulletFixture.shape = &bulletShape;
+					bulletPhys.GetBody()->CreateFixture(&bulletFixture);
+					bulletEntity.Add<ProjectileComponent>();
+				}
+			}
+		}
+	}
+
+	en::Time accumulator;
+	static constexpr en::Time kCooldownTime = en::Time::Seconds(0.3f);
+};
+
+class ProjectileLifetimeSystem : public en::System
+{
+public:
+	ProjectileLifetimeSystem(en::World& world) : en::System(world) {}
+
+	void Update(en::Time dt) override
+	{
+		auto& entityManager = mWorld.GetEntityManager();
+		auto view = entityManager.View<ProjectileComponent>();
+		for (auto entt : view)
+		{
+			en::Entity entity(entityManager, entt);
+			if (entity.IsValid())
+			{
+				auto& proj = entity.Get<ProjectileComponent>();
+				proj.lifetime -= dt;
+				if (proj.lifetime <= 0.0f && !entity.Has<MarkedForDestructionComponent>())
+				{
+					entity.Add<MarkedForDestructionComponent>();
+				}
+			}
+		}
+	}
+};
+
+class DestructionSystem : public en::System
+{
+public:
+	DestructionSystem(en::World& world) : en::System(world) {}
+
+	void Update(en::Time dt) override
+	{
+		auto& entityManager = mWorld.GetEntityManager();
+		auto view = entityManager.View<MarkedForDestructionComponent>();
+		for (auto entt : view)
+		{
+			en::Entity entity(entityManager, entt);
+			if (entity.IsValid())
+			{
+				entity.Destroy();
 			}
 		}
 	}
@@ -198,6 +409,10 @@ public:
 };
 
 
+//////////////////////////////////
+// State
+//////////////////////////////////
+
 class MyState : public en::State
 {
 public:
@@ -208,6 +423,9 @@ public:
 		mWorld.CreateSystem<BeforePhysicSystem>();
 		mWorld.CreateSystem<en::PhysicSystem>();
 		mWorld.CreateSystem<AfterPhysicSystem>();
+		mWorld.CreateSystem<PlayerShootSystem>();
+		mWorld.CreateSystem<ProjectileLifetimeSystem>();
+		mWorld.CreateSystem<DestructionSystem>();
 		mWorld.CreateSystem<TransformRenderSystem>();
 
 		en::Universe::GetInstance().SetCurrentWorld(&mWorld);
@@ -262,6 +480,7 @@ public:
 		playerFixture.shape = &playerFootSensorShape;
 		playerFixture.isSensor = true;
 		playerPhys.GetBody()->CreateFixture(&playerFixture);
+		playerEntity.Add<CanJumpComponent>();
 	}
 
 	bool update(en::Time dt)
@@ -294,6 +513,11 @@ public:
 private:
 	en::World mWorld;
 };
+
+
+//////////////////////////////////
+// Main
+//////////////////////////////////
 
 int main(int argc, char** argv)
 {

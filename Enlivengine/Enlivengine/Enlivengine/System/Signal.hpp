@@ -15,6 +15,7 @@
 #define enStaticSignal(SignalName, ...) enDetailSignal(static, SignalName, __VA_ARGS__)
 #define enStaticSignalImpl(Class, SignalName) Class :: SignalName ## Type Class :: SignalName
 
+#define enSlotType(Class, SignalName) Class::SignalName ## Type::ConnectionGuard
 #define enSlot(Class, SignalName, SlotName) Class::SignalName ## Type::ConnectionGuard SlotName
 
 namespace en
