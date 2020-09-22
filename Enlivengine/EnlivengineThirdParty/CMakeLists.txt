@@ -231,19 +231,6 @@ set(SRC_MAGICENUM
 )
 source_group("magic_enum" FILES ${SRC_MAGICENUM})
 
-# meow_hash
-set(SRC_MEOWHASH
-	meow_hash/meow_hash_x64_aesni.h
-)
-source_group("meow_hash" FILES ${SRC_MEOWHASH})
-
-# metrics-gui
-set(SRC_METRICSGUI
-	metrics_gui/metrics_gui.cpp
-	metrics_gui/metrics_gui.h
-)
-source_group("metrics_gui" FILES ${SRC_METRICSGUI})
-
 # miniz
 set(SRC_MINIZ
 	miniz/miniz.cpp
@@ -275,8 +262,6 @@ add_library(EnlivengineThirdParty STATIC
 	${SRC_IMGUISFML}
 	${SRC_JSON}
 	${SRC_MAGICENUM}
-	${SRC_MEOWHASH}
-	${SRC_METRICSGUI}
 	${SRC_MINIZ}
 	${SRC_PUGIXML}
 )
